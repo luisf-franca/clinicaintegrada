@@ -1,25 +1,20 @@
-/* TONS DE CINZA */
-
 :root {
-  --branco: #ffffff;
-  --preto: #171a1a;
+  --branco: #fff;
+  --preto: #212529;
+  --cinza: #636466;
+  --vermelho: #d71c23;
+  --vermelho-claro: #e82137;
+  --roxo: #7d1474;
+  --background: #f8f9fa;
+}
 
-  --cinza-50: #f3f5f5;
-  --cinza-100: #eaeded;
-  --cinza-200: #e4e7e7;
-  --cinza-300: #c9cfcf;
-  --cinza-400: #a1aaaa;
-  --cinza-500: #798686;
-  --cinza-600: #555e5e;
-  --cinza-700: #3b4444;
-  --cinza-800: #2f3636;
-  --cinza-900: #252b2b;
-  --cinza-950: #1f2323;
+/* GRADIENTE */
+:root {
+  --gradiente1: linear-gradient(to left, #7d1474, #d71c23);
 }
 
 /* SOMBRAS */
 
 :root {
-  --shadow1: 0px 1px 2px 0px rgba(0, 0, 0, 0.2);
-  --shadow2: 5px 5px 10px 0px rgba(0, 0, 0, 0.1);
+  --shadow1: 0 2px 20px rgba(0, 0, 0, 0.1);
 }
