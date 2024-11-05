@@ -1,0 +1,23 @@
+/* CONTAINER */
+
+.container {
+  max-width: 80rem;
+  padding-inline: 2rem;
+  margin-inline: auto;
+}
+
+/* RESPONSIVO */
+
+@media (max-width: 1024px) {
+  .container {
+    max-width: 64rem;
+    padding-inline: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    max-width: 48rem;
+    padding-inline: 1.25rem;
+  }
+}

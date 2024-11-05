@@ -1,0 +1,44 @@
+/* FONTES */
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@100..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+/* GLOBAL */
+@import url('./styles/container.css');
+@import url('./styles/colors.css');
+
+*,
+button {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+  list-style: none;
+  appearance: none;
+  border: none;
+  color: inherit;
+  background: none;
+
+  font-family: Sora, Montserrat, Helvetica, sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h1 > *,
+h2 > * {
+  font-family: Montserrat, Helvetica, sans-serif;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
