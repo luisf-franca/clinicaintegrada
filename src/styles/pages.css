@@ -1,0 +1,13 @@
+.pages {
+  min-width: 100vw;
+  min-height: 100vh;
+  background: var(--background);
+  background-size: 100% 40%, 100% 40%, 100% 60%;
+  background-position: bottom, bottom, top;
+  background-repeat: no-repeat, no-repeat, no-repeat;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}

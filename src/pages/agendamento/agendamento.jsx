@@ -3,11 +3,13 @@ import './agendamento.css';
 
 const agendamento = () => {
   return (
-    <main className="container">
-      <hgroup>
-        <h1>Clínica Integrada de Saúde</h1>
-      </hgroup>
-    </main>
+    <section className="pages ">
+      <main className="container">
+        <hgroup>
+          <h1></h1>
+        </hgroup>
+      </main>
+    </section>
   );
 };
 

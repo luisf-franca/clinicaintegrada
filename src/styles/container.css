@@ -1,9 +1,15 @@
 /* CONTAINER */
 
 .container {
-  max-width: 80rem;
-  padding-inline: 2rem;
+  padding: 2rem;
   margin-inline: auto;
+
+  max-width: 80rem;
+  width: 100vw;
+  height: 90vh;
+  background-color: var(--branco);
+  box-shadow: var(--shadow1);
+  border-radius: 1rem;
 }
 
 /* RESPONSIVO */

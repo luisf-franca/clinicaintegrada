@@ -5,16 +5,17 @@
   --vermelho: #d71c23;
   --vermelho-claro: #e82137;
   --roxo: #7d1474;
-  --background: #f8f9fa;
+  --gelo: #f8f9fa;
 }
 
 /* GRADIENTE */
 :root {
-  --gradiente1: linear-gradient(to left, #7d1474, #d71c23);
+  --background: url('./src/assets/bg.png'),
+    linear-gradient(to right, #7d1474, #d71c23),
+    linear-gradient(to bottom, #f8f9fa 60%, transparent 60%);
 }
 
 /* SOMBRAS */
-
 :root {
   --shadow1: 0 2px 20px rgba(0, 0, 0, 0.1);
 }
