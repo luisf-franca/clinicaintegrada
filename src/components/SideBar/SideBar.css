@@ -1,0 +1,64 @@
+/* Estilos básicos para a sidebar */
+.sidebar {
+    width: 6.5%;
+    background-color: #D71C23; /* Cor de fundo normal */
+    color: #FFFFFF; /* Cor do texto e ícones normal */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    position: relative; /* Certificar que está contida na div parent */
+    height: 100%; /* Altura total da div pai */
+    border-radius: 16px; /* Raio de canto de 16px */
+    opacity: 1; /* Opacidade 100% */
+    overflow: hidden; /* Impede que qualquer conteúdo ultrapasse a borda arredondada */
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3); /* Adiciona a sombra */
+  }
+  
+  /* Estilo para o menu da sidebar */
+  .sidebar-menu {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+  }
+  
+  /* Estilo para os itens do menu */
+  .sidebar-item {
+    width: 100%; /* Os itens do menu ocupam toda a largura da sidebar */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100% / 8); /* Cada item ocupa 1/8 da altura da sidebar */
+    color: #FFFFFF;
+    text-decoration: none;
+    transition: background-color 0.15s, color 0.15s;
+    /* border-radius: 3px; Mantém o border-radius para os itens */
+  }
+  
+  /* Adicionando a margem à imagem */
+  .sidebar-item img {
+    margin: 8px; /* Margem entre a imagem e a borda do botão */
+    max-width: 60%; /* Ajuste o tamanho da imagem para não ultrapassar o botão */
+    max-height: 60%; /* Ajuste a altura máxima da imagem */
+  }
+  
+  .sidebar-item:hover {
+    background-color: #B0171B; /* Cor de fundo ao passar o mouse */
+    color: rgba(255, 255, 255, 0.8); /* Cor do texto e ícones ao passar o mouse */
+  }
+  
+  .sidebar-item img {
+    width: 24px; /* Ajuste o tamanho da imagem conforme necessário */
+    height: 24px;
+    font: 1.5rem; /* Ajuste o tamanho da fonte conforme necessário */
+    transition: filter 0.3s; /* Adiciona a propriedade de transição */
+  }
+  
+  .sidebar-item:hover img {
+    filter: brightness(0.8); /* Efeito de desbotamento na imagem ao passar o mouse */
+  }
+  
+  
+
+  

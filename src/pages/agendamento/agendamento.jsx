@@ -1,16 +1,19 @@
 import React from 'react';
 import './agendamento.css';
 
-const agendamento = () => {
+//COMPONENTS
+import SideBar from '../../components/SideBar/SideBar';
+
+const Agendamento = () => {
   return (
-    <section className="pages ">
-      <main className="container">
-        <hgroup>
-          <h1></h1>
-        </hgroup>
-      </main>
-    </section>
+    <div className="main-layout">
+      <section className="pages">
+        <main className="container">
+        <SideBar />
+        </main>
+      </section>
+    </div>
   );
 };
 
-export default agendamento;
+export default Agendamento;
