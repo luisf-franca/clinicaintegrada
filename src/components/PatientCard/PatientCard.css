@@ -1,0 +1,71 @@
+.patient-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Garante que o card ocupe 100% do espaço disponível */
+    width: 100%; /* Garante que o card ocupe 100% do espaço disponível */
+  }
+  
+  .patient-card-header {
+    flex: 1; /* Ocupa 1 parte do espaço disponível */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px;
+  }
+  
+  .patient-card-body {
+    flex: 7; /* Ocupa 7 partes do espaço disponível */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px;
+  }
+
+  .pesquisar-pacientes {
+    height: 100%;
+    width: 20%;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .pesquisar-pacientes label {
+    margin-bottom: 5px; /* Espaço entre o label e o input */
+    font-weight: bold;
+  }
+  
+  .pesquisar-pacientes input,
+  .pesquisar-pacientes select {
+    margin-bottom: 15px; /* Espaço entre os campos */
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+  
+  .pesquisar-pacientes input[type="date"] {
+    padding: 5px; /* Ajustar o padding para inputs de data */
+  }
+
+  .lista-pacientes {
+    height: 100%;
+    width: 100%;
+  }
+  
+  .pacientes-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .pacientes-table th, 
+  .pacientes-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  
+
+    
+  
+  
+
+
+  
