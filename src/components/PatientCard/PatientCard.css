@@ -10,6 +10,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin: 20px;
   }
   
   .patient-card-body {
@@ -17,5 +18,54 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin: 20px;
   }
+
+  .pesquisar-pacientes {
+    height: 100%;
+    width: 20%;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .pesquisar-pacientes label {
+    margin-bottom: 5px; /* Espaço entre o label e o input */
+    font-weight: bold;
+  }
+  
+  .pesquisar-pacientes input,
+  .pesquisar-pacientes select {
+    margin-bottom: 15px; /* Espaço entre os campos */
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+  
+  .pesquisar-pacientes input[type="date"] {
+    padding: 5px; /* Ajustar o padding para inputs de data */
+  }
+
+  .lista-pacientes {
+    height: 100%;
+    width: 100%;
+  }
+  
+  .pacientes-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .pacientes-table th, 
+  .pacientes-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  
+
+    
+  
+  
+
+
   
