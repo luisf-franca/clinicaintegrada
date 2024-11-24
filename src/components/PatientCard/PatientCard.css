@@ -1,0 +1,21 @@
+.patient-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Garante que o card ocupe 100% do espaço disponível */
+    width: 100%; /* Garante que o card ocupe 100% do espaço disponível */
+  }
+  
+  .patient-card-header {
+    flex: 1; /* Ocupa 1 parte do espaço disponível */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .patient-card-body {
+    flex: 7; /* Ocupa 7 partes do espaço disponível */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  

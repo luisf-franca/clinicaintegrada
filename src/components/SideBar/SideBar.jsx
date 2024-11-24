@@ -9,28 +9,28 @@ import iconRelatorio from '../../assets/icons/icon-relatorio.png';
 import iconEquipe from '../../assets/icons/icon-equipe.png';
 import iconSala from '../../assets/icons/icon-sala.png';
 
-const SideBar = () => {
+const SideBar = ({ onSelection }) => {
     return (
         <div className="sidebar">
-            <button className="sidebar-item" title="Início">
+            <button onClick={() => onSelection('Inicio')} className="sidebar-item" title="Início">
                 <img src={iconInicio} alt="Início" />
             </button>
-            <button className="sidebar-item" title="Paciente">
+            <button onClick={() => onSelection('PatientCard')} className="sidebar-item" title="Paciente">
                 <img src={iconPaciente} alt="Paciente" />
             </button>
-            <button className="sidebar-item" title="Agendamento">
+            <button onClick={() => onSelection('AgendamentoCard')} className="sidebar-item" title="Agendamento">
                 <img src={iconAgendamento} alt="Agendamento" />
             </button>
-            <button className="sidebar-item" title="Consulta">
+            <button onClick={() => onSelection('ConsultaCard')} className="sidebar-item" title="Consulta">
                 <img src={iconConsulta} alt="Consulta" />
             </button>
-            <button className="sidebar-item" title="Relatório">
+            <button onClick={() => onSelection('RelatorioCard')} className="sidebar-item" title="Relatório">
                 <img src={iconRelatorio} alt="Relatório" />
-            </button> 
-             <button className="sidebar-item" title="Equipe">
+            </button>
+            <button onClick={() => onSelection('EquipeCard')} className="sidebar-item" title="Equipe">
                 <img src={iconEquipe} alt="Equipe" />
             </button>
-            <button className="sidebar-item" title="Sala">
+            <button onClick={() => onSelection('SalaCard')} className="sidebar-item" title="Sala">
                 <img src={iconSala} alt="Sala" />
             </button>
         </div>
