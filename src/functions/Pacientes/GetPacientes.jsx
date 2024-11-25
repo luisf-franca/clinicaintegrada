@@ -4,7 +4,6 @@ const GetPacientes = async (options = {}) => {
   try {
     // Extrai os parâmetros opcionais
     const { page, pageSize, filter, orderBy } = options;
-    console.log('options:', options);
 
     // Monta a query string com os parâmetros opcionais
     const params = new URLSearchParams();
@@ -18,7 +17,7 @@ const GetPacientes = async (options = {}) => {
     const fullUrl = `${url}/pacientes?${params.toString()}`;
 
     // Obtém o token de autenticação
-    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImF0ZW5kZW50ZUB1c2VyLmNvbS5iciIsImp0aSI6ImIyOGU5MmJkLThhYzUtNDU3NS04Mjg2LTNmZTg1MmFiMGU5MiIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWUiOiJhdGVuZGVudGVAdXNlci5jb20uYnIiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJhdGVuZGVudGUiLCJleHAiOjE3MzI1Mjg3NzcsImlzcyI6IkNsaW5pY2FJbnRlZ3JhZGFfSXNzdWVyIiwiYXVkIjoiQ2xpbmljYUludGVncmFkYV9BdWRpZW5jZSJ9.FedLtD4dxRngTj2okFj3jX5mVTFxXltRCmMNKDEVOuI';
+    const token = localStorage.getItem('token');
 
     // Faz a requisição com os parâmetros e o cabeçalho de autenticação
     const response = await axios.get(fullUrl, {

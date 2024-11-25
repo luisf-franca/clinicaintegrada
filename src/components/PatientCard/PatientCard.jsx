@@ -1,8 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './patientCard.css';
+
+//COMPONENTS
 import PesquisarPacientes from '../Pacientes/PesquisarPacientes';
+import GetPacientes from '../../functions/Pacientes/GetPacientes';
+import AdicionarPaciente from '../Pacientes/AdicionarPaciente';
 
 const PatientCard = () => {
+
+  const [selectedComponent, setSelectedComponent] = useState('Pesquisar');
   const [pacientes, setPacientes] = useState([
     {
       nome: "Ana Silva",
@@ -78,27 +84,39 @@ const PatientCard = () => {
     }
   ]);
 
-  const [selectedComponent, setSelectedComponent] = useState('Pesquisar');
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const items = await GetPacientes();
+        setPacientes(items);
+      }
+      catch (error) {
+        console.error('Erro ao buscar pacientes:', error);
+      }
+    }
+    fetchData();
+  }, []);
+
   
   return (
     <div className="patient-card">
       <div className="patient-card-header">
         <h2>Pacientes</h2>
-        <button>Adicionar Paciente</button>
+        <button onClick={(e) => setSelectedComponent("Adicionar")}>Adicionar Paciente</button>
       </div>
 
       <div className="patient-card-body">
         <div className='pesquisar-pacientes'>
-          <select onChange={(e) => setSelectedComponent(e.target.value)}>
+          <select value={selectedComponent} onChange={(e) => setSelectedComponent(e.target.value)}>
             <option value="Pesquisar">Pesquisar</option>
             <option value="Adicionar">Adicionar</option>
             <option value="Atualizar">Atualizar</option>
           </select>
 
           {selectedComponent === 'Pesquisar' && <PesquisarPacientes setPacientes={setPacientes} />}
-          {selectedComponent === 'Adicionar' && <h1>Adicionar Paciente</h1>}
+          {selectedComponent === 'Adicionar' && <AdicionarPaciente />} { /* pendência: deve atualizar lista de pacientes ao cadastrar paciente */ }
           {selectedComponent === 'Atualizar' && <h1>Atualizar Paciente</h1>}
-          
+
         </div>
 
         <div className='lista-pacientes'>
