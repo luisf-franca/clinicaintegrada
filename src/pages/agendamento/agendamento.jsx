@@ -7,7 +7,7 @@ import PatientCard from '../../components/PatientCard/PatientCard';
 
 const Agendamento = () => {
   // Estado para controlar o componente selecionado
-  const [selectedComponent, setSelectedComponent] = useState("Inicio");
+  const [selectedComponent, setSelectedComponent] = useState('Inicio');
 
   // Função para atualizar o componente selecionado
   const handleSelection = (componentName) => {
@@ -15,20 +15,18 @@ const Agendamento = () => {
   };
 
   return (
-    <div className="main-layout">
-      <section className="pages">
-        <main className="container">
-          <SideBar onSelection={handleSelection} />
-          {selectedComponent === 'Inicio' && <h1>Início</h1>}
-          {selectedComponent === 'PatientCard' && <PatientCard />}
-          {selectedComponent === 'AgendamentoCard' && <h1>Agendamento</h1>}
-          {selectedComponent === 'ConsultaCard' && <h1>Consulta</h1>}
-          {selectedComponent === 'RelatorioCard' && <h1>Relatório</h1>}
-          {selectedComponent === 'EquipeCard' && <h1>Equipe</h1>}
-          {selectedComponent === 'SalaCard' && <h1>Sala</h1>}
-        </main>
-      </section>
-    </div>
+    <section className="pages">
+      <main className="container">
+        <SideBar onSelection={handleSelection} />
+        {selectedComponent === 'Inicio' && <h1>Início</h1>}
+        {selectedComponent === 'PatientCard' && <PatientCard />}
+        {selectedComponent === 'AgendamentoCard' && <h1>Agendamento</h1>}
+        {selectedComponent === 'ConsultaCard' && <h1>Consulta</h1>}
+        {selectedComponent === 'RelatorioCard' && <h1>Relatório</h1>}
+        {selectedComponent === 'EquipeCard' && <h1>Equipe</h1>}
+        {selectedComponent === 'SalaCard' && <h1>Sala</h1>}
+      </main>
+    </section>
   );
 };
 
