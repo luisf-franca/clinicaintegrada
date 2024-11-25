@@ -1,8 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './patientCard.css';
+
+//COMPONENTS
 import PesquisarPacientes from '../Pacientes/PesquisarPacientes';
+import GetPacientes from '../../functions/Pacientes/GetPacientes';
 
 const PatientCard = () => {
+
+  const [selectedComponent, setSelectedComponent] = useState('Pesquisar');
   const [pacientes, setPacientes] = useState([
     {
       nome: "Ana Silva",
@@ -78,7 +83,19 @@ const PatientCard = () => {
     }
   ]);
 
-  const [selectedComponent, setSelectedComponent] = useState('Pesquisar');
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const items = await GetPacientes();
+        setPacientes(items);
+      }
+      catch (error) {
+        console.error('Erro ao buscar pacientes:', error);
+      }
+    }
+    fetchData();
+  }, []);
+
   
   return (
     <div className="patient-card">
@@ -98,7 +115,7 @@ const PatientCard = () => {
           {selectedComponent === 'Pesquisar' && <PesquisarPacientes setPacientes={setPacientes} />}
           {selectedComponent === 'Adicionar' && <h1>Adicionar Paciente</h1>}
           {selectedComponent === 'Atualizar' && <h1>Atualizar Paciente</h1>}
-          
+
         </div>
 
         <div className='lista-pacientes'>
