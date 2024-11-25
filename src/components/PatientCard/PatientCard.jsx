@@ -114,7 +114,7 @@ const PatientCard = () => {
           </select>
 
           {selectedComponent === 'Pesquisar' && <PesquisarPacientes setPacientes={setPacientes} />}
-          {selectedComponent === 'Adicionar' && <AdicionarPaciente />} // pendência: Deve atualizar a lista ao cadastrar paciente
+          {selectedComponent === 'Adicionar' && <AdicionarPaciente />} { /* pendência: deve atualizar lista de pacientes ao cadastrar paciente */ }
           {selectedComponent === 'Atualizar' && <h1>Atualizar Paciente</h1>}
 
         </div>
