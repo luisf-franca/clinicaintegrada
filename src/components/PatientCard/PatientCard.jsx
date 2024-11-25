@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './patientCard.css';
+import PesquisarPacientes from '../Pacientes/PesquisarPacientes';
 
 const PatientCard = () => {
   const [pacientes, setPacientes] = useState([
@@ -76,33 +77,28 @@ const PatientCard = () => {
       recebeuAlta: false,
     }
   ]);
+
+  const [selectedComponent, setSelectedComponent] = useState('Pesquisar');
   
   return (
     <div className="patient-card">
       <div className="patient-card-header">
         <h2>Pacientes</h2>
-
         <button>Adicionar Paciente</button>
       </div>
 
       <div className="patient-card-body">
         <div className='pesquisar-pacientes'>
-          <label>Pesquisar Paciente:</label>
-          
-          <label>Nome:</label>
-          <input type="text" />
-
-          <label>Data Consulta:</label>
-          <input type="date" />
-
-          <label>Prioridade:</label>
-          <select>
-            <option value="1">Baixa</option>
-            <option value="2">Média</option>
-            <option value="3">Alta</option>
+          <select onChange={(e) => setSelectedComponent(e.target.value)}>
+            <option value="Pesquisar">Pesquisar</option>
+            <option value="Adicionar">Adicionar</option>
+            <option value="Atualizar">Atualizar</option>
           </select>
 
-          <button>Pesquisar</button>
+          {selectedComponent === 'Pesquisar' && <PesquisarPacientes setPacientes={setPacientes} />}
+          {selectedComponent === 'Adicionar' && <h1>Adicionar Paciente</h1>}
+          {selectedComponent === 'Atualizar' && <h1>Atualizar Paciente</h1>}
+          
         </div>
 
         <div className='lista-pacientes'>
