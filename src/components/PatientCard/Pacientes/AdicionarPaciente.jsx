@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 //COMPONENTS
-import CreatePaciente from '../../functions/Pacientes/CreatePaciente';
+import CreatePaciente from '../../../functions/Pacientes/CreatePaciente';
 
 const AdicionarPaciente = ( { atualizarListaPacientes } ) => {
     const [step, setStep] = useState(1); // Estado para controlar a etapa atual

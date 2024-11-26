@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import '../PatientCard/patientCard.css';
-import GetPacientes from '../../functions/Pacientes/GetPacientes';
+// import '../PatientCard/patientCard.css';
+import GetPacientes from '../../../functions/Pacientes/GetPacientes';
 
 const PesquisarPacientes = ({ setPacientes }) => {
   const [page, setPage] = useState(1);

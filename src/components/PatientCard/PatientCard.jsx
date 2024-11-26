@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import './patientCard.css';
 
 // COMPONENTS
-import PesquisarPacientes from '../Pacientes/PesquisarPacientes';
+import PesquisarPacientes from './Pacientes/PesquisarPacientes';
 import GetPacientes from '../../functions/Pacientes/GetPacientes';
-import AdicionarPaciente from '../Pacientes/AdicionarPaciente';
-import AtualizarPaciente from '../Pacientes/AtualizarPaciente';
+import AdicionarPaciente from './Pacientes/AdicionarPaciente';
+import AtualizarPaciente from './Pacientes/AtualizarPaciente';
 import DeletePaciente from '../../functions/Pacientes/DeletePaciente';
 
 const PatientCard = () => {

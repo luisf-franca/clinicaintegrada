@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 // COMPONENTS
-import UpdatePaciente from '../../functions/Pacientes/UpdatePaciente';
+import UpdatePaciente from '../../../functions/Pacientes/UpdatePaciente';
 
 const AtualizarPaciente = ({ pacienteId, pacienteInicial, atualizarListaPacientes }) => {
     const [step, setStep] = useState(1); // Controle da etapa atual
