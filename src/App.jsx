@@ -1,13 +1,57 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
+import Login from './functions/Authenticate/Login.jsx';
 import './App.css';
 
 // COMPONENTS
 import Router from './components/Router/Router.jsx';
 
 function App() {
+  const handleLogin = async () => {
+    try {
+      const response = await Login({
+        email: 'atendente@user.com.br',
+        senha: 'Teste1@'
+      });
+      console.log('Usuário autenticado com sucesso:', response);
+
+      // Armazenando token e data de expiração no localStorage
+      localStorage.setItem('token', response.token);
+      localStorage.setItem('dataExpiracao', response.expiration);
+    } catch (error) {
+      console.error('Erro ao realizar login:', error);
+      alert("Ocorreu um erro ao processar sua solicitação. Verifique os logs para mais informações.");
+    }
+  };
+
+  const handleAuthentication = async () => {
+    const dataExpiracao = localStorage.getItem('dataExpiracao');
+
+    if (dataExpiracao) {
+      const expiracaoDate = new Date(dataExpiracao);
+      const currentDate = new Date();
+
+      if (expiracaoDate < currentDate) {
+        console.log('Token expirado, realizando novo login...');
+        await handleLogin();
+      } else {
+        console.log('Token ainda válido.');
+      }
+    } else {
+      console.log('Nenhum token encontrado, realizando login inicial...');
+      await handleLogin();
+    }
+  };
 
   useEffect(() => {
-    localStorage.setItem('token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImF0ZW5kZW50ZUB1c2VyLmNvbS5iciIsImp0aSI6IjczNzQ5NmQ4LTlhYzgtNDliYS1hMTI1LTViNTFkZjI4NjgxNyIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWUiOiJhdGVuZGVudGVAdXNlci5jb20uYnIiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJhdGVuZGVudGUiLCJleHAiOjE3MzI2MTAzMTYsImlzcyI6IkNsaW5pY2FJbnRlZ3JhZGFfSXNzdWVyIiwiYXVkIjoiQ2xpbmljYUludGVncmFkYV9BdWRpZW5jZSJ9.l0tr8r2akgAF6I9RTWEcE-s8jIAl7myLdO6oT8rU1bE');
+    handleAuthentication();
+
+    const intervalId = setInterval(() => {
+      handleAuthentication();
+    }, 3600000); // 1 hora em milissegundos
+
+    return () => {
+      clearInterval(intervalId);
+    };
   }, []);
 
   return (
