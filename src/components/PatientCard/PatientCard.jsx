@@ -1,112 +1,61 @@
 import React, { useState, useEffect } from 'react';
 import './patientCard.css';
 
-//COMPONENTS
+// COMPONENTS
 import PesquisarPacientes from '../Pacientes/PesquisarPacientes';
 import GetPacientes from '../../functions/Pacientes/GetPacientes';
 import AdicionarPaciente from '../Pacientes/AdicionarPaciente';
+import AtualizarPaciente from '../Pacientes/AtualizarPaciente';
+import DeletePaciente from '../../functions/Pacientes/DeletePaciente';
 
 const PatientCard = () => {
-
   const [selectedComponent, setSelectedComponent] = useState('Pesquisar');
-  const [pacientes, setPacientes] = useState([
-    {
-      nome: "Ana Silva",
-      telefone: "31985674523",
-      idade: 12,
-      nomeResponsavel: "Maria Silva",
-      parentescoResponsavel: "Mãe",
-      observacao: "Alergia a medicamentos",
-      recebeuAlta: false,
-    },
-    {
-      nome: "Carlos Souza",
-      telefone: "31991237856",
-      idade: 16,
-      nomeResponsavel: "João Souza",
-      parentescoResponsavel: "Pai",
-      observacao: "Hipertensão arterial",
-      recebeuAlta: true,
-    },
-    {
-      nome: "Mariana Oliveira",
-      telefone: "31983456219",
-      idade: 28,
-      nomeResponsavel: null,
-      parentescoResponsavel: null,
-      observacao: "Em acompanhamento pós-cirúrgico",
-      recebeuAlta: false,
-    },
-    {
-      nome: "João Santos",
-      telefone: "31976543210",
-      idade: 35,
-      nomeResponsavel: null,
-      parentescoResponsavel: null,
-      observacao: "Diabetes tipo 2",
-      recebeuAlta: true,
-    },
-    {
-      nome: "Fernanda Costa",
-      telefone: "31999876543",
-      idade: 17,
-      nomeResponsavel: "Pedro Costa",
-      parentescoResponsavel: "Avô",
-      observacao: "Consulta de rotina",
-      recebeuAlta: false,
-    },
-    {
-      nome: "Lucas Lima",
-      telefone: "31982347856",
-      idade: 13,
-      nomeResponsavel: "Camila Lima",
-      parentescoResponsavel: "Irmã",
-      observacao: "Tratamento odontológico",
-      recebeuAlta: false,
-    },
-    {
-      nome: "Carla Pereira",
-      telefone: "31984567812",
-      idade: 7,
-      nomeResponsavel: "Rodrigo Pereira",
-      parentescoResponsavel: "Pai",
-      observacao: "Acompanhamento nutricional",
-      recebeuAlta: true,
-    },
-    {
-      nome: "Ricardo Almeida",
-      telefone: "31996781234",
-      idade: 32,
-      nomeResponsavel: null,
-      parentescoResponsavel: null,
-      observacao: "Exame de sangue agendado",
-      recebeuAlta: false,
+  const [pacienteSelecionado, setPacienteSelecionado] = useState({});
+  const [pacientes, setPacientes] = useState([]);
+
+  const atualizarListaPacientes = async () => {
+    try {
+      const items = await GetPacientes();
+      setPacientes(items);
+    } catch (error) {
+      console.error('Erro ao buscar pacientes:', error);
     }
-  ]);
+  };
+
+  const handlePacienteClick = (paciente) => {
+    setPacienteSelecionado(paciente);
+    setSelectedComponent('Atualizar');
+  };
+
+  const handleDeletePaciente = async (pacienteId) => {
+    const confirmDelete = window.confirm('Tem certeza que deseja deletar o paciente?');
+    if (confirmDelete) {
+      try {
+        await DeletePaciente(pacienteId);
+        alert('Paciente deletado com sucesso!');
+        atualizarListaPacientes(); // Atualiza a lista após deletar
+      } catch (error) {
+        console.error('Erro ao deletar paciente:', error);
+        alert('Erro ao deletar paciente.');
+      }
+    } else {
+      alert('Ação cancelada.');
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const items = await GetPacientes();
-        setPacientes(items);
-      }
-      catch (error) {
-        console.error('Erro ao buscar pacientes:', error);
-      }
-    }
-    fetchData();
+    atualizarListaPacientes();
   }, []);
 
-  
   return (
     <div className="patient-card">
       <div className="patient-card-header">
         <h2>Pacientes</h2>
-        <button onClick={(e) => setSelectedComponent("Adicionar")}>Adicionar Paciente</button>
+        <button onClick={() => setSelectedComponent("Adicionar")}>Adicionar Paciente</button>
       </div>
 
       <div className="patient-card-body">
-        <div className='pesquisar-pacientes'>
+        <div className="pesquisar-pacientes">
           <select value={selectedComponent} onChange={(e) => setSelectedComponent(e.target.value)}>
             <option value="Pesquisar">Pesquisar</option>
             <option value="Adicionar">Adicionar</option>
@@ -114,14 +63,21 @@ const PatientCard = () => {
           </select>
 
           {selectedComponent === 'Pesquisar' && <PesquisarPacientes setPacientes={setPacientes} />}
-          {selectedComponent === 'Adicionar' && <AdicionarPaciente />} { /* pendência: deve atualizar lista de pacientes ao cadastrar paciente */ }
-          {selectedComponent === 'Atualizar' && <h1>Atualizar Paciente</h1>}
-
+          {selectedComponent === 'Adicionar' && (
+            <AdicionarPaciente atualizarListaPacientes={atualizarListaPacientes} />
+          )}
+          {selectedComponent === 'Atualizar' && (
+            <AtualizarPaciente
+              pacienteId={pacienteSelecionado.id}
+              pacienteInicial={pacienteSelecionado}
+              atualizarListaPacientes={atualizarListaPacientes}
+            />
+          )}
         </div>
 
-        <div className='lista-pacientes'>
-          <table className='pacientes-table'>
-            <thead className='header-lista'>
+        <div className="lista-pacientes">
+          <table className="pacientes-table">
+            <thead className="header-lista">
               <tr>
                 <th>Nome</th>
                 <th>Idade</th>
@@ -130,18 +86,34 @@ const PatientCard = () => {
                 <th>Recebeu Alta</th>
                 <th>Nome Responsável</th>
                 <th>Parentesco Responsável</th>
+                <th>Ações</th>
               </tr>
             </thead>
-            <tbody className='body-lista'>
-              {pacientes.map((paciente, index) => (
-                <tr key={index} className="paciente-item">
+            <tbody className="body-lista">
+              {pacientes.map((paciente) => (
+                <tr
+                  key={paciente.id}
+                  className="paciente-item"
+                  onClick={() => handlePacienteClick(paciente)}
+                  style={{
+                    cursor: 'pointer',
+                    backgroundColor:
+                      pacienteSelecionado.id === paciente.id ? '#f0f8ff' : 'transparent',
+                  }}
+                >
                   <td>{paciente.nome}</td>
                   <td>{paciente.idade}</td>
                   <td>{paciente.telefone}</td>
                   <td>{paciente.observacao}</td>
-                  <td>{paciente.recebeuAlta ? "Sim" : "Não"}</td>
+                  <td>{paciente.recebeuAlta ? 'Sim' : 'Não'}</td>
                   <td>{paciente.nomeResponsavel}</td>
                   <td>{paciente.parentescoResponsavel}</td>
+                  <td>
+                    <button onClick={(e) => {
+                      e.stopPropagation();
+                      handleDeletePaciente(paciente.id);
+                    }}>Deletar</button>
+                  </td>
                 </tr>
               ))}
             </tbody>

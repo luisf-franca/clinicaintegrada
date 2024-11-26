@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 //COMPONENTS
 import CreatePaciente from '../../functions/Pacientes/CreatePaciente';
 
-const AdicionarPaciente = () => {
+const AdicionarPaciente = ( { atualizarListaPacientes } ) => {
     const [step, setStep] = useState(1); // Estado para controlar a etapa atual
     const [paciente, setPaciente] = useState({
         nome: '',
@@ -20,6 +20,8 @@ const AdicionarPaciente = () => {
     });
     const [desejaResponsavel, setDesejaResponsavel] = useState(false);
     const [desejaListaEspera, setDesejaListaEspera] = useState(false);
+
+
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -49,6 +51,7 @@ const AdicionarPaciente = () => {
             const response = await CreatePaciente(pacienteData);
             console.log('Paciente adicionado com sucesso:', response);
             alert('Paciente adicionado com sucesso!');
+            await atualizarListaPacientes(); // Atualiza a lista
         } catch (error) {
             console.error('Erro ao adicionar paciente:', error);
             alert('Erro ao adicionar paciente.');
