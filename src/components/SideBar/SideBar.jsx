@@ -1,7 +1,8 @@
 import React from 'react';
 import './SideBar.css';
 
-import iconInicio from '../../assets/icons/icon-listaEspera.png';
+import iconHome from '../../assets/icons/icon-home.jpg';
+import iconListaEspera from '../../assets/icons/icon-listaEspera.png';
 import iconPaciente from '../../assets/icons/icon-paciente.png';
 import iconAgendamento from '../../assets/icons/icon-agendamento.png';
 import iconConsulta from '../../assets/icons/icon-consulta.png';
@@ -12,8 +13,11 @@ import iconSala from '../../assets/icons/icon-sala.png';
 const SideBar = ({ onSelection }) => {
     return (
         <div className="sidebar">
-            <button onClick={() => onSelection('Inicio')} className="sidebar-item" title="Início">
-                <img src={iconInicio} alt="Início" />
+            <button onClick={() => onSelection('Inicio')} className="sidebar-item" title="Home">
+                <img src={iconHome} alt="Inicio"></img>
+            </button>
+            <button onClick={() => onSelection('ListaEsperaCard')} className="sidebar-item" title="Início">
+                <img src={iconListaEspera} alt="ListaEspera" />
             </button>
             <button onClick={() => onSelection('PatientCard')} className="sidebar-item" title="Paciente">
                 <img src={iconPaciente} alt="Paciente" />

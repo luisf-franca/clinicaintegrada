@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import './agendamento.css';
+import './home.css';
 
 // COMPONENTS
 import SideBar from '../../components/SideBar/SideBar';
 import PatientCard from '../../components/PatientCard/PatientCard';
 import ListaEsperaCard from '../../components/ListaEsperaCard/ListaEsperaCard';
 
-const Agendamento = () => {
+const Home = () => {
   // Estado para controlar o componente selecionado
   const [selectedComponent, setSelectedComponent] = useState('Inicio');
 
@@ -19,7 +19,8 @@ const Agendamento = () => {
     <section className="pages">
       <main className="container">
         <SideBar onSelection={handleSelection} />
-        {selectedComponent === 'Inicio' && <ListaEsperaCard />}
+        {selectedComponent === 'Inicio' && <h1>Home</h1>}
+        {selectedComponent === 'ListaEsperaCard' && <ListaEsperaCard />}
         {selectedComponent === 'PatientCard' && <PatientCard />}
         {selectedComponent === 'AgendamentoCard' && <h1>Agendamento</h1>}
         {selectedComponent === 'ConsultaCard' && <h1>Consulta</h1>}
@@ -31,4 +32,4 @@ const Agendamento = () => {
   );
 };
 
-export default Agendamento;
+export default Home;
