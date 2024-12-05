@@ -44,7 +44,7 @@ function App() {
   };
 
   useEffect(() => {
-    handleAuthentication();
+    handleLogin();
 
     const intervalId = setInterval(() => {
       handleAuthentication();
