@@ -1,6 +1,8 @@
 import React from 'react';
 
 const ListaEsperaResumo = () => {
+    
+
     return (
         <div className="lista-espera-resumo">
             <div className="lista-espera-resumo__header">

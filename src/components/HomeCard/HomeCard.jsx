@@ -6,7 +6,7 @@ import Especialidade from '../Especialidade/Especialidade';
 import ListaEsperaResumo from './Resumo/ListaEspera/ListaEsperaResumo';
 
 const HomeCard = () => {
-    const [selectedSpecialty, setSelectedSpecialty] = useState(null); // Armazena o valor inteiro da especialidade selecionada
+    const [selectedSpecialty, setSelectedSpecialty] = useState(0); // Armazena o valor inteiro da especialidade selecionada
     
     useEffect(() => {
         if (selectedSpecialty !== null) {

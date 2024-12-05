@@ -18,10 +18,10 @@ const Especialidade = ({ selectedSpecialty, onSelectSpecialty }) => {
         <div className="especialidade">
             <h4>Especialidade</h4>
             <select
-                value={selectedSpecialty || ''}
+                value={selectedSpecialty || ''} 
                 onChange={handleSelectChange}
             >
-                <option value="" disabled>Selecione uma especialidade</option>
+                <option value={0}>Todas</option>
                 {specialties.map((specialty) => (
                     <option key={specialty.id} value={specialty.id}>
                         {specialty.name}
