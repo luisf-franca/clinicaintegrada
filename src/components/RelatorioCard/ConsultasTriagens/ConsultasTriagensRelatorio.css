@@ -1,4 +1,4 @@
-.consultas-triagens-resumo {
+.consultas-triagens-relatorio {
     width: 80%;
     border: 1px solid #ddd;
     border-radius: 4px;
@@ -6,44 +6,44 @@
     background-color: #fff;
 }
 
-.consultas-triagens-resumo__header {
+.consultas-triagens-relatorio__header {
     background-color: #d71c23;
     color: #fff;
     padding: 10px;
     text-align: center;
 }
 
-.consultas-triagens-resumo__header h4 {
+.consultas-triagens-relatorio__header h4 {
     margin: 0;
     font-size: 1.0rem; /* Reduzido para 1.0 conforme pedido */
 }
 
-.consultas-triagens-resumo__body {
+.consultas-triagens-relatorio__body {
     padding: 10px;
 }
 
-.consultas-triagens-resumo__table {
+.consultas-triagens-relatorio__table {
     width: 100%;
     border-collapse: collapse;
     text-align: left;
     font-size: 0.8rem; /* Reduzido para 0.8 conforme pedido */
 }
 
-.consultas-triagens-resumo__table th,
-.consultas-triagens-resumo__table td {
+.consultas-triagens-relatorio__table th,
+.consultas-triagens-relatorio__table td {
     border: 1px solid #ddd;
     padding: 8px;
 }
 
-.consultas-triagens-resumo__table th {
+.consultas-triagens-relatorio__table th {
     background-color: #f4f4f4;
     font-weight: bold;
 }
 
-.consultas-triagens-resumo__table tr:nth-child(even) {
+.consultas-triagens-relatorio__table tr:nth-child(even) {
     background-color: #f9f9f9;
 }
 
-.consultas-triagens-resumo__table tr:hover {
+.consultas-triagens-relatorio__table tr:hover {
     background-color: #f1f1f1;
 }
