@@ -4,6 +4,7 @@ import './HomeCard.css';
 // COMPONENTS
 import Especialidade from '../Especialidade/Especialidade';
 import ListaEsperaResumo from './Resumo/ListaEspera/ListaEsperaResumo';
+import ConsultasTriagensResumo from './Resumo/ConsultasTriagens/ConsultasTriagensResumo';
 
 const HomeCard = () => {
     const [selectedSpecialty, setSelectedSpecialty] = useState(0); // Armazena o valor inteiro da especialidade selecionada
@@ -15,8 +16,8 @@ const HomeCard = () => {
     }, [selectedSpecialty]);
 
     return (
-        <div className="patient-card">
-            <div className="patient-card-header">
+        <div className="home-card">
+            <div className="home-card-header">
                 <h1>Home</h1>
                 {/* Passando o estado e a função de atualização para o componente Especialidade */}
                 <Especialidade
@@ -24,13 +25,15 @@ const HomeCard = () => {
                     onSelectSpecialty={setSelectedSpecialty}
                 />
             </div>
-            <div className="patient-card-body">
+            <div className="home-card-body">
                 {/* Primeira div com 2 componentes */}
                 <div className="body-section">
                     <div className="component">
                         <ListaEsperaResumo />
                     </div>
-                    <div className="component">Consultas/Triagens</div>
+                    <div className="component">
+                        <ConsultasTriagensResumo />
+                    </div>
                 </div>
 
                 {/* Segunda div com 1 componente */}

@@ -1,0 +1,49 @@
+.lista-espera-resumo {
+    width: 80%;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+    background-color: #fff;
+}
+
+.lista-espera-resumo__header {
+    background-color: #d71c23;
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+}
+
+.lista-espera-resumo__header h4 {
+    margin: 0;
+    font-size: 1.0rem;
+}
+
+.lista-espera-resumo__body {
+    padding: 10px;
+}
+
+.lista-espera-resumo__table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.8rem;
+}
+
+.lista-espera-resumo__table th,
+.lista-espera-resumo__table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.lista-espera-resumo__table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
+
+.lista-espera-resumo__table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.lista-espera-resumo__table tr:hover {
+    background-color: #f1f1f1;
+}
