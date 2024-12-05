@@ -2,14 +2,12 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 
 // PAGES
-import Agendamento from '../../pages/agendamento/agendamento';
-import Relatorio from '../../pages/relatorio/relatorio';
+import Home from '../../pages/home/home';
 
 const Router = () => {
   return (
     <Routes>
-      <Route path="/" element={<Agendamento />} />
-      <Route path="/relatorio" element={<Relatorio />} />
+      <Route path="/" element={<Home />} />
     </Routes>
   );
 };

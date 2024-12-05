@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './PesquisaRegistros.css';
+import './PesquisarRegistros.css';
 
 // COMPONENTS
 import GetPacientes from '../../../functions/Pacientes/GetPacientes';
