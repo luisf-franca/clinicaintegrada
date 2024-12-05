@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import './home.css';
 
 // COMPONENTS
+import Especialidade from '../../components/Especialidade/Especialidade';
 import SideBar from '../../components/SideBar/SideBar';
+import HomeCard from '../../components/HomeCard/HomeCard';
 import PatientCard from '../../components/PatientCard/PatientCard';
 import ListaEsperaCard from '../../components/ListaEsperaCard/ListaEsperaCard';
 
@@ -19,7 +21,7 @@ const Home = () => {
     <section className="pages">
       <main className="container">
         <SideBar onSelection={handleSelection} />
-        {selectedComponent === 'Inicio' && <h1>Home</h1>}
+        {selectedComponent === 'Inicio' && <HomeCard/>}
         {selectedComponent === 'ListaEsperaCard' && <ListaEsperaCard />}
         {selectedComponent === 'PatientCard' && <PatientCard />}
         {selectedComponent === 'AgendamentoCard' && <h1>Agendamento</h1>}
