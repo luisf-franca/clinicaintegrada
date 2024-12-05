@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './ListaEsperaResumo.css';
 
 const ListaEsperaResumo = () => {
     // Estado inicial com dados fictícios

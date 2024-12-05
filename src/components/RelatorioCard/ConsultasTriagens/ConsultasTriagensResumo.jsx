@@ -10,7 +10,7 @@ const ConsultasTriagensResumo = () => {
         <div className="consultas-triagens-resumo">
             {/* Header com título */}
             <div className="consultas-triagens-resumo__header">
-                <h4>Consultas/Triagens</h4>
+                <h4>Consultas e Triagens</h4>
             </div>
 
             {/* Corpo do resumo */}

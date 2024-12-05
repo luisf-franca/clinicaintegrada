@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-// import '../PatientCard/patientCard.css';
 import GetPacientes from '../../../functions/Pacientes/GetPacientes';
 
 const PesquisarPacientes = ({ setPacientes }) => {

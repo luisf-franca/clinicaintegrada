@@ -1,0 +1,49 @@
+.pacientes-resumo {
+    width: 80%;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+    background-color: #fff;
+}
+
+.pacientes-resumo__header {
+    background-color: #d71c23;
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+}
+
+.pacientes-resumo__header h4 {
+    margin: 0;
+    font-size: 1.0rem; /* Reduzido para 1.0 conforme padrão */
+}
+
+.pacientes-resumo__body {
+    padding: 10px;
+}
+
+.pacientes-resumo__table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.8rem; /* Reduzido para 0.8 conforme padrão */
+}
+
+.pacientes-resumo__table th,
+.pacientes-resumo__table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.pacientes-resumo__table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
+
+.pacientes-resumo__table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.pacientes-resumo__table tr:hover {
+    background-color: #f1f1f1;
+}
