@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import '../styles/agendamento.css';
 import Especialidade from '../components/Especialidade/Especialidade';
 import AgendamentoModal from '../components/AgendamentoModal/AgendamentoModal';
+import AgendamentoDetails from '../components/AgendamentoDetails/AgendamentoDetails';
 
 const Agendamento = () => {
   const [selectedSlots, setSelectedSlots] = useState({});
@@ -10,6 +11,7 @@ const Agendamento = () => {
   const [startSlot, setStartSlot] = useState(null);
   const [currentRange, setCurrentRange] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [modalData, setModalData] = useState({
     patientName: '',
     interns: '',
@@ -170,6 +172,20 @@ const Agendamento = () => {
     setCurrentWeek(currentWeek + 1);
   };
 
+  // const handleShowDetails = (day, time) => {
+  //   setModalData({
+  //     patientName: selectedSlots[day]?.[time]?.patientName || '',
+  //     interns: selectedSlots[day]?.[time]?.interns || '',
+  //     procedure: selectedSlots[day]?.[time]?.procedure || '',
+  //     observations: selectedSlots[day]?.[time]?.observations || '',
+  //     startSlot: time,
+  //     endSlot: selectedSlots[day]?.[time]?.endSlot || '',
+  //   });
+  //   setIsDetailsOpen(true);
+  // };
+
+  const closeDetails = () => setIsDetailsOpen(false);
+
   return (
     <div
       className="agendamento"
@@ -180,6 +196,10 @@ const Agendamento = () => {
         <h1>Agendamentos</h1>
         <Especialidade />
       </hgroup>
+
+      {isDetailsOpen && (
+        <AgendamentoDetails modalData={modalData} closeDetails={closeDetails} />
+      )}
 
       <nav>
         <button onClick={handleOpenModal} disabled={currentRange.length === 0}>
@@ -260,7 +280,6 @@ const Agendamento = () => {
           modalData={modalData}
           setModalData={setModalData}
           handleSaveModal={handleSaveModal}
-          currentRange={currentRange}
         />
       )}
     </div>

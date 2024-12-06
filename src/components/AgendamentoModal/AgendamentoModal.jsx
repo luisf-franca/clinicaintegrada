@@ -7,7 +7,6 @@ const AgendamentoModal = ({
   modalData,
   setModalData,
   handleSaveModal,
-  currentRange,
 }) => {
   return (
     isModalOpen && (
@@ -21,40 +20,45 @@ const AgendamentoModal = ({
             </div>
           </hgroup>
 
-          <input
-            type="text"
-            placeholder="Nome do Paciente"
-            value={modalData.patientName}
-            onChange={(e) =>
-              setModalData({ ...modalData, patientName: e.target.value })
-            }
-          />
-          <input
-            type="text"
-            placeholder="Estagiários"
-            value={modalData.interns}
-            onChange={(e) =>
-              setModalData({ ...modalData, interns: e.target.value })
-            }
-          />
+          <form>
+            <input
+              type="text"
+              placeholder="Nome do Paciente"
+              value={modalData.patientName}
+              onChange={(e) =>
+                setModalData({ ...modalData, patientName: e.target.value })
+              }
+            />
+            <input
+              type="text"
+              placeholder="Estagiários"
+              value={modalData.interns}
+              onChange={(e) =>
+                setModalData({ ...modalData, interns: e.target.value })
+              }
+            />
 
-          <input
-            type="text"
-            placeholder="Procedimento"
-            value={modalData.procedure}
-            onChange={(e) =>
-              setModalData({ ...modalData, procedure: e.target.value })
-            }
-          />
-          <textarea
-            placeholder="Observações"
-            value={modalData.observations}
-            onChange={(e) =>
-              setModalData({ ...modalData, observations: e.target.value })
-            }
-          />
-          <button onClick={handleSaveModal}>Salvar</button>
-          <button onClick={() => setIsModalOpen(false)}>Cancelar</button>
+            <input
+              type="text"
+              placeholder="Procedimento"
+              value={modalData.procedure}
+              onChange={(e) =>
+                setModalData({ ...modalData, procedure: e.target.value })
+              }
+            />
+            <textarea
+              placeholder="Observações"
+              value={modalData.observations}
+              onChange={(e) =>
+                setModalData({ ...modalData, observations: e.target.value })
+              }
+            />
+          </form>
+
+          <div>
+            <button onClick={() => setIsModalOpen(false)}>Cancelar</button>
+            <button onClick={handleSaveModal}>Salvar</button>
+          </div>
         </div>
       </div>
     )

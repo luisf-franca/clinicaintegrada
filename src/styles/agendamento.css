@@ -12,11 +12,19 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+
+    & select {
+      cursor: pointer;
+    }
   }
 
   & > nav {
     display: flex;
     gap: 1rem;
+
+    & button {
+      cursor: pointer;
+    }
   }
 
   & .calendario-wrapper {
