@@ -1,4 +1,4 @@
-.equipes-profissionais-resumo {
+.pacientes-relatorio {
     width: 80%;
     border: 1px solid #ddd;
     border-radius: 4px;
@@ -6,44 +6,44 @@
     background-color: #fff;
 }
 
-.equipes-profissionais-resumo__header {
+.pacientes-relatorio__header {
     background-color: #d71c23;
     color: #fff;
     padding: 10px;
     text-align: center;
 }
 
-.equipes-profissionais-resumo__header h4 {
+.pacientes-relatorio__header h4 {
     margin: 0;
     font-size: 1.0rem; /* Reduzido para 1.0 conforme padrão */
 }
 
-.equipes-profissionais-resumo__body {
+.pacientes-relatorio__body {
     padding: 10px;
 }
 
-.equipes-profissionais-resumo__table {
+.pacientes-relatorio__table {
     width: 100%;
     border-collapse: collapse;
     text-align: left;
     font-size: 0.8rem; /* Reduzido para 0.8 conforme padrão */
 }
 
-.equipes-profissionais-resumo__table th,
-.equipes-profissionais-resumo__table td {
+.pacientes-relatorio__table th,
+.pacientes-relatorio__table td {
     border: 1px solid #ddd;
     padding: 8px;
 }
 
-.equipes-profissionais-resumo__table th {
+.pacientes-relatorio__table th {
     background-color: #f4f4f4;
     font-weight: bold;
 }
 
-.equipes-profissionais-resumo__table tr:nth-child(even) {
+.pacientes-relatorio__table tr:nth-child(even) {
     background-color: #f9f9f9;
 }
 
-.equipes-profissionais-resumo__table tr:hover {
+.pacientes-relatorio__table tr:hover {
     background-color: #f1f1f1;
 }

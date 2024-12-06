@@ -23,7 +23,6 @@ const AgendamentosResumo = () => {
 
     return (
         <div className="agendamentos-resumo">
-            {/* Header */}
             <div className="agendamentos-resumo__header">
                 <h4>Agendamentos</h4>
             </div>

@@ -1,21 +1,21 @@
 import React, { useState } from 'react';
-import './ConsultasTriagensResumo.css';
+import './ConsultasTriagensRelatorio.css';
 
-const ConsultasTriagensResumo = () => {
+const ConsultasTriagensRelatorio = () => {
     const [quantidadeConsultasAgendadas, setQuantidadeConsultasAgendadas] = useState(15); // Exemplo inicial
     const [quantidadeConsultasEmAndamento, setQuantidadeConsultasEmAndamento] = useState(8); // Exemplo inicial
     const [quantidadeConsultasConcluidas, setQuantidadeConsultasConcluidas] = useState(12); // Exemplo inicial
 
     return (
-        <div className="consultas-triagens-resumo">
+        <div className="consultas-triagens-relatorio">
             {/* Header com título */}
-            <div className="consultas-triagens-resumo__header">
+            <div className="consultas-triagens-relatorio__header">
                 <h4>Consultas e Triagens</h4>
             </div>
 
-            {/* Corpo do resumo */}
-            <div className="consultas-triagens-resumo__body">
-                <table className="consultas-triagens-resumo__table">
+            {/* Corpo do relatorio */}
+            <div className="consultas-triagens-relatorio__body">
+                <table className="consultas-triagens-relatorio__table">
                     <thead>
                         <tr>
                             <th>Status</th>
@@ -42,4 +42,4 @@ const ConsultasTriagensResumo = () => {
     );
 };
 
-export default ConsultasTriagensResumo;
+export default ConsultasTriagensRelatorio;

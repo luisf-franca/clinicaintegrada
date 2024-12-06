@@ -1,21 +1,21 @@
 import React, { useState } from 'react';
-import './PacientesResumo.css';
+import './PacientesRelatorio.css';
 
-const PacientesResumo = () => {
+const PacientesRelatorio = () => {
     const [quantidadeTotalPacientes, setQuantidadeTotalPacientes] = useState(100); // Exemplo inicial
     const [quantidadePacientesHomens, setQuantidadePacientesHomens] = useState(40); // Exemplo inicial
     const [quantidadePacientesMulheres, setQuantidadePacientesMulheres] = useState(60); // Exemplo inicial
 
     return (
-        <div className="pacientes-resumo">
+        <div className="pacientes-relatorio">
             {/* Header com título */}
-            <div className="pacientes-resumo__header">
+            <div className="pacientes-relatorio__header">
                 <h4>Pacientes</h4>
             </div>
 
-            {/* Corpo do resumo */}
-            <div className="pacientes-resumo__body">
-                <table className="pacientes-resumo__table">
+            {/* Corpo do relatorio */}
+            <div className="pacientes-relatorio__body">
+                <table className="pacientes-relatorio__table">
                     <thead>
                         <tr>
                             <th>Categoria</th>
@@ -42,4 +42,4 @@ const PacientesResumo = () => {
     );
 };
 
-export default PacientesResumo;
+export default PacientesRelatorio;

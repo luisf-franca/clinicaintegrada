@@ -1,21 +1,21 @@
 import React, { useState } from 'react';
-import './EquipesResumo.css';
+import './EquipesRelatorio.css';
 
-const EquipesEProfissionaisResumo = () => {
+const EquipesRelatorio = () => {
     const [quantidadeEquipes, setQuantidadeEquipes] = useState(5); // Exemplo inicial
     const [quantidadeProfessores, setQuantidadeProfessores] = useState(12); // Exemplo inicial
     const [quantidadeEstagiarios, setQuantidadeEstagiarios] = useState(8); // Exemplo inicial
 
     return (
-        <div className="equipes-profissionais-resumo">
+        <div className="equipes-profissionais-relatorio">
             {/* Header com título */}
-            <div className="equipes-profissionais-resumo__header">
+            <div className="equipes-profissionais-relatorio__header">
                 <h4>Equipes</h4>
             </div>
 
-            {/* Corpo do resumo */}
-            <div className="equipes-profissionais-resumo__body">
-                <table className="equipes-profissionais-resumo__table">
+            {/* Corpo do relatorio */}
+            <div className="equipes-profissionais-relatorio__body">
+                <table className="equipes-profissionais-relatorio__table">
                     <thead>
                         <tr>
                             <th>Categoria</th>
@@ -42,4 +42,4 @@ const EquipesEProfissionaisResumo = () => {
     );
 };
 
-export default EquipesEProfissionaisResumo;
+export default EquipesRelatorio;
