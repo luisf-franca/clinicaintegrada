@@ -3,24 +3,26 @@ import Login from './functions/Authenticate/Login.jsx';
 import './App.css';
 
 // COMPONENTS
-import Router from './components/Router/Router.jsx';
+import Router from './router.jsx';
+import Sidebar from './components/SideBar/SideBar.jsx';
 
 function App() {
   const handleLogin = async () => {
     try {
       const response = await Login({
         email: 'atendente@user.com.br',
-        senha: 'Teste1@'
+        senha: 'Teste1@',
       });
       console.log('Usuário autenticado com sucesso:', response);
 
-      // Armazenando token e data de expiração no localStorage
       console.log(response.token);
       localStorage.setItem('token', response.token);
       localStorage.setItem('dataExpiracao', response.expiration);
     } catch (error) {
       console.error('Erro ao realizar login:', error);
-      alert("Ocorreu um erro ao processar sua solicitação. Verifique os logs para mais informações.");
+      // alert(
+      //   'Ocorreu um erro ao processar sua solicitação. Verifique os logs para mais informações.',
+      // );
     }
   };
 
@@ -48,7 +50,7 @@ function App() {
 
     const intervalId = setInterval(() => {
       handleAuthentication();
-    }, 3600000); // 1 hora em milissegundos
+    }, 3600000);
 
     return () => {
       clearInterval(intervalId);
@@ -56,9 +58,12 @@ function App() {
   }, []);
 
   return (
-    <>
-      <Router />
-    </>
+    <section className="pages">
+      <main className="container">
+        <Sidebar />
+        <Router />
+      </main>
+    </section>
   );
 }
 

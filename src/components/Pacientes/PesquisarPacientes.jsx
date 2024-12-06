@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import GetPacientes from '../../../functions/Pacientes/GetPacientes';
+import GetPacientes from '../../functions/Pacientes/GetPacientes';
 
 const PesquisarPacientes = ({ setPacientes }) => {
   const [page, setPage] = useState(1);
@@ -62,7 +62,14 @@ const PesquisarPacientes = ({ setPacientes }) => {
             onKeyDown={handleKeyDown}
           />
           {nome && (
-            <button onClick={() => { clearFilter(); setPacientes([]); }}>Limpar</button>
+            <button
+              onClick={() => {
+                clearFilter();
+                setPacientes([]);
+              }}
+            >
+              Limpar
+            </button>
           )}
         </div>
       </div>

@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import './patientCard.css';
+import '../styles/pacientes.css';
 
 // COMPONENTS
-import PesquisarPacientes from './Pacientes/PesquisarPacientes';
-import GetPacientes from '../../functions/Pacientes/GetPacientes';
-import AdicionarPaciente from './Pacientes/AdicionarPaciente';
-import AtualizarPaciente from './Pacientes/AtualizarPaciente';
-import DeletePaciente from '../../functions/Pacientes/DeletePaciente';
+import PesquisarPacientes from '../components/Pacientes/PesquisarPacientes';
+import GetPacientes from '../functions/Pacientes/GetPacientes';
+import AdicionarPaciente from '../components/Pacientes/AdicionarPaciente';
+import AtualizarPaciente from '../components/Pacientes/AtualizarPaciente';
+import DeletePaciente from '../functions/Pacientes/DeletePaciente';
 
-const PatientCard = () => {
+const Pacientes = () => {
   const [selectedComponent, setSelectedComponent] = useState('Pesquisar');
   const [pacienteSelecionado, setPacienteSelecionado] = useState({});
   const [pacientes, setPacientes] = useState([]);
@@ -28,7 +28,9 @@ const PatientCard = () => {
   };
 
   const handleDeletePaciente = async (pacienteId) => {
-    const confirmDelete = window.confirm('Tem certeza que deseja deletar o paciente?');
+    const confirmDelete = window.confirm(
+      'Tem certeza que deseja deletar o paciente?',
+    );
     if (confirmDelete) {
       try {
         await DeletePaciente(pacienteId);
@@ -51,20 +53,29 @@ const PatientCard = () => {
     <div className="patient-card">
       <div className="patient-card-header">
         <h2>Pacientes</h2>
-        <button onClick={() => setSelectedComponent("Adicionar")}>Adicionar Paciente</button>
+        <button onClick={() => setSelectedComponent('Adicionar')}>
+          Adicionar Paciente
+        </button>
       </div>
 
       <div className="patient-card-body">
         <div className="pesquisar-pacientes">
-          <select value={selectedComponent} onChange={(e) => setSelectedComponent(e.target.value)}>
+          <select
+            value={selectedComponent}
+            onChange={(e) => setSelectedComponent(e.target.value)}
+          >
             <option value="Pesquisar">Pesquisar</option>
             <option value="Adicionar">Adicionar</option>
             <option value="Atualizar">Atualizar</option>
           </select>
 
-          {selectedComponent === 'Pesquisar' && <PesquisarPacientes setPacientes={setPacientes} />}
+          {selectedComponent === 'Pesquisar' && (
+            <PesquisarPacientes setPacientes={setPacientes} />
+          )}
           {selectedComponent === 'Adicionar' && (
-            <AdicionarPaciente atualizarListaPacientes={atualizarListaPacientes} />
+            <AdicionarPaciente
+              atualizarListaPacientes={atualizarListaPacientes}
+            />
           )}
           {selectedComponent === 'Atualizar' && (
             <AtualizarPaciente
@@ -98,7 +109,9 @@ const PatientCard = () => {
                   style={{
                     cursor: 'pointer',
                     backgroundColor:
-                      pacienteSelecionado.id === paciente.id ? '#f0f8ff' : 'transparent',
+                      pacienteSelecionado.id === paciente.id
+                        ? '#f0f8ff'
+                        : 'transparent',
                   }}
                 >
                   <td>{paciente.nome}</td>
@@ -109,10 +122,14 @@ const PatientCard = () => {
                   <td>{paciente.nomeResponsavel}</td>
                   <td>{paciente.parentescoResponsavel}</td>
                   <td>
-                    <button onClick={(e) => {
-                      e.stopPropagation();
-                      handleDeletePaciente(paciente.id);
-                    }}>Deletar</button>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDeletePaciente(paciente.id);
+                      }}
+                    >
+                      Deletar
+                    </button>
                   </td>
                 </tr>
               ))}
@@ -124,4 +141,4 @@ const PatientCard = () => {
   );
 };
 
-export default PatientCard;
+export default Pacientes;

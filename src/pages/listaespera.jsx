@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
-import "./listaEsperaCard.css";
+import React, { useState, useEffect } from 'react';
+import '../styles/listaespera.css';
 
 // COMPONENTS
-import PesquisarRegistros from "./ListaEspera/PesquisarRegistros";
-import GetListaEntries from "../../functions/ListaEspera/GetListaEntries";
+import PesquisarRegistros from '../components/ListaEspera/PesquisarRegistros';
+import GetListaEntries from '../functions/ListaEspera/GetListaEntries';
 
-const ListaEsperaCard = () => {
-  const [selectedComponent, setSelectedComponent] = useState("Pesquisar");
+const ListaEspera = () => {
+  const [selectedComponent, setSelectedComponent] = useState('Pesquisar');
   const [registros, setRegistros] = useState([]);
   const [registroSelecionado, setRegistroSelecionado] = useState({});
 
@@ -22,7 +22,7 @@ const ListaEsperaCard = () => {
         setRegistros(data);
       })
       .catch((error) => {
-        console.error("Erro ao atualizar registros:", error);
+        console.error('Erro ao atualizar registros:', error);
       });
   };
 
@@ -42,7 +42,9 @@ const ListaEsperaCard = () => {
     <div className="patient-card">
       <div className="patient-card-header">
         <h2>Lista de Espera</h2>
-        <button onClick={() => setSelectedComponent("Adicionar")}>Adicionar Registro</button>
+        <button onClick={() => setSelectedComponent('Adicionar')}>
+          Adicionar Registro
+        </button>
       </div>
 
       <div className="patient-card-body">
@@ -56,7 +58,7 @@ const ListaEsperaCard = () => {
             <option value="Atualizar">Atualizar</option>
           </select>
 
-           {/* {selectedComponent === "Pesquisar" && (
+          {/* {selectedComponent === "Pesquisar" && (
             <PesquisarRegistros setRegistros={setRegistros} />
           )} */}
           {/*
@@ -92,18 +94,18 @@ const ListaEsperaCard = () => {
                   className="paciente-item"
                   onClick={() => handleRegistroClick(registro)}
                   style={{
-                    cursor: "pointer",
+                    cursor: 'pointer',
                     backgroundColor:
                       registroSelecionado.id === registro.id
-                        ? "#f0f8ff"
-                        : "transparent",
+                        ? '#f0f8ff'
+                        : 'transparent',
                   }}
                 >
                   <td>{new Date(registro.dataEntrada).toLocaleString()}</td>
                   <td>
                     {registro.dataSaida
                       ? new Date(registro.dataSaida).toLocaleString()
-                      : "N/A"}
+                      : 'N/A'}
                   </td>
                   <td>{registro.status}</td>
                   <td>{registro.prioridade}</td>
@@ -129,4 +131,4 @@ const ListaEsperaCard = () => {
   );
 };
 
-export default ListaEsperaCard;
+export default ListaEspera;

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './PesquisarRegistros.css';
 
 // COMPONENTS
-import GetPacientes from '../../../functions/Pacientes/GetPacientes';
+import GetPacientes from '../../functions/Pacientes/GetPacientes';
 
 const PesquisarRegistros = ({ setRegistros }) => {
   const [pageSize] = useState(4); // Limite para dropdown
@@ -48,22 +48,13 @@ const PesquisarRegistros = ({ setRegistros }) => {
     <div>
       <div>
         <label>Nome:</label>
-        <input
-          type="text"
-          value={nome}
-          onChange={handleNomeChange}
-        />
-        {nome && (
-          <button onClick={clearFilter}>Limpar</button>
-        )}
+        <input type="text" value={nome} onChange={handleNomeChange} />
+        {nome && <button onClick={clearFilter}>Limpar</button>}
       </div>
       {sugestoes.length > 0 && (
         <ul className="dropdown-sugestoes">
           {sugestoes.map((paciente) => (
-            <li
-              key={paciente.id}
-              onClick={() => handleSugestaoClick(paciente)}
-            >
+            <li key={paciente.id} onClick={() => handleSugestaoClick(paciente)}>
               {paciente.nome}
             </li>
           ))}
