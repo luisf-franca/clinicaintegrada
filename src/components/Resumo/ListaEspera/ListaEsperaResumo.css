@@ -8,6 +8,9 @@
 
 .lista-espera-resumo__header {
     background-color: #d71c23;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     color: #fff;
     padding: 10px;
     text-align: center;

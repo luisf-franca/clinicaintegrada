@@ -12,15 +12,48 @@ import PesquisarPacientes from '../components/Pacientes/PesquisarPacientes';
 import PacientesResumo from '../components/Resumo/Pacientes/PacientesResumo';
 
 const Home = () => {
-  const [selectedSpecialty, setSelectedSpecialty] = useState(0);
+  const [selectedSpecialty, setSelectedSpecialty] = useState(1);
+
   const [pacientes, setPacientes] = useState([]);
+  const [pacienteEtapa, setPacienteEtapa] = useState(null);
+  const [pacienteSelecionadoId, setPacienteSelecionadoId] = useState(null);
+
   const [activeTab, setActiveTab] = useState(0);
 
+  //monitore activeTab, se for alterada para Pacientes, deve limpar o pacienteSelecionadoId e pacienteEtapa
   useEffect(() => {
-    if (selectedSpecialty !== null) {
-      console.log(`Especialidade selecionada: ${selectedSpecialty}`);
+    if (activeTab === 0) {
+      setPacienteSelecionadoId(null);
+      setPacienteEtapa(null);
     }
-  }, [selectedSpecialty]);
+  }, [activeTab]);
+
+  //monitore pacienteEtapa, se for alterada, deve sugerir a funcionalidade de acordo com a etapa do paciente no sistema
+  useEffect(() => {
+    if (pacienteEtapa !== null) {
+      switch (pacienteEtapa) {
+        case 1:
+          console.log('Paciente cadastrado: ' + pacienteSelecionadoId);
+          setActiveTab(1);
+          break;
+        case 2:
+          console.log('Paciente cadastrado: ' + pacienteSelecionadoId);
+          setActiveTab(1);
+          break;
+        case 3:
+          console.log('Paciente em triagem/consulta');
+          break;
+        case 4:
+          console.log('Consulta concluída');
+          break;
+        case 5:
+          console.log('Consulta cancelada');
+          break;
+        default:
+          console.log('Etapa desconhecida');
+      }
+    }
+  }, [pacienteEtapa]);
 
   const handleTabChange = (index) => {
     setActiveTab(index);
@@ -47,12 +80,12 @@ const Home = () => {
           <TabPanel>
             <div className="body-section">
               <PesquisarPacientes setPacientes={setPacientes} />
-              <PacientesResumo pacientes={pacientes} />
+              <PacientesResumo pacientes={pacientes} setPacienteEtapa={setPacienteEtapa} setPacienteSelecionadoId={setPacienteSelecionadoId} />
             </div>
           </TabPanel>
           <TabPanel>
             <div className="body-section">
-              <ListaEsperaResumo />
+              <ListaEsperaResumo pacienteId={pacienteSelecionadoId} especialidade={selectedSpecialty} />
             </div>
           </TabPanel>
           <TabPanel>

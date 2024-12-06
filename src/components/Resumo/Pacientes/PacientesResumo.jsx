@@ -1,19 +1,23 @@
 import React, { useState } from 'react';
 import './PacientesResumo.css';
 
-const PacientesResumo = ({ pacientes }) => {
+//FUNCTIONS
+import GetPacienteEtapa from '../../../functions/Pacientes/GetPacienteEtapa';
+
+const PacientesResumo = ({ pacientes, setPacienteEtapa, setPacienteSelecionadoId }) => {
     const [selectedPaciente, setSelectedPaciente] = useState(null);
 
     const handleSelectPaciente = (index) => {
         setSelectedPaciente(index);
     };
 
-    const handleNext = () => {
+    const handleNext = async () => {
         if (selectedPaciente !== null) {
             const paciente = pacientes[selectedPaciente];
             // Lógica para identificar a etapa do paciente e redirecionar
-            console.log(`Paciente selecionado: ${paciente.id}`);
-            // Redirecionar para a próxima fase
+            var etapa = await GetPacienteEtapa(paciente.id);
+            setPacienteSelecionadoId(paciente.id);
+            setPacienteEtapa(etapa.data);
         }
     };
 
