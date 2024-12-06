@@ -49,6 +49,7 @@ const AgendamentosResumo = () => {
                             <th>Data/Hora Início</th>
                             <th>Data/Hora Fim</th>
                             <th>Sala</th>
+                            <th>Ações</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -58,6 +59,7 @@ const AgendamentosResumo = () => {
                                 <td>{item.dataHoraInicio}</td>
                                 <td>{item.dataHoraFim}</td>
                                 <td>{item.sala}</td>
+                                <button>Iniciar Consulta</button>
                             </tr>
                         ))}
                     </tbody>
