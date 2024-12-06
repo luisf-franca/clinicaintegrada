@@ -62,7 +62,7 @@ const PesquisarPacientes = ({ setPacientes }) => {
             onKeyDown={handleKeyDown}
           />
           {nome && (
-            <button onClick={() => { clearFilter(); setPacientes([]); }}>Limpar Filtro</button>
+            <button onClick={() => { clearFilter(); setPacientes([]); }}>Limpar</button>
           )}
         </div>
       </div>
