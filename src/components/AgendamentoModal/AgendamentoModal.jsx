@@ -1,4 +1,5 @@
 import React from 'react';
+import './AgendamentoModal.css';
 
 const AgendamentoModal = ({
   isModalOpen,
@@ -10,8 +11,8 @@ const AgendamentoModal = ({
 }) => {
   return (
     isModalOpen && (
-      <div className="modal-overlay" onClick={() => setIsModalOpen(false)}>
-        <div className="modal" onClick={(e) => e.stopPropagation()}>
+      <div className="overlay" onClick={() => setIsModalOpen(false)}>
+        <div className="agendar-modal" onClick={(e) => e.stopPropagation()}>
           <hgroup>
             <h3>Fazer Agendamento</h3>
             <div className="time-range">

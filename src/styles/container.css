@@ -1,11 +1,11 @@
 /* CONTAINER */
 
 .container {
-  margin-inline: auto;
+  display: flex;
 
-  max-width: 80rem;
+  max-width: 85%;
   width: 100vw;
-  height: 90vh;
+  height: 85vh;
   background-color: var(--branco);
   box-shadow: var(--shadow1);
   border-radius: 1rem;

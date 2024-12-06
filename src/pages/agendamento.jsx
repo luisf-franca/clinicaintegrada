@@ -17,10 +17,11 @@ const Agendamento = () => {
     observations: '',
   });
   const [currentWeek, setCurrentWeek] = useState(0);
+  const [selectedSlotForDelete, setSelectedSlotForDelete] = useState(null);
 
   const generateTimeSlots = () => {
     const slots = [];
-    for (let hour = 0; hour < 24; hour++) {
+    for (let hour = 8; hour < 22; hour++) {
       for (let minute = 0; minute < 60; minute += 15) {
         const formattedTime = `${hour.toString().padStart(2, '0')}:${minute
           .toString()
@@ -33,34 +34,28 @@ const Agendamento = () => {
 
   const timeSlots = generateTimeSlots();
 
-  const generateMonthDays = () => {
+  const generateDaysForWeek = (weekOffset) => {
     const today = new Date();
-    const year = today.getFullYear();
-    const month = today.getMonth();
-    const firstDayOfMonth = new Date(year, month, 1);
-    const lastDayOfMonth = new Date(year, month + 1, 0);
+    const firstDayOfWeek = new Date(
+      today.setDate(today.getDate() - today.getDay() + 1 + weekOffset * 7),
+    );
     const days = [];
-
-    for (let day = 1; day <= lastDayOfMonth.getDate(); day++) {
-      const date = new Date(year, month, day);
+    for (let i = 0; i < 7; i++) {
+      const day = new Date(firstDayOfWeek);
+      day.setDate(firstDayOfWeek.getDate() + i);
       days.push({
-        date,
-        label: date.toLocaleDateString('pt-BR', {
+        date: day,
+        label: day.toLocaleDateString('pt-BR', {
           day: '2-digit',
           month: '2-digit',
         }),
       });
     }
-
     return days;
   };
 
-  const monthDays = generateMonthDays();
-
   const getDaysForWeek = () => {
-    const start = currentWeek * 7;
-    const end = start + 7;
-    return monthDays.slice(start, end);
+    return generateDaysForWeek(currentWeek);
   };
 
   const handleMouseDown = (day, time) => {
@@ -162,17 +157,17 @@ const Agendamento = () => {
         };
       });
     }
+    setSelectedSlotForDelete(null);
   };
 
   const isSelected = (day, time) => selectedSlots[day]?.[time];
 
   const handlePreviousWeek = () => {
-    if (currentWeek > 0) setCurrentWeek(currentWeek - 1);
+    setCurrentWeek(currentWeek - 1);
   };
 
   const handleNextWeek = () => {
-    if ((currentWeek + 1) * 7 < monthDays.length)
-      setCurrentWeek(currentWeek + 1);
+    setCurrentWeek(currentWeek + 1);
   };
 
   return (
@@ -184,24 +179,31 @@ const Agendamento = () => {
       <hgroup>
         <h1>Agendamentos</h1>
         <Especialidade />
+      </hgroup>
+
+      <nav>
         <button onClick={handleOpenModal} disabled={currentRange.length === 0}>
           Agendar
         </button>
-      </hgroup>
 
-      <div className="week-navigation">
-        <button onClick={handlePreviousWeek} disabled={currentWeek === 0}>
-          ← Semana Anterior
-        </button>
-        <button
-          onClick={handleNextWeek}
-          disabled={(currentWeek + 1) * 7 >= monthDays.length}
-        >
-          Próxima Semana →
-        </button>
-      </div>
+        {selectedSlotForDelete && (
+          <button
+            onClick={() =>
+              handleDeleteProcedure(
+                selectedSlotForDelete.day,
+                selectedSlotForDelete.time,
+              )
+            }
+          >
+            Excluir
+          </button>
+        )}
 
-      <div className="table-wrapper">
+        <button onClick={handlePreviousWeek}>← Semana Anterior</button>
+        <button onClick={handleNextWeek}>Próxima Semana →</button>
+      </nav>
+
+      <div className="calendario-wrapper">
         <table>
           <thead>
             <tr>
@@ -218,7 +220,7 @@ const Agendamento = () => {
                 {getDaysForWeek().map((day, dayIndex) => (
                   <td
                     key={dayIndex}
-                    className={`slot ${
+                    className={`${
                       isSelected(day.label, time) ? 'selected' : ''
                     } ${
                       currentRange.includes(time) && currentDay === day.label
@@ -227,19 +229,18 @@ const Agendamento = () => {
                     }`}
                     onMouseDown={() => handleMouseDown(day.label, time)}
                     onMouseEnter={() => handleMouseEnter(time)}
+                    onClick={() => {
+                      if (isSelected(day.label, time)) {
+                        setSelectedSlotForDelete({
+                          day: day.label,
+                          time: time,
+                        });
+                      }
+                    }}
                   >
                     {isSelected(day.label, time) ? (
                       <div className="procedure">
                         {selectedSlots[day.label][time]}
-                        <button
-                          className="delete-btn"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleDeleteProcedure(day.label, time);
-                          }}
-                        >
-                          Excluir
-                        </button>
                       </div>
                     ) : (
                       ''

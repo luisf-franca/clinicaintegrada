@@ -1,28 +1,16 @@
 import React from 'react';
 
 const Especialidade = ({ selectedSpecialty, onSelectSpecialty }) => {
-  const specialties = [
-    { id: 1, name: 'Psicologia' },
-    { id: 2, name: 'Fisioterapia' },
-    { id: 3, name: 'Odontologia' },
-    { id: 4, name: 'Nutrição' },
-  ];
-
-  const handleSelectChange = (event) => {
-    const selectedId = parseInt(event.target.value, 10);
-    onSelectSpecialty(selectedId);
-  };
-
   return (
     <div className="especialidade">
-      <h4>Especialidade</h4>
-      <select value={selectedSpecialty || ''} onChange={handleSelectChange}>
-        <option value={0}>Todas</option>
-        {specialties.map((specialty) => (
-          <option key={specialty.id} value={specialty.id}>
-            {specialty.name}
-          </option>
-        ))}
+      <select
+        value={selectedSpecialty}
+        onChange={(e) => onSelectSpecialty(Number(e.target.value))}
+      >
+        <option value={1}>Psicologia</option>
+        <option value={2}>Fisioterapia</option>
+        <option value={3}>Odontologia</option>
+        <option value={4}>Nutrição</option>
       </select>
     </div>
   );

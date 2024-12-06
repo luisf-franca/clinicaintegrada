@@ -1,0 +1,21 @@
+.agendar-modal {
+  display: flex;
+  flex-direction: column;
+
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 300px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+
+  & input {
+    margin-bottom: 1rem;
+    width: 100%;
+    padding: 0.5rem;
+  }
+
+  & button {
+    margin-right: 0.5rem;
+    padding: 0.5rem 1rem;
+  }
+}
