@@ -1,4 +1,4 @@
-.patient-card {
+.pacientes {
   padding: 2rem;
   display: flex;
   flex-direction: column;
@@ -7,7 +7,7 @@
   overflow-y: scroll;
 }
 
-.patient-card-header {
+.pacientes-header {
   flex: 1;
   display: flex;
   justify-content: space-between;
@@ -15,7 +15,7 @@
   margin: 20px;
 }
 
-.patient-card-body {
+.pacientes-body {
   flex: 7;
   display: flex;
   justify-content: space-between;

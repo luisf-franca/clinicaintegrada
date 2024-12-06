@@ -39,15 +39,15 @@ const ListaEspera = () => {
   }, []);
 
   return (
-    <div className="patient-card">
-      <div className="patient-card-header">
+    <div className="pacientes">
+      <div className="pacientes-header">
         <h2>Lista de Espera</h2>
         <button onClick={() => setSelectedComponent('Adicionar')}>
           Adicionar Registro
         </button>
       </div>
 
-      <div className="patient-card-body">
+      <div className="pacientes-body">
         <div className="pesquisar-pacientes">
           <select
             value={selectedComponent}

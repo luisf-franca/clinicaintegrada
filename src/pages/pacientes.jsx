@@ -50,15 +50,15 @@ const Pacientes = () => {
   }, []);
 
   return (
-    <div className="patient-card">
-      <div className="patient-card-header">
+    <div className="pacientes">
+      <div className="pacientes-header">
         <h2>Pacientes</h2>
         <button onClick={() => setSelectedComponent('Adicionar')}>
           Adicionar Paciente
         </button>
       </div>
 
-      <div className="patient-card-body">
+      <div className="pacientes-body">
         <div className="pesquisar-pacientes">
           <select
             value={selectedComponent}

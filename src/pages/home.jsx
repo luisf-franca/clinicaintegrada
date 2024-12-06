@@ -27,15 +27,15 @@ const Home = () => {
   };
 
   return (
-    <div className="home-card">
-      <div className="home-card-header">
+    <div className="home">
+      <div className="home-header">
         <h1>Início</h1>
         <Especialidade
           selectedSpecialty={selectedSpecialty}
           onSelectSpecialty={setSelectedSpecialty}
         />
       </div>
-      <div className="home-card-body">
+      <div className="home-body">
         <Tabs selectedIndex={activeTab} onSelect={handleTabChange}>
           <TabList>
             <Tab>Pacientes</Tab>

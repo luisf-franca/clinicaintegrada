@@ -177,7 +177,7 @@ const Agendamento = () => {
 
   return (
     <div
-      className="agendamento-card"
+      className="agendamento"
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseUp}
     >
