@@ -26,6 +26,7 @@ const ListaEsperaResumo = () => {
                             <th>Nome</th>
                             <th>Data Entrada</th>
                             <th>Prioridade</th>
+                            <th>Ações</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -34,6 +35,7 @@ const ListaEsperaResumo = () => {
                                 <td>{item.nome}</td>
                                 <td>{item.dataEntrada}</td>
                                 <td>{item.prioridade}</td>
+                                <button>Agendar</button>
                             </tr>
                         ))}
                     </tbody>

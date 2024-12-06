@@ -12,7 +12,7 @@ const PacientesResumo = ({ pacientes }) => {
         if (selectedPaciente !== null) {
             const paciente = pacientes[selectedPaciente];
             // Lógica para identificar a etapa do paciente e redirecionar
-            console.log(`Paciente selecionado: ${paciente.nome}`);
+            console.log(`Paciente selecionado: ${paciente.id}`);
             // Redirecionar para a próxima fase
         }
     };
@@ -46,7 +46,7 @@ const PacientesResumo = ({ pacientes }) => {
             </div>
             <div className="pacientes-resumo__footer">
                 <button onClick={handleNext} disabled={selectedPaciente === null}>
-                    Próximo
+                    Localizar Paciente
                 </button>
             </div>
         </div>

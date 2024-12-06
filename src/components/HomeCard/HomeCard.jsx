@@ -29,7 +29,7 @@ const HomeCard = () => {
     return (
         <div className="home-card">
             <div className="home-card-header">
-                <h1>Clínica Integrada</h1>
+                <h1>Início</h1>
                 <Especialidade
                     selectedSpecialty={selectedSpecialty}
                     onSelectSpecialty={setSelectedSpecialty}
@@ -39,6 +39,7 @@ const HomeCard = () => {
                 <Tabs selectedIndex={activeTab} onSelect={handleTabChange}>
                     <TabList>
                         <Tab>Pacientes</Tab>
+                        <Tab>Lista de Espera</Tab>
                         <Tab>Agendamentos</Tab>
                         <Tab>Salas</Tab>
                     </TabList>
@@ -51,12 +52,16 @@ const HomeCard = () => {
                     </TabPanel>
                     <TabPanel>
                         <div className="body-section">
+                            <ListaEsperaResumo />
+                        </div>
+                    </TabPanel>
+                    <TabPanel>
+                        <div className="body-section">
                             <AgendamentosResumo />
                         </div>
                     </TabPanel>
                     <TabPanel>
                         <div className="body-section">
-                            <ListaEsperaResumo />
                             <SalasResumo />
                         </div>
                     </TabPanel>
