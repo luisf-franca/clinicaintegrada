@@ -70,6 +70,10 @@ const AgendamentosResumo = ({ pacienteId, especialidade }) => {
         navigate('/agendamento'); // Navegação sem query string
     };
 
+    const handleNavigateConsulta = (registroId) => {
+        navigate(`/consulta?consultaId=${registroId}`); // Navegação com query string
+    };
+
     return (
         <div className="agendamentos-resumo">
             <div className="agendamentos-resumo__header">
@@ -111,7 +115,7 @@ const AgendamentosResumo = ({ pacienteId, especialidade }) => {
                                     <td>{item.sala}</td>
                                     <td>{item.statusConsulta}</td>
                                     <td>
-                                        <button onClick={() => console.log(`Consulta ${item.id} visualizada`)}>
+                                        <button onClick={() => handleNavigateConsulta(item.id)}>
                                             Visualizar Consulta
                                         </button>
                                     </td>
