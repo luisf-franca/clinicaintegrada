@@ -8,6 +8,9 @@ import Agendamento from './pages/agendamento';
 import ListaEspera from './pages/listaespera';
 import Pacientes from './pages/pacientes';
 import Relatorio from './pages/relatorio';
+import Consulta from './pages/consulta';
+import Equipe from './pages/equipe';
+import Sala from './pages/sala';
 
 const Router = () => {
   return (
@@ -17,6 +20,10 @@ const Router = () => {
       <Route path="/listaespera" element={<ListaEspera />} />
       <Route path="/pacientes" element={<Pacientes />} />
       <Route path="/relatorio" element={<Relatorio />} />
+      <Route path="/consulta" element={<Consulta />} />
+      <Route path="/equipe" element={<Equipe />} />
+      <Route path="/sala" element={<Sala />} />
+
     </Routes>
   );
 };

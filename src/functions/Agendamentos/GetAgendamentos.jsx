@@ -18,9 +18,7 @@ const GetAgendamentos = async (options = {}) => {
 
         // Obtém o token de autenticação
         const token = localStorage.getItem('token');
-        
-        console.log(token);
-
+    
         // Faz a requisição com os parâmetros e o cabeçalho de autenticação
         const response = await axios.get(fullUrl, {
             headers: {

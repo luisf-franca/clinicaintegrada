@@ -1,76 +1,139 @@
 import React, { useState, useEffect } from 'react';
 import './AgendamentosResumo.css';
+import { useNavigate } from 'react-router-dom';
 
 // FUNCTIONS
 import GetAgendamentos from '../../../functions/Agendamentos/GetAgendamentos';
 
-const AgendamentosResumo = ( {pacienteId, especialidade}) => {
-    const [intervalo, setIntervalo] = useState('hoje'); // Estado inicial: "hoje"
+const AgendamentosResumo = ({ pacienteId, especialidade }) => {
+    const [intervalo, setIntervalo] = useState('sempre'); // Estado inicial
     const [agendamentos, setAgendamentos] = useState([]);
+    const [pacienteFilter, setPacienteFilter] = useState(pacienteId);
+    const navigate = useNavigate(); // Hook para navegação
 
     useEffect(() => {
         const fetchAgendamentos = async () => {
             try {
-                // Monta o filtro no formato esperado
                 const filters = [];
                 if (especialidade) filters.push(`especialidade=${especialidade}`);
-                if (pacienteId) filters.push(`pacienteId=${pacienteId}`);
-                const filterString = filters.length > 0 ? filters.join(',') : null;
-                // Chama a função passando o filtro
+                if (pacienteFilter) filters.push(`pacienteId=${pacienteFilter}`);
+
+                // Adiciona filtro de intervalo conforme necessário
+                if (intervalo !== 'sempre') {
+                    const now = new Date();
+                    const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                    let startDate, endDate;
+
+                    if (intervalo === 'hoje') {
+                        startDate = startOfDay;
+                        endDate = new Date(startOfDay);
+                        endDate.setDate(startOfDay.getDate() + 1);
+                    } else if (intervalo === 'semana') {
+                        startDate = new Date(startOfDay);
+                        startDate.setDate(startOfDay.getDate() - startOfDay.getDay());
+                        endDate = new Date(startDate);
+                        endDate.setDate(startDate.getDate() + 7);
+                    } else if (intervalo === 'mes') {
+                        startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+                        endDate = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+                    }
+
+                    filters.push(
+                        `dataHoraInicio>${startDate.toISOString().split('T')[0]}`,
+                        `dataHoraInicio<${endDate.toISOString().split('T')[0]}`
+                    );
+                }
+
+                const filterString = filters.join(',');
                 const response = await GetAgendamentos({ filter: filterString });
-                console.log(response);
                 setAgendamentos(response);
             } catch (error) {
                 console.error('Erro ao buscar agendamentos:', error);
             }
         };
 
-        // Executa a função ao montar o componente ou alterar os parâmetros
         fetchAgendamentos();
-    }, [especialidade, pacienteId]);
+    }, [intervalo, especialidade, pacienteFilter]);
+
+    // Define a mensagem apropriada
+    const getEmptyMessage = () => {
+        if (pacienteId && agendamentos.length === 0) {
+            return 'Nenhum registro encontrado para o paciente selecionado, considere cadastrar um novo registro.';
+        }
+        if (!pacienteId && agendamentos.length === 0) {
+            return 'Nenhum registro encontrado, considere cadastrar um novo registro.';
+        }
+        return null;
+    };
+
+    const handleNavigateAgendamentos = () => {
+        navigate('/agendamento'); // Navegação sem query string
+    };
 
     return (
         <div className="agendamentos-resumo">
             <div className="agendamentos-resumo__header">
                 <h4>Agendamentos</h4>
+                <button onClick={handleNavigateAgendamentos}>Novo Registro</button>
             </div>
 
-            {/* Intervalo de agendamentos */}
             <div className="agendamentos-resumo__intervalo">
-                <button onClick={() => alterarIntervalo('hoje')} className={intervalo === 'hoje' ? 'active' : ''}>
-                    Hoje
-                </button>
-                <button onClick={() => alterarIntervalo('semana')} className={intervalo === 'semana' ? 'active' : ''}>
-                    Esta Semana
-                </button>
-                <button onClick={() => alterarIntervalo('mes')} className={intervalo === 'mes' ? 'active' : ''}>
-                    Este Mês
-                </button>
+                {['sempre', 'hoje', 'semana', 'mes'].map((opcao) => (
+                    <button
+                        key={opcao}
+                        onClick={() => setIntervalo(opcao)}
+                        className={intervalo === opcao ? 'active' : ''}
+                    >
+                        {opcao.charAt(0).toUpperCase() + opcao.slice(1)}
+                    </button>
+                ))}
             </div>
 
-            {/* Tabela de agendamentos */}
             <div className="agendamentos-resumo__body">
                 <table className="agendamentos-resumo__table">
                     <thead>
                         <tr>
+                            <th>Nome</th>
                             <th>Data/Hora Início</th>
-                            {/* <th>Data/Hora Fim</th> */}
+                            <th>Data/Hora Fim</th>
                             <th>Sala</th>
+                            <th>Status Consulta</th>
                             <th>Ações</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {agendamentos.map((item) => (
-                            <tr key={item.id}>
-                                <td>{item.dataHora}</td>
-                                {/* <td>{item.dataHoraFim}</td> */}
-                                <td>{item.salaId}</td>
-                                <button>Visualizar Consulta</button>
+                        {agendamentos.length > 0 ? (
+                            agendamentos.slice(0, 4).map((item) => (
+                                <tr key={item.id}>
+                                    <td>{item.nome}</td>
+                                    <td>{item.dataHoraInicio}</td>
+                                    <td>{item.dataHoraFim}</td>
+                                    <td>{item.sala}</td>
+                                    <td>{item.statusConsulta}</td>
+                                    <td>
+                                        <button onClick={() => console.log(`Consulta ${item.id} visualizada`)}>
+                                            Visualizar Consulta
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan="5" className="agendamentos-resumo__empty">
+                                    {getEmptyMessage()}
+                                </td>
                             </tr>
-                        ))}
+                        )}
                     </tbody>
                 </table>
+                {pacienteFilter && (
+                    <div className="agendamentos-resumo__filtro">
+                        <span>Filtro por paciente ativo</span>
+                        <button onClick={() => setPacienteFilter(null)}>Mostrar Todos</button>
+                    </div>
+                )}
             </div>
+
         </div>
     );
 };

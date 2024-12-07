@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const GetListaEntries = async (options = {}) => {
+const GetSalas = async (options = {}) => {
     try {
         // Extrai os parâmetros opcionais
         const { page, pageSize, filter, orderBy } = options;
@@ -14,11 +14,11 @@ const GetListaEntries = async (options = {}) => {
 
         // Monta a URL completa com a query string
         const url = import.meta.env.VITE_API_BASE_URL;
-        const fullUrl = `${url}/lista-espera?${params.toString()}`;
+        const fullUrl = `${url}/salas?${params.toString()}`;
 
         // Obtém o token de autenticação
         const token = localStorage.getItem('token');
-        
+
         // Faz a requisição com os parâmetros e o cabeçalho de autenticação
         const response = await axios.get(fullUrl, {
             headers: {
@@ -27,12 +27,11 @@ const GetListaEntries = async (options = {}) => {
         });
 
         console.log('response:', response);
-        return response.data.items;
-        // return response.data;
+        return response.data.data.items;
     } catch (error) {
-        console.error('Erro ao buscar pacientes:', error);
+        console.error('Erro ao buscar salas:', error);
         throw error;
     }
-}
+};
 
-export default GetListaEntries;
+export default GetSalas;

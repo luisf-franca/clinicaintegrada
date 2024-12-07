@@ -15,7 +15,6 @@ function App() {
       });
       console.log('Usuário autenticado com sucesso:', response);
 
-      console.log(response.token);
       localStorage.setItem('token', response.token);
       localStorage.setItem('dataExpiracao', response.expiration);
     } catch (error) {

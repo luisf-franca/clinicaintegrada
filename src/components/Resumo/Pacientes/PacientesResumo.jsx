@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import './PacientesResumo.css';
+import { useNavigate } from 'react-router-dom'; // Import necessário para navegação
 
 //FUNCTIONS
 import GetPacienteEtapa from '../../../functions/Pacientes/GetPacienteEtapa';
 
 const PacientesResumo = ({ pacientes, setPacienteEtapa, setPacienteSelecionadoId }) => {
     const [selectedPaciente, setSelectedPaciente] = useState(null);
+    const navigate = useNavigate(); // Hook para navegação
 
     const handleSelectPaciente = (index) => {
         setSelectedPaciente(index);
@@ -21,10 +23,15 @@ const PacientesResumo = ({ pacientes, setPacienteEtapa, setPacienteSelecionadoId
         }
     };
 
+    const handleNavigatePacientes = () => {
+        navigate('/pacientes'); // Navegação sem query string
+    }
+
     return (
         <div className="pacientes-resumo">
             <div className="pacientes-resumo__header">
                 <h4>Pacientes</h4>
+                <button onClick={handleNavigatePacientes}>Novo Registro</button>
             </div>
             <div className="pacientes-resumo__body">
                 {pacientes && pacientes.length > 0 ? (

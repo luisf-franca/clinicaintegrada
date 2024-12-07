@@ -9,10 +9,13 @@
 }
 
 .pacientes-resumo__header {
-    background-color: #f4f4f4;
+    background-color: #d71c23;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #fff;
     padding: 10px;
     text-align: center;
-    border-bottom: 1px solid #ddd;
 }
 
 .pacientes-resumo__header h4 {

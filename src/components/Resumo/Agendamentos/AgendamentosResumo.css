@@ -8,14 +8,29 @@
 
 .agendamentos-resumo__header {
     background-color: #d71c23;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     color: #fff;
     padding: 10px;
-    text-align: center;
 }
 
 .agendamentos-resumo__header h4 {
     margin: 0;
     font-size: 1.0rem;
+}
+
+.agendamentos-resumo__filtro {
+    display: flex;
+    justify-content: center; /* Centraliza horizontalmente */
+    align-items: center; /* Centraliza verticalmente */
+    gap: 10px; /* Espaçamento entre os elementos */
+    background-color: #f8f9fa; /* Cor de fundo opcional */
+    border: 1px solid #ddd; /* Borda leve para destaque */
+    border-radius: 5px; /* Bordas arredondadas */
+    margin: 20px auto; /* Margem para espaçamento externo */
+    max-width: 500px; /* Define um tamanho máximo para a div */
+    text-align: center; /* Centraliza o texto */
 }
 
 .agendamentos-resumo__intervalo {
