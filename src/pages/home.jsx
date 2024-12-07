@@ -31,28 +31,12 @@ const Home = () => {
   //monitore pacienteEtapa, se for alterada, deve sugerir a funcionalidade de acordo com a etapa do paciente no sistema
   useEffect(() => {
     if (pacienteEtapa !== null) {
-      switch (pacienteEtapa) {
-        case 1:
-          console.log('Paciente cadastrado: ' + pacienteSelecionadoId);
-          setActiveTab(1);
-          break;
-        case 2:
-          console.log('Paciente cadastrado: ' + pacienteSelecionadoId);
-          setActiveTab(1);
-          break;
-        case 3:
-          console.log('Paciente em triagem/consulta');
-          setActiveTab(2);
-          break;
-        case 4:
-          console.log('Consulta concluída');
-          setActiveTab(2);
-          break;
-        case 5:
-          console.log('Consulta cancelada');
-          break;
-        default:
-          console.log('Etapa desconhecida');
+      if (pacienteEtapa === 1 || pacienteEtapa === 2) {
+        setActiveTab(1);
+      } else if (pacienteEtapa >= 3 && pacienteEtapa <= 5) {
+        setActiveTab(2);
+      } else {
+        console.log('Etapa desconhecida');
       }
     }
   }, [pacienteEtapa]);

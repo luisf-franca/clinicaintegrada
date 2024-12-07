@@ -74,7 +74,7 @@ const PesquisarPacientes = ({ setPacientes }) => {
         </div>
       </div>
 
-      <button onClick={getPacientes}>Buscar Pacientes</button>
+      <button onClick={getPacientes}>Pesquisar</button>
     </div>
   );
 };
