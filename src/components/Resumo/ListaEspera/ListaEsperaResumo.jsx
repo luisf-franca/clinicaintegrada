@@ -55,6 +55,11 @@ const ListaEsperaResumo = ({ pacienteId, especialidade }) => {
             navigate('/listaespera'); // Navegação sem query string
         }
     }
+
+    const handleAgendarConsulta = (registroId) => {
+        navigate(`/agendamento?agendamentoId=${registroId}`); // Navegação com query string
+    }
+
         
 
     return (
@@ -82,7 +87,7 @@ const ListaEsperaResumo = ({ pacienteId, especialidade }) => {
                                     <td>{item.dataEntrada}</td>
                                     <td>{item.prioridade}</td>
                                     <td>
-                                        <button>Agendar</button>
+                                        <button onClick={() => handleAgendarConsulta(item.id)}>Agendar</button>
                                     </td>
                                 </tr>
                             ))

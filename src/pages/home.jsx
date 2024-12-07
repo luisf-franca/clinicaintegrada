@@ -42,6 +42,7 @@ const Home = () => {
           break;
         case 3:
           console.log('Paciente em triagem/consulta');
+          setActiveTab(2);
           break;
         case 4:
           console.log('Consulta concluída');
@@ -90,7 +91,7 @@ const Home = () => {
           </TabPanel>
           <TabPanel>
             <div className="body-section">
-              <AgendamentosResumo />
+              <AgendamentosResumo pacienteId={pacienteSelecionadoId} especialidade={selectedSpecialty}   />
             </div>
           </TabPanel>
           <TabPanel>

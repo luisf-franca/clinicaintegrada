@@ -1,25 +1,33 @@
-import React, { useState } from 'react';
-
+import React, { useState, useEffect } from 'react';
 import './AgendamentosResumo.css';
 
-const AgendamentosResumo = () => {
-    const [intervalo, setIntervalo] = useState('hoje'); // Estado inicial: "hoje"
-    const [agendamentos, setAgendamentos] = useState([
-        { id: 1, nome: 'João Silva', dataHoraInicio: '2024-12-05 08:00', dataHoraFim: '2024-12-05 09:00', sala: 'Sala 1' },
-        { id: 2, nome: 'Maria Oliveira', dataHoraInicio: '2024-12-05 10:00', dataHoraFim: '2024-12-05 11:00', sala: 'Sala 2' },
-        { id: 3, nome: 'Carlos Souza', dataHoraInicio: '2024-12-06 14:00', dataHoraFim: '2024-12-06 15:00', sala: 'Sala 3' },
-        { id: 4, nome: 'Ana Santos', dataHoraInicio: '2024-12-07 16:00', dataHoraFim: '2024-12-07 17:00', sala: 'Sala 1' },
-        { id: 5, nome: 'Beatriz Lima', dataHoraInicio: '2024-12-08 09:00', dataHoraFim: '2024-12-08 10:00', sala: 'Sala 2' },
-        { id: 6, nome: 'Fernando Almeida', dataHoraInicio: '2024-12-09 11:00', dataHoraFim: '2024-12-09 12:00', sala: 'Sala 3' },
-        { id: 7, nome: 'Gabriela Costa', dataHoraInicio: '2024-12-10 13:00', dataHoraFim: '2024-12-10 14:00', sala: 'Sala 1' },
-        { id: 8, nome: 'Ricardo Pereira', dataHoraInicio: '2024-12-11 15:00', dataHoraFim: '2024-12-11 16:00', sala: 'Sala 2' },
-      ]);
+// FUNCTIONS
+import GetAgendamentos from '../../../functions/Agendamentos/GetAgendamentos';
 
-    // Função para alterar o intervalo de agendamentos
-    const alterarIntervalo = (novoIntervalo) => {
-        setIntervalo(novoIntervalo);
-        // Aqui você pode filtrar os dados dinamicamente com base no intervalo selecionado
-    };
+const AgendamentosResumo = ( {pacienteId, especialidade}) => {
+    const [intervalo, setIntervalo] = useState('hoje'); // Estado inicial: "hoje"
+    const [agendamentos, setAgendamentos] = useState([]);
+
+    useEffect(() => {
+        const fetchAgendamentos = async () => {
+            try {
+                // Monta o filtro no formato esperado
+                const filters = [];
+                if (especialidade) filters.push(`especialidade=${especialidade}`);
+                if (pacienteId) filters.push(`pacienteId=${pacienteId}`);
+                const filterString = filters.length > 0 ? filters.join(',') : null;
+                // Chama a função passando o filtro
+                const response = await GetAgendamentos({ filter: filterString });
+                console.log(response);
+                setAgendamentos(response);
+            } catch (error) {
+                console.error('Erro ao buscar agendamentos:', error);
+            }
+        };
+
+        // Executa a função ao montar o componente ou alterar os parâmetros
+        fetchAgendamentos();
+    }, [especialidade, pacienteId]);
 
     return (
         <div className="agendamentos-resumo">
@@ -45,9 +53,8 @@ const AgendamentosResumo = () => {
                 <table className="agendamentos-resumo__table">
                     <thead>
                         <tr>
-                            <th>Nome</th>
                             <th>Data/Hora Início</th>
-                            <th>Data/Hora Fim</th>
+                            {/* <th>Data/Hora Fim</th> */}
                             <th>Sala</th>
                             <th>Ações</th>
                         </tr>
@@ -55,11 +62,10 @@ const AgendamentosResumo = () => {
                     <tbody>
                         {agendamentos.map((item) => (
                             <tr key={item.id}>
-                                <td>{item.nome}</td>
-                                <td>{item.dataHoraInicio}</td>
-                                <td>{item.dataHoraFim}</td>
-                                <td>{item.sala}</td>
-                                <button>Iniciar Consulta</button>
+                                <td>{item.dataHora}</td>
+                                {/* <td>{item.dataHoraFim}</td> */}
+                                <td>{item.salaId}</td>
+                                <button>Visualizar Consulta</button>
                             </tr>
                         ))}
                     </tbody>
