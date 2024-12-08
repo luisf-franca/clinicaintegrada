@@ -1,11 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../styles/agendamento.css';
+
+// COMPONENTS
 import Especialidade from '../components/Especialidade/Especialidade';
 import AgendamentoModal from '../components/AgendamentoModal/AgendamentoModal';
 import AgendamentoDetails from '../components/AgendamentoDetails/AgendamentoDetails';
 
+// FUNCTIONS
+import GetAgendamentos from '../functions/Agendamentos/GetAgendamentos';
+import DeleteAgendamento from '../functions/Agendamentos/DeleteAgendamento';
+
+
 const Agendamento = () => {
+  const [agendamentos, setAgendamentos] = useState([]);
   const [selectedSlots, setSelectedSlots] = useState({});
+  const [selectedSpecialty, setSelectedSpecialty] = useState(1);
   const [isDragging, setIsDragging] = useState(false);
   const [currentDay, setCurrentDay] = useState(null);
   const [startSlot, setStartSlot] = useState(null);
@@ -23,7 +32,7 @@ const Agendamento = () => {
 
   const generateTimeSlots = () => {
     const slots = [];
-    for (let hour = 8; hour < 22; hour++) {
+    for (let hour = 9; hour < 22; hour++) {
       for (let minute = 0; minute < 60; minute += 15) {
         const formattedTime = `${hour.toString().padStart(2, '0')}:${minute
           .toString()
@@ -34,7 +43,49 @@ const Agendamento = () => {
     return slots;
   };
 
-  const timeSlots = generateTimeSlots();
+  const [timeSlots, setTimeSlots] = useState(generateTimeSlots());
+
+  useEffect(() => {
+    const fetchAgendamentos = async () => {
+      try {
+        const agendamentos = await GetAgendamentos({ filter: "especialidade=" + selectedSpecialty });
+        console.log('Agendamentos:', agendamentos);
+        setAgendamentos(agendamentos);
+
+        const processedSlots = {};
+
+        agendamentos.forEach((agendamento) => {
+          const startTime = new Date(agendamento.dataHoraInicio);
+          const endTime = new Date(agendamento.dataHoraFim);
+          const dayLabel = startTime.toLocaleDateString('pt-BR', {
+            day: '2-digit',
+            month: '2-digit',
+          });
+
+          const startSlotIndex = timeSlots.findIndex(
+            (time) => time === `${startTime.getHours().toString().padStart(2, '0')}:${startTime.getMinutes().toString().padStart(2, '0')}`
+          );
+          const endSlotIndex = timeSlots.findIndex(
+            (time) => time === `${endTime.getHours().toString().padStart(2, '0')}:${endTime.getMinutes().toString().padStart(2, '0')}`
+          );
+
+          if (!processedSlots[dayLabel]) processedSlots[dayLabel] = {};
+
+          for (let i = startSlotIndex; i <= endSlotIndex; i++) {
+            processedSlots[dayLabel][timeSlots[i]] = {
+              nome: agendamento.nome,
+              agendamentoId: agendamento.id
+            };
+          }
+        });
+
+        setSelectedSlots(processedSlots);
+      } catch (error) {
+        console.error('Erro ao buscar agendamentos:', error);
+      }
+    };
+    fetchAgendamentos();
+  }, [selectedSpecialty, timeSlots]);
 
   const generateDaysForWeek = (weekOffset) => {
     const today = new Date();
@@ -101,9 +152,9 @@ const Agendamento = () => {
       .getHours()
       .toString()
       .padStart(2, '0')}:${adjustedEndTime
-      .getMinutes()
-      .toString()
-      .padStart(2, '0')}`;
+        .getMinutes()
+        .toString()
+        .padStart(2, '0')}`;
 
     setModalData((prev) => ({
       ...prev,
@@ -144,6 +195,10 @@ const Agendamento = () => {
   const handleDeleteProcedure = (day, time) => {
     const procedureToDelete = selectedSlots[day]?.[time];
 
+    // obter o id do agendamento
+    const agendamentoId = procedureToDelete.agendamentoId;
+    console.log('Agendamento ID:', agendamentoId);
+
     if (procedureToDelete) {
       setSelectedSlots((prev) => {
         const updatedDay = { ...prev[day] };
@@ -172,18 +227,6 @@ const Agendamento = () => {
     setCurrentWeek(currentWeek + 1);
   };
 
-  // const handleShowDetails = (day, time) => {
-  //   setModalData({
-  //     patientName: selectedSlots[day]?.[time]?.patientName || '',
-  //     interns: selectedSlots[day]?.[time]?.interns || '',
-  //     procedure: selectedSlots[day]?.[time]?.procedure || '',
-  //     observations: selectedSlots[day]?.[time]?.observations || '',
-  //     startSlot: time,
-  //     endSlot: selectedSlots[day]?.[time]?.endSlot || '',
-  //   });
-  //   setIsDetailsOpen(true);
-  // };
-
   const closeDetails = () => setIsDetailsOpen(false);
 
   return (
@@ -194,7 +237,10 @@ const Agendamento = () => {
     >
       <hgroup>
         <h1>Agendamentos</h1>
-        <Especialidade />
+        <Especialidade 
+          selectedSpecialty={selectedSpecialty} 
+          onSelectSpecialty={setSelectedSpecialty}
+        />
       </hgroup>
 
       {isDetailsOpen && (
@@ -240,13 +286,11 @@ const Agendamento = () => {
                 {getDaysForWeek().map((day, dayIndex) => (
                   <td
                     key={dayIndex}
-                    className={`${
-                      isSelected(day.label, time) ? 'selected' : ''
-                    } ${
-                      currentRange.includes(time) && currentDay === day.label
+                    className={`${isSelected(day.label, time) ? 'selected' : ''
+                      } ${currentRange.includes(time) && currentDay === day.label
                         ? 'dragging'
                         : ''
-                    }`}
+                      }`}
                     onMouseDown={() => handleMouseDown(day.label, time)}
                     onMouseEnter={() => handleMouseEnter(time)}
                     onClick={() => {
@@ -255,15 +299,15 @@ const Agendamento = () => {
                           day: day.label,
                           time: time,
                         });
+                      } else {
+                        setSelectedSlotForDelete(null);
                       }
                     }}
                   >
-                    {isSelected(day.label, time) ? (
+                    {isSelected(day.label, time) && (
                       <div className="procedure">
-                        {selectedSlots[day.label][time]}
+                        {selectedSlots[day.label][time].nome}
                       </div>
-                    ) : (
-                      ''
                     )}
                   </td>
                 ))}
