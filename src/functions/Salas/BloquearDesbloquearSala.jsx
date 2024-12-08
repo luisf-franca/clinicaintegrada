@@ -15,7 +15,7 @@ const BloquearDesbloquearSala = async (salaId) => {
             },
         });
     
-        console.log('Sala bloqueada/desbloqueada:', response.data);
+        // console.log('Sala bloqueada/desbloqueada:', response.data);
         return response.data;
     } catch (error) {
         console.error('Erro ao bloquear/desbloquear sala:', error);

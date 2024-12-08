@@ -33,7 +33,7 @@ const AtualizarPaciente = ({
     e.preventDefault();
     try {
       const response = await UpdatePaciente(pacienteId, paciente);
-      console.log('Paciente atualizado com sucesso:', response);
+      // console.log('Paciente atualizado com sucesso:', response);
       alert('Paciente atualizado com sucesso!');
     } catch (error) {
       console.error('Erro ao atualizar paciente:', error);

@@ -8,7 +8,7 @@ const CreatePaciente = async (pacienteData) => {
     // Obtém o token de autenticação
     const token = localStorage.getItem('token');
 
-    console.log(pacienteData);
+    // console.log(pacienteData);
 
     // Faz a requisição com os parâmetros e o cabeçalho de autenticação
     const response = await axios.post(fullUrl, pacienteData, {
@@ -17,7 +17,7 @@ const CreatePaciente = async (pacienteData) => {
       },
     });
 
-    console.log('Paciente criado:', response.data);
+    // console.log('Paciente criado:', response.data);
     return response.data;
   } catch (error) {
     console.error('Erro ao criar paciente:', error);

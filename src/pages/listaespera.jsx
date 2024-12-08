@@ -27,7 +27,7 @@ const ListaEspera = () => {
   };
 
   const handleRegistroClick = (registro) => {
-    console.log('Registro selecionado:', registro);
+    // console.log('Registro selecionado:', registro);
     setRegistroSelecionado(registro);
     setSelectedComponent('Atualizar');
   };

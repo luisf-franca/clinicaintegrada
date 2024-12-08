@@ -8,7 +8,7 @@ const CreateListaEsperaEntry = async (pacienteId, listaEsperaData) => {
         // Obtém o token de autenticação
         const token = localStorage.getItem('token');
 
-        console.log(listaEsperaData);
+        // console.log(listaEsperaData);
 
         // Faz a requisição com os parâmetros e o cabeçalho de autenticação
         const response = await axios.post(fullUrl, listaEsperaData, {
@@ -17,7 +17,7 @@ const CreateListaEsperaEntry = async (pacienteId, listaEsperaData) => {
             },
         });
 
-        console.log('Entrada na lista de espera criada:', response.data);
+        // console.log('Entrada na lista de espera criada:', response.data);
         return response.data;
     } catch (error) {
         console.error('Erro ao criar entrada na lista de espera:', error);

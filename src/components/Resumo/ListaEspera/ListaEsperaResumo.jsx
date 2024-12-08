@@ -47,7 +47,7 @@ const ListaEsperaResumo = ({ pacienteId, especialidade }) => {
     const handleCadastrarRegistroListaEspera = () => {
         //Caso o pacienteId esteja definido, redirecionar para a tela de cadastro com o pacienteId preenchido
         if (pacienteId && listaEspera.length === 0) {
-            console.log('pacienteId:', pacienteId);
+            // console.log('pacienteId:', pacienteId);
             navigate(`/listaespera?pacienteId=${pacienteId}`); // Navegação com query string
         }
         //Caso contrário, redirecionar para a tela de cadastro sem preenchimento

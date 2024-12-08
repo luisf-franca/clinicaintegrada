@@ -36,7 +36,7 @@ const Home = () => {
       } else if (pacienteEtapa >= 3 && pacienteEtapa <= 5) {
         setActiveTab(2);
       } else {
-        console.log('Etapa desconhecida');
+        // console.log('Etapa desconhecida');
       }
     }
   }, [pacienteEtapa]);

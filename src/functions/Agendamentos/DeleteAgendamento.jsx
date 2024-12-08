@@ -15,7 +15,7 @@ const DeleteAgendamento = async (agendamentoId) => {
             },
         });
     
-        console.log("Agendamento deletado:", response.data);
+        // console.log("Agendamento deletado:", response.data);
         return response.data;
     } catch (error) {
         console.error("Erro ao deletar agendamento:", error);

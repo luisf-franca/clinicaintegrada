@@ -15,7 +15,7 @@ const DeletePaciente = async (pacienteId) => {
         },
         });
     
-        console.log("Paciente deletado:", response.data);
+        // console.log("Paciente deletado:", response.data);
         return response.data;
     } catch (error) {
         console.error("Erro ao deletar paciente:", error);

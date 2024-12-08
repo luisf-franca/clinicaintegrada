@@ -15,7 +15,7 @@ const GetAgendamentoById = async (agendamentoId) => {
             },
         });
     
-        console.log('Agendamento encontrado:', response.data);
+        // console.log('Agendamento encontrado:', response.data);
         return response.data;
     } catch (error) {
         console.error('Erro ao buscar agendamento:', error);

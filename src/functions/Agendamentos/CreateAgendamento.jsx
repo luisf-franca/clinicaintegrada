@@ -8,7 +8,7 @@ const CreateAgendamento = async (agendamentoData) => {
         // Obtém o token de autenticação
         const token = localStorage.getItem('token');
 
-        console.log(agendamentoData);
+        // console.log(agendamentoData);
 
         // Faz a requisição com os parâmetros e o cabeçalho de autenticação
         const response = await axios.post(fullUrl, agendamentoData, {
@@ -17,7 +17,7 @@ const CreateAgendamento = async (agendamentoData) => {
             },
         });
 
-        console.log('Agendamento criado:', response.data);
+        // console.log('Agendamento criado:', response.data);
         return response.data;
     } catch (error) {
         console.error('Erro ao criar agendamento:', error);

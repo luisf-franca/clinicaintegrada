@@ -10,7 +10,7 @@ const AtualizarRegistro = ({ registroId, registroInicial, atualizarRegistros }) 
     });
 
     useEffect(() => {
-        console.log('Registro inicial:', registroInicial);
+        // console.log('Registro inicial:', registroInicial);
         if (registroInicial) {
             const formatDate = (date) => {
                 if (!date) return ''; // Se a data for null, retorne string vazia
@@ -43,7 +43,7 @@ const AtualizarRegistro = ({ registroId, registroInicial, atualizarRegistros }) 
 
     const handleSubmit = async () => {
         try {
-            console.log('Registro a ser atualizado:', registroId);
+            // console.log('Registro a ser atualizado:', registroId);
             await UpdateListaEsperaEntry(registroId, listaEspera);
             atualizarRegistros();
             alert('Registro atualizado com sucesso!');

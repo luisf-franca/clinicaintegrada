@@ -8,7 +8,7 @@ const UpdatePaciente = async (pacienteId, pacienteData) => {
     // Obtém o token de autenticação
     const token = localStorage.getItem('token');
 
-    console.log(pacienteData);
+    // console.log(pacienteData);
 
     // Faz a requisição PUT com os parâmetros e o cabeçalho de autenticação
     const response = await axios.put(fullUrl, pacienteData, {
@@ -17,7 +17,7 @@ const UpdatePaciente = async (pacienteId, pacienteData) => {
       },
     });
 
-    console.log('Paciente atualizado:', response.data);
+    // console.log('Paciente atualizado:', response.data);
     return response.data;
   } catch (error) {
     console.error('Erro ao atualizar paciente:', error);

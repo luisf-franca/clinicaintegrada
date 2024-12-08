@@ -26,7 +26,7 @@ const GetEquipes = async (options = {}) => {
             },
         });
 
-        console.log('response:', response);
+        // console.log('response:', response);
         return response.data.data.items;
     } catch (error) {
         console.error('Erro ao buscar equipes:', error);

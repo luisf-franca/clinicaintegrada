@@ -15,7 +15,7 @@ const DeleteListaEsperaEntry = async (entryId) => {
             },
         });
     
-        console.log("Entrada da lista de espera deletada:", response.data);
+        // console.log("Entrada da lista de espera deletada:", response.data);
         return response.data;
     } catch (error) {
         console.error("Erro ao deletar entrada da lista de espera:", error);

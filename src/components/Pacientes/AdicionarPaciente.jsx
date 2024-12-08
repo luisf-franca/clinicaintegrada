@@ -50,7 +50,7 @@ const AdicionarPaciente = ({ atualizarListaPacientes }) => {
     }
     try {
       const response = await CreatePaciente(pacienteData);
-      console.log('Paciente adicionado com sucesso:', response);
+      // console.log('Paciente adicionado com sucesso:', response);
       alert('Paciente adicionado com sucesso!');
       await atualizarListaPacientes(); // Atualiza a lista
     } catch (error) {

@@ -7,7 +7,7 @@ const Login = async (loginData) => {
     
         const response = await axios.post(fullUrl, loginData);
     
-        console.log("Login realizado:", response.data);
+        // console.log("Login realizado:", response.data);
         return response.data;
     } catch (error) {
         console.error("Erro ao realizar login:", error);

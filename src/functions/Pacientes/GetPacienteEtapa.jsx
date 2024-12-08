@@ -15,7 +15,7 @@ const GetPacienteEtapa = async (pacienteId) => {
             },
         });
     
-        console.log('Etapa do paciente encontrada:', response.data);
+        // console.log('Etapa do paciente encontrada:', response.data);
         return response.data;
     } catch (error) {
         console.error('Erro ao buscar etapa do paciente:', error);

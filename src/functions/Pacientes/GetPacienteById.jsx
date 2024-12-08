@@ -15,7 +15,7 @@ const GetPacienteById = async (pacienteId) => {
         },
         });
     
-        console.log('Paciente encontrado:', response.data);
+        // console.log('Paciente encontrado:', response.data);
         return response.data;
     } catch (error) {
         console.error('Erro ao buscar paciente:', error);

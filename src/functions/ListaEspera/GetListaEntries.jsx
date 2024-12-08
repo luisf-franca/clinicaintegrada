@@ -26,7 +26,7 @@ const GetListaEntries = async (options = {}) => {
             },
         });
 
-        console.log('response:', response);
+        // console.log('response:', response);
         return response.data.items;
         // return response.data;
     } catch (error) {

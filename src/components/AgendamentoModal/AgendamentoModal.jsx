@@ -44,7 +44,7 @@ const AgendamentoModal = ({
 
   // Monitorar mudanças em requestData
   useEffect(() => {
-    console.log(requestData);
+    // console.log(requestData);
   }, [requestData]);
 
   const handlePacienteChange = (e) => {
@@ -89,7 +89,7 @@ const AgendamentoModal = ({
   const handlePostAgendamento = async () => {
     try {
       const response = await CreateAgendamento(requestData);
-      console.log('Agendamento criado com sucesso:', response);
+      // console.log('Agendamento criado com sucesso:', response);
       atualizarRegistros();
       setIsModalOpen(false);
     } catch (error) {
