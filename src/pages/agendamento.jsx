@@ -24,7 +24,7 @@ const Agendamento = () => {
   const [startSlot, setStartSlot] = useState(null);
   const [currentRange, setCurrentRange] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  // const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [modalData, setModalData] = useState({
     pacienteId: '',
     startSlot: '',
@@ -127,40 +127,36 @@ const Agendamento = () => {
     const startIndex = timeSlots.indexOf(startSlot);
     const endIndex = timeSlots.indexOf(time);
 
+    // Ensure valid indices
     if (startIndex === -1 || endIndex === -1) return;
 
-    const range = timeSlots.slice(
+    // Update currentRange based on dragging direction
+    const newRange = timeSlots.slice(
       Math.min(startIndex, endIndex),
-      Math.max(startIndex, endIndex) + 1,
+      Math.max(startIndex, endIndex) + 1 // include the end slot
     );
 
-    setCurrentRange(range);
+    // console.log('New range:', newRange);
+
+    setCurrentRange(newRange);
   };
 
   const handleMouseUp = () => {
     setIsDragging(false);
   };
 
-  // Obter o horário e dia selecioando, enviar para o modal
-  // const handleOpenModal = () => {
-  //   console.log('Dia:', currentDay);
-  //   console.log('Horário Inicial:', currentRange[0]);
-  //   console.log('Horário Final:', currentRange[currentRange.length - 1]);
-
-
-
-  //   setIsModalOpen(true);
-  // };
-
   const handleOpenModal = () => {
     if (currentRange.length === 0) return;
 
     const [day, month] = currentDay.split('/').map((v) => parseInt(v, 10));
-    const start = currentRange[0];
-    const end = currentRange[currentRange.length - 1];
 
-    const [startHour, startMinute] = start.split(':').map((v) => parseInt(v, 10));
-    const [endHour, endMinute] = end.split(':').map((v) => parseInt(v, 10));
+    // Get the first and last slots from the currentRange
+    const firstSlot = currentRange[0];
+    const lastSlot = currentRange[currentRange.length - 1];
+
+    // Parse the hours and minutes from the first and last slots
+    const [startHour, startMinute] = firstSlot.split(':').map((v) => parseInt(v, 10));
+    const [endHour, endMinute] = lastSlot.split(':').map((v) => parseInt(v, 10));
 
     const startDate = new Date();
     startDate.setDate(day);
@@ -170,9 +166,12 @@ const Agendamento = () => {
     startDate.setSeconds(0);
     startDate.setMilliseconds(0);
 
+    // Calculate endDate directly from the last slot
     const endDate = new Date(startDate);
     endDate.setHours(endHour);
-    endDate.setMinutes(endMinute + 15); // Adicionando 15 minutos ao horário final
+    endDate.setMinutes(endMinute);
+    endDate.setSeconds(0);
+    endDate.setMilliseconds(0);
 
     const formatDateTime = (date) => {
       const year = date.getFullYear();
@@ -229,7 +228,7 @@ const Agendamento = () => {
 
     // Obter o ID do agendamento do primeiro slot selecionado
     const agendamentoId = selectedSlots[selectedSlotForDelete[0].day][selectedSlotForDelete[0].time].agendamentoId;
-    console.log('Agendamento ID:', agendamentoId);
+    // console.log('Agendamento ID:', agendamentoId);
 
     // Confirmar exclusão
     const confirmDelete = window.confirm('Tem certeza que deseja excluir o agendamento?');
@@ -276,7 +275,7 @@ const Agendamento = () => {
       });
 
       // Atualizar o estado dos slots a serem deletados
-      console.log('Slots a serem deletados:', slotsToDelete);
+      // console.log('Slots a serem deletados:', slotsToDelete);
       setSelectedSlotForDelete(slotsToDelete);
     } else {
       // Limpar seleção se clicar fora de um agendamento
@@ -285,7 +284,7 @@ const Agendamento = () => {
   };
 
   const handleReloadAgendamentos = () => {
-    console.log('Recarregando agendamentos...');
+    // console.log('Recarregando agendamentos...');
     setReloadAgendamentos((prev) => !prev);
   };
 
@@ -295,7 +294,7 @@ const Agendamento = () => {
     // consultar agendamento, obter consultaId e navegar para a página de consulta
     try {
       const agendamento = await GetAgendamentoById(agendamentoId);
-      console.log('Agendamento:', agendamento);
+      // console.log('Agendamento:', agendamento);
       // Navegar para a página de consulta
       navigate(`/consulta?consultaId=${agendamento.data.consultaId}`);
     } catch (error) {
