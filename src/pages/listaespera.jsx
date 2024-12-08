@@ -44,7 +44,7 @@ const ListaEspera = () => {
         alert('Erro ao deletar registro.');
       }
     } else {
-      alert('Ação cancelada.');
+      // alert('Ação cancelada.');
     }
   };
 

@@ -41,7 +41,7 @@ const Pacientes = () => {
         alert('Erro ao deletar paciente.');
       }
     } else {
-      alert('Ação cancelada.');
+      // alert('Ação cancelada.');
     }
   };
 
