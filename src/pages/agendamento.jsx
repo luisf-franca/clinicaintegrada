@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/agendamento.css';
+import { useNavigate } from 'react-router-dom';
 
 // COMPONENTS
 import Especialidade from '../components/Especialidade/Especialidade';
@@ -10,6 +11,7 @@ import SelectSala from '../components/Salas/SelectSala';
 // FUNCTIONS
 import GetAgendamentos from '../functions/Agendamentos/GetAgendamentos';
 import DeleteAgendamento from '../functions/Agendamentos/DeleteAgendamento';
+import GetAgendamentoById from '../functions/Agendamentos/GetAgendamentoById';
 
 
 const Agendamento = () => {
@@ -22,15 +24,15 @@ const Agendamento = () => {
   const [startSlot, setStartSlot] = useState(null);
   const [currentRange, setCurrentRange] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+  // const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [modalData, setModalData] = useState({
-    patientName: '',
-    interns: '',
-    procedure: '',
-    observations: '',
+    pacienteId: '',
+    startSlot: '',
+    endSlot: '',
   });
   const [currentWeek, setCurrentWeek] = useState(0);
   const [selectedSlotForDelete, setSelectedSlotForDelete] = useState(null);
+  const navigate = useNavigate();
 
   const generateTimeSlots = () => {
     const slots = [];
@@ -89,13 +91,13 @@ const Agendamento = () => {
 
   const generateDaysForWeek = (weekOffset) => {
     const today = new Date();
-    const firstDayOfWeek = new Date(
-      today.setDate(today.getDate() - today.getDay() + 1 + weekOffset * 7),
-    );
+    const startOfWeek = new Date(today);
+    startOfWeek.setDate(today.getDate() + weekOffset * 7); // Ajusta para a semana desejada
+
     const days = [];
     for (let i = 0; i < 7; i++) {
-      const day = new Date(firstDayOfWeek);
-      day.setDate(firstDayOfWeek.getDate() + i);
+      const day = new Date(startOfWeek);
+      day.setDate(startOfWeek.getDate() + i);
       days.push({
         date: day,
         label: day.toLocaleDateString('pt-BR', {
@@ -106,6 +108,7 @@ const Agendamento = () => {
     }
     return days;
   };
+
 
   const getDaysForWeek = () => {
     return generateDaysForWeek(currentWeek);
@@ -138,78 +141,104 @@ const Agendamento = () => {
     setIsDragging(false);
   };
 
+  // Obter o horário e dia selecioando, enviar para o modal
+  // const handleOpenModal = () => {
+  //   console.log('Dia:', currentDay);
+  //   console.log('Horário Inicial:', currentRange[0]);
+  //   console.log('Horário Final:', currentRange[currentRange.length - 1]);
+
+
+
+  //   setIsModalOpen(true);
+  // };
+
   const handleOpenModal = () => {
     if (currentRange.length === 0) return;
 
+    const [day, month] = currentDay.split('/').map((v) => parseInt(v, 10));
     const start = currentRange[0];
     const end = currentRange[currentRange.length - 1];
 
-    const endHour = parseInt(end.split(':')[0]);
-    const endMinute = parseInt(end.split(':')[1]);
-    const adjustedEndTime = new Date(0, 0, 0, endHour, endMinute + 15);
+    const [startHour, startMinute] = start.split(':').map((v) => parseInt(v, 10));
+    const [endHour, endMinute] = end.split(':').map((v) => parseInt(v, 10));
 
-    const formattedEnd = `${adjustedEndTime
-      .getHours()
-      .toString()
-      .padStart(2, '0')}:${adjustedEndTime
-        .getMinutes()
-        .toString()
-        .padStart(2, '0')}`;
+    const startDate = new Date();
+    startDate.setDate(day);
+    startDate.setMonth(month - 1); // Meses em JavaScript são baseados em zero (Janeiro é 0, Dezembro é 11)
+    startDate.setHours(startHour);
+    startDate.setMinutes(startMinute);
+    startDate.setSeconds(0);
+    startDate.setMilliseconds(0);
+
+    const endDate = new Date(startDate);
+    endDate.setHours(endHour);
+    endDate.setMinutes(endMinute + 15); // Adicionando 15 minutos ao horário final
+
+    const formatDateTime = (date) => {
+      const year = date.getFullYear();
+      const month = (date.getMonth() + 1).toString().padStart(2, '0');
+      const day = date.getDate().toString().padStart(2, '0');
+      const hours = date.getHours().toString().padStart(2, '0');
+      const minutes = date.getMinutes().toString().padStart(2, '0');
+      return `${year}-${month}-${day}T${hours}:${minutes}`;
+    };
+
+    const formattedStart = formatDateTime(startDate);
+    const formattedEnd = formatDateTime(endDate);
 
     setModalData((prev) => ({
       ...prev,
-      procedure: '',
-      startSlot: start,
+      startSlot: formattedStart,
       endSlot: formattedEnd,
     }));
 
     setIsModalOpen(true);
   };
 
-  const handleSaveModal = () => {
-    if (modalData.procedure.trim()) {
-      setSelectedSlots((prev) => ({
-        ...prev,
-        [currentDay]: {
-          ...prev[currentDay],
-          ...Object.fromEntries(
-            currentRange.map((slot) => [slot, modalData.procedure]),
-          ),
-        },
-      }));
-    }
-    setIsModalOpen(false);
-    setModalData({
-      patientName: '',
-      interns: '',
-      procedure: '',
-      observations: '',
-      startSlot: '',
-      endSlot: '',
-    });
-    setCurrentDay(null);
-    setStartSlot(null);
-    setCurrentRange([]);
-  };
+  // const handleSaveModal = () => {
+  //   if (modalData.procedure.trim()) {
+  //     setSelectedSlots((prev) => ({
+  //       ...prev,
+  //       [currentDay]: {
+  //         ...prev[currentDay],
+  //         ...Object.fromEntries(
+  //           currentRange.map((slot) => [slot, modalData.procedure]),
+  //         ),
+  //       },
+  //     }));
+  //   }
+  //   setIsModalOpen(false);
+  //   setModalData({
+  //     patientName: '',
+  //     interns: '',
+  //     procedure: '',
+  //     observations: '',
+  //     startSlot: '',
+  //     endSlot: '',
+  //   });
+  //   setCurrentDay(null);
+  //   setStartSlot(null);
+  //   setCurrentRange([]);
+  // };
 
   const handleDeleteProcedure = async () => {
     if (!selectedSlotForDelete || selectedSlotForDelete.length === 0) {
       alert('Nenhum slot selecionado para exclusão.');
       return;
     }
-  
+
     // Obter o ID do agendamento do primeiro slot selecionado
     const agendamentoId = selectedSlots[selectedSlotForDelete[0].day][selectedSlotForDelete[0].time].agendamentoId;
     console.log('Agendamento ID:', agendamentoId);
-  
+
     // Confirmar exclusão
-    const confirmDelete = window.confirm('Tem certeza que deseja deletar o agendamento?');
+    const confirmDelete = window.confirm('Tem certeza que deseja excluir o agendamento?');
     if (confirmDelete) {
       try {
         await DeleteAgendamento(agendamentoId);
         alert('Agendamento deletado com sucesso!');
         setSelectedSlotForDelete(null);
-        setReloadAgendamentos((prev) => !prev); // Atualiza o estado para recarregar agendamentos
+        handleReloadAgendamentos();
       } catch (error) {
         console.error('Erro ao deletar agendamento:', error);
         alert('Erro ao deletar agendamento.');
@@ -218,7 +247,7 @@ const Agendamento = () => {
       // alert('Ação cancelada.');
     }
   };
-  
+
 
   const isSelected = (day, time) => selectedSlots[day]?.[time];
 
@@ -230,7 +259,7 @@ const Agendamento = () => {
     setCurrentWeek(currentWeek + 1);
   };
 
-  const closeDetails = () => setIsDetailsOpen(false);
+  // const closeDetails = () => setIsDetailsOpen(false);
 
   const handleSlotClick = (day, time) => {
     if (isSelected(day, time)) {
@@ -255,7 +284,24 @@ const Agendamento = () => {
     }
   };
 
+  const handleReloadAgendamentos = () => {
+    console.log('Recarregando agendamentos...');
+    setReloadAgendamentos((prev) => !prev);
+  };
 
+  // Função para navegar para a página de consulta
+  const handleNavigateConsulta = async () => {
+    const agendamentoId = selectedSlots[selectedSlotForDelete[0].day][selectedSlotForDelete[0].time].agendamentoId;
+    // consultar agendamento, obter consultaId e navegar para a página de consulta
+    try {
+      const agendamento = await GetAgendamentoById(agendamentoId);
+      console.log('Agendamento:', agendamento);
+      // Navegar para a página de consulta
+      navigate(`/consulta?consultaId=${agendamento.data.consultaId}`);
+    } catch (error) {
+      console.error('Erro ao buscar agendamento:', error);
+    }
+  };
 
   return (
     <div
@@ -265,7 +311,7 @@ const Agendamento = () => {
     >
       <hgroup>
         <h1>Agendamentos</h1>
-        <SelectSala 
+        <SelectSala
           especialidade={selectedSpecialty}
           onSelectSala={setSelectedSala}
         />
@@ -276,26 +322,26 @@ const Agendamento = () => {
 
       </hgroup>
 
-      {isDetailsOpen && (
+      {/* {isDetailsOpen && (
         <AgendamentoDetails modalData={modalData} closeDetails={closeDetails} />
-      )}
+      )} */}
 
       <nav>
-        <button onClick={handleOpenModal} disabled={currentRange.length === 0}>
-          Agendar
-        </button>
+        {selectedSlotForDelete === null && (
+          <button onClick={handleOpenModal} disabled={currentRange.length === 0}>
+            Agendar
+          </button>
+        )}
 
         {selectedSlotForDelete && (
-          <button
-            onClick={() =>
-              handleDeleteProcedure(
-                selectedSlotForDelete.day,
-                selectedSlotForDelete.time,
-              )
-            }
-          >
-            Excluir
-          </button>
+          <>
+            <button onClick={handleNavigateConsulta}>
+              Ver Detalhes
+            </button>
+            <button onClick={handleDeleteProcedure}>
+              Excluir
+            </button>
+          </>
         )}
 
         <button onClick={handlePreviousWeek}>← Semana Anterior</button>
@@ -348,10 +394,10 @@ const Agendamento = () => {
           isModalOpen={isModalOpen}
           setIsModalOpen={setIsModalOpen}
           modalData={modalData}
-          setModalData={setModalData}
-          handleSaveModal={handleSaveModal}
+          atualizarRegistros={handleReloadAgendamentos}
         />
       )}
+
     </div>
   );
 };

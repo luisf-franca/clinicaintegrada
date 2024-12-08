@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+
+// FUNCTIONS
 import GetPacientes from '../../functions/Pacientes/GetPacientes';
 
 const PesquisarPacientes = ({ setPacientes }) => {
