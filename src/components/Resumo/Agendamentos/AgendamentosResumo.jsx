@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 // FUNCTIONS
 import GetAgendamentos from '../../../functions/Agendamentos/GetAgendamentos';
+import FormatarDateTimeToLocal from '../../../functions/FormatarDateTime/FormatDateTimeToLocal';
 
 const AgendamentosResumo = ({ pacienteId, especialidade }) => {
     const [intervalo, setIntervalo] = useState('sempre'); // Estado inicial
@@ -110,8 +111,8 @@ const AgendamentosResumo = ({ pacienteId, especialidade }) => {
                             agendamentos.slice(0, 4).map((item) => (
                                 <tr key={item.id}>
                                     <td>{item.nome}</td>
-                                    <td>{item.dataHoraInicio}</td>
-                                    <td>{item.dataHoraFim}</td>
+                                    <td>{FormatarDateTimeToLocal(item.dataHoraInicio)}</td>
+                                    <td>{FormatarDateTimeToLocal(item.dataHoraFim)}</td>
                                     <td>{item.sala}</td>
                                     <td>{item.statusConsulta}</td>
                                     <td>

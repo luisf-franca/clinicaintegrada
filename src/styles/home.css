@@ -23,6 +23,11 @@
   color: var(--vermelho-claro);
 }
 
+.home-header select {
+  color: black;
+  border: 1px solid gray;
+}
+
 .home-body {
   padding: 20px;
 }

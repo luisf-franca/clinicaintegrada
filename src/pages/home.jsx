@@ -7,6 +7,7 @@ import 'react-tabs/style/react-tabs.css';
 import Especialidade from '../components/Especialidade/Especialidade';
 import ListaEsperaResumo from '../components/Resumo/ListaEspera/ListaEsperaResumo';
 import AgendamentosResumo from '../components/Resumo/Agendamentos/AgendamentosResumo';
+import ConsultaResumo from '../components/Resumo/Consultas/ConsultaResumo';
 import SalasResumo from '../components/Resumo/Salas/SalasResumo';
 import PesquisarPacientes from '../components/Pacientes/PesquisarPacientes';
 import PacientesResumo from '../components/Resumo/Pacientes/PacientesResumo';
@@ -31,15 +32,27 @@ const Home = () => {
   //monitore pacienteEtapa, se for alterada, deve sugerir a funcionalidade de acordo com a etapa do paciente no sistema
   useEffect(() => {
     if (pacienteEtapa !== null) {
-      if (pacienteEtapa === 1 || pacienteEtapa === 2) {
-        setActiveTab(1);
-      } else if (pacienteEtapa >= 3 && pacienteEtapa <= 5) {
-        setActiveTab(2);
-      } else {
-        // console.log('Etapa desconhecida');
+      switch (pacienteEtapa) {
+        case 1:
+          setActiveTab(1);
+          break;
+        case 2:
+          setActiveTab(2);
+          break;
+        case 3:
+        case 4:
+          setActiveTab(3);
+          break;
+        case 5:
+          setActiveTab(1);
+          break;
+        default:
+          // console.log('Etapa desconhecida');
+          break;
       }
     }
   }, [pacienteEtapa]);
+
 
   const handleTabChange = (index) => {
     setActiveTab(index);
@@ -49,10 +62,10 @@ const Home = () => {
     <div className="home">
       <div className="home-header">
         <h1>Início</h1>
-        <Especialidade
+        {/* <Especialidade
           selectedSpecialty={selectedSpecialty}
           onSelectSpecialty={setSelectedSpecialty}
-        />
+        /> */}
       </div>
       <div className="home-body">
         <Tabs selectedIndex={activeTab} onSelect={handleTabChange}>
@@ -60,6 +73,7 @@ const Home = () => {
             <Tab>Pacientes</Tab>
             <Tab>Lista de Espera</Tab>
             <Tab>Agendamentos</Tab>
+            <Tab>Consultas</Tab>
             <Tab>Salas</Tab>
           </TabList>
 
@@ -71,12 +85,17 @@ const Home = () => {
           </TabPanel>
           <TabPanel>
             <div className="body-section">
-              <ListaEsperaResumo pacienteId={pacienteSelecionadoId} especialidade={selectedSpecialty} />
+              <ListaEsperaResumo pacienteId={pacienteSelecionadoId} />
             </div>
           </TabPanel>
           <TabPanel>
             <div className="body-section">
-              <AgendamentosResumo pacienteId={pacienteSelecionadoId} especialidade={selectedSpecialty} />
+              <AgendamentosResumo pacienteId={pacienteSelecionadoId} />
+            </div>
+          </TabPanel>
+          <TabPanel>
+            <div className="body-section">
+              <ConsultaResumo pacienteId={pacienteSelecionadoId} />
             </div>
           </TabPanel>
           <TabPanel>

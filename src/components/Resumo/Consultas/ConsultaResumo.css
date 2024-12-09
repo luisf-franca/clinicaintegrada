@@ -1,0 +1,53 @@
+.consulta-resumo {
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+    background-color: var(--branco);
+  }
+  
+  .consulta-resumo__header {
+    background-color: var(--vermelho);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--branco);
+    padding: 10px;
+    text-align: center;
+  }
+  
+  .consulta-resumo__header h4 {
+    margin: 0;
+    font-size: 1rem;
+  }
+  
+  .consulta-resumo__body {
+    padding: 10px;
+  }
+  
+  .consulta-resumo__table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.8rem;
+  }
+  
+  .consulta-resumo__table th,
+  .consulta-resumo__table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  
+  .consulta-resumo__table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+  }
+  
+  .consulta-resumo__table tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  .consulta-resumo__table tr:hover {
+    background-color: #f1f1f1;
+  }
+  

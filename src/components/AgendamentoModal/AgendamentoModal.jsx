@@ -88,8 +88,10 @@ const AgendamentoModal = ({
 
   const handlePostAgendamento = async () => {
     try {
+      requestData.agendamento.status = parseInt(requestData.agendamento.status, 10);
+      requestData.agendamento.tipo = parseInt(requestData.agendamento.tipo, 10);
+      requestData.consulta.especialidade = parseInt(requestData.consulta.especialidade, 10);
       const response = await CreateAgendamento(requestData);
-      // console.log('Agendamento criado com sucesso:', response);
       atualizarRegistros();
       setIsModalOpen(false);
     } catch (error) {
