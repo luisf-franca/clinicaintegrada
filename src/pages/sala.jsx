@@ -3,8 +3,8 @@ import React from 'react';
 const Sala = () => {
     return (
         <div>
-            <h1>Bem-vindo à Sala</h1>
-            <p>Esta é a página da sala.</p>
+            <h1>Sala</h1>
+            <h2>Em breve...</h2>
         </div>
     );
 };

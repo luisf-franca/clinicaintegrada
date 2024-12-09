@@ -5,7 +5,7 @@
   background-color: #fff;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
+  overflow-y: auto;
 }
 
 .home-header {
@@ -32,6 +32,13 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
+}
+
+.body-section input {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 8px;
+  margin: 8px;
 }
 
 .component {

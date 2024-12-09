@@ -24,8 +24,8 @@ const AtualizarPaciente = ({
         type === 'checkbox'
           ? checked
           : name === 'idade'
-          ? parseInt(value, 10) || ''
-          : value,
+            ? parseInt(value, 10) || ''
+            : value,
     }));
   };
 
@@ -77,6 +77,7 @@ const AtualizarPaciente = ({
               name="recebeuAlta"
               checked={paciente.recebeuAlta}
               onChange={handleInputChange}
+              style={{ backgroundColor: paciente.recebeuAlta ? 'red' : 'white' }}
             />
           </>
         );

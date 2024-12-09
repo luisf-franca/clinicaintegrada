@@ -4,7 +4,7 @@ const Relatorio = () => {
   return (
     <div className="relatorio">
       <h2>Relatório</h2>
-      <p>Este é um componente básico de relatório.</p>
+      <h2>Em breve...</h2>
     </div>
   );
 };
