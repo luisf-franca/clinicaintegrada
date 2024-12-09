@@ -2,15 +2,15 @@
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  background-color: #fff;
+  background-color: var(--branco);
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   overflow-y: auto;
 }
 
 .home-header {
-  background-color: #d71c23;
-  color: #fff;
+  background-color: var(--branco);
+  box-shadow: var(--shadow1);
+  color: var(--branco);
   padding: 20px;
   display: flex;
   justify-content: space-between;
@@ -20,6 +20,7 @@
 .home-header h1 {
   margin: 0;
   font-size: 1.8rem;
+  color: var(--vermelho-claro);
 }
 
 .home-body {
@@ -46,7 +47,7 @@
   border: 1px solid #ddd;
   border-radius: 4px;
   overflow: hidden;
-  background-color: #fff;
+  background-color: var(--branco);
   padding: 20px;
   width: 100%;
   max-width: 600px;

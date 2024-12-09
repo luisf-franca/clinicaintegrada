@@ -1,7 +1,7 @@
 .sidebar {
   min-width: 6.5%;
-  background-color: #d71c23;
-  color: #ffffff;
+  background-color: var(--vermelho);
+  color: var(--branco);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -27,7 +27,7 @@
   justify-content: center;
   align-items: center;
   height: calc(100% / 8);
-  color: #ffffff;
+  color: var(--branco);
   text-decoration: none;
   transition: background-color 0.15s, color 0.15s;
 }

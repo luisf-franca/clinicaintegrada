@@ -1,108 +1,108 @@
 .pacientes-resumo {
-    width: 100%;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    overflow: hidden;
-    background-color: #fff;
-    padding: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  overflow: hidden;
+  background-color: var(--branco);
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .pacientes-resumo__header {
-    background-color: #d71c23;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: #fff;
-    padding: 10px;
-    text-align: center;
+  background-color: var(--vermelho);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--branco);
+  padding: 10px;
+  text-align: center;
 }
 
 .pacientes-resumo__header h4 {
-    margin: 0;
-    font-size: 1.2rem;
+  margin: 0;
+  font-size: 1.2rem;
 }
 
 .pacientes-resumo__body {
-    padding: 10px;
+  padding: 10px;
 }
 
 .paciente-item {
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    border: 1px solid #ddd;
-    margin-bottom: 10px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.2s;
-    font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid #ddd;
+  margin-bottom: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-size: 0.9rem;
 }
 
 .paciente-item:hover {
-    background-color: #f9f9f9;
+  background-color: #f9f9f9;
 }
 
 .paciente-item.selected {
-    background-color: #f1f1f1;
+  background-color: #f1f1f1;
 }
 
 .paciente-item__button {
-    margin-right: 10px;
+  margin-right: 10px;
 }
 
 .round-button {
-    width: 20px;
-    height: 20px;
-    border: 2px solid #ddd;
-    border-radius: 50%;
-    transition: background-color 0.2s, border-color 0.2s;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #ddd;
+  border-radius: 50%;
+  transition: background-color 0.2s, border-color 0.2s;
 }
 
 .round-button.marked {
-    background-color: #ddd;
-    border-color: #aaa;
+  background-color: #ddd;
+  border-color: #aaa;
 }
 
 .paciente-item__info {
-    display: flex;
-    flex-direction: row;
-    gap: 15px;
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
 }
 
 .paciente-item__info p {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
 .no-pacientes {
-    text-align: center;
-    padding: 10px;
-    color: #666;
+  text-align: center;
+  padding: 10px;
+  color: #666;
 }
 
 .pacientes-resumo__footer {
-    display: flex;
-    justify-content: flex-end;
-    padding: 10px;
-    border-top: 1px solid #ddd;
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px;
+  border-top: 1px solid #ddd;
 }
 
 .pacientes-resumo__footer button {
-    padding: 10px 20px;
-    background-color: #ddd;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: background-color 0.2s;
+  padding: 10px 20px;
+  background-color: #ddd;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s;
 }
 
 .pacientes-resumo__footer button:disabled {
-    background-color: #f4f4f4;
-    cursor: not-allowed;
+  background-color: #f4f4f4;
+  cursor: not-allowed;
 }
 
 .pacientes-resumo__footer button:hover:not(:disabled) {
-    background-color: #ccc;
+  background-color: #ccc;
 }

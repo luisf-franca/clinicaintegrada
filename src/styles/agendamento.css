@@ -80,12 +80,15 @@
           }
 
           &.selected {
-            background-color: #4caf50;
-            color: #fff;
+            background-color: var(--branco);
+            border: 1px solid var(--vermelho);
+            border-radius: 0.25rem;
+            color: var(--preto);
           }
 
           &.dragging {
-            background-color: #2196f3;
+            background-color: var(--roxo);
+            border-radius: 0.25rem;
             color: white;
           }
         }

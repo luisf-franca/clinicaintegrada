@@ -1,70 +1,70 @@
 .salas-resumo {
-    width: 100%;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    overflow: hidden;
-    background-color: #fff;
-    padding: 10px;
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  overflow: hidden;
+  background-color: var(--branco);
+  padding: 10px;
 }
 
 .salas-resumo__header {
-    background-color: #d71c23;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: #fff;
-    padding: 10px;
-    text-align: center;
+  background-color: var(--vermelho);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--branco);
+  padding: 10px;
+  text-align: center;
 }
 
 .salas-resumo__header h4 {
-    margin: 0;
-    font-size: 1.0rem;
+  margin: 0;
+  font-size: 1rem;
 }
 
 .salas-resumo__body {
-    padding: 10px;
+  padding: 10px;
 }
 
 .salas-resumo__select {
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 .salas-resumo__select label {
-    font-size: 0.8rem;
-    display: block;
-    margin-bottom: 5px;
+  font-size: 0.8rem;
+  display: block;
+  margin-bottom: 5px;
 }
 
 .salas-resumo__select select {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 0.8rem;
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.8rem;
 }
 
 .salas-resumo__actions {
-    margin-top: 10px;
-    text-align: center;
+  margin-top: 10px;
+  text-align: center;
 }
 
 .salas-resumo__actions button {
-    background-color: #d71c23;
-    color: #fff;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.8rem;
+  background-color: var(--vermelho);
+  color: var(--branco);
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
 }
 
 .salas-resumo__actions button:disabled {
-    background-color: #ddd;
-    cursor: not-allowed;
+  background-color: #ddd;
+  cursor: not-allowed;
 }
 
 .salas-resumo__status {
-    margin-top: 15px;
-    font-size: 0.8rem;
+  margin-top: 15px;
+  font-size: 0.8rem;
 }

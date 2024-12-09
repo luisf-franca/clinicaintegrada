@@ -11,8 +11,8 @@
 /* GRADIENTE */
 :root {
   --background: url('./src/assets/bg.png'),
-    linear-gradient(to right, #7d1474, #d71c23),
-    linear-gradient(to bottom, #f8f9fa 60%, transparent 60%);
+    linear-gradient(to right, var(--roxo), var(--vermelho)),
+    linear-gradient(to bottom, var(--gelo) 60%, transparent 60%);
 }
 
 /* SOMBRAS */

@@ -1,49 +1,49 @@
 .pacientes-relatorio {
-    width: 80%;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    overflow: hidden;
-    background-color: #fff;
+  width: 80%;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  overflow: hidden;
+  background-color: var(--branco);
 }
 
 .pacientes-relatorio__header {
-    background-color: #d71c23;
-    color: #fff;
-    padding: 10px;
-    text-align: center;
+  background-color: var(--vermelho);
+  color: var(--branco);
+  padding: 10px;
+  text-align: center;
 }
 
 .pacientes-relatorio__header h4 {
-    margin: 0;
-    font-size: 1.0rem; /* Reduzido para 1.0 conforme padrão */
+  margin: 0;
+  font-size: 1rem; /* Reduzido para 1.0 conforme padrão */
 }
 
 .pacientes-relatorio__body {
-    padding: 10px;
+  padding: 10px;
 }
 
 .pacientes-relatorio__table {
-    width: 100%;
-    border-collapse: collapse;
-    text-align: left;
-    font-size: 0.8rem; /* Reduzido para 0.8 conforme padrão */
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.8rem; /* Reduzido para 0.8 conforme padrão */
 }
 
 .pacientes-relatorio__table th,
 .pacientes-relatorio__table td {
-    border: 1px solid #ddd;
-    padding: 8px;
+  border: 1px solid #ddd;
+  padding: 8px;
 }
 
 .pacientes-relatorio__table th {
-    background-color: #f4f4f4;
-    font-weight: bold;
+  background-color: #f4f4f4;
+  font-weight: bold;
 }
 
 .pacientes-relatorio__table tr:nth-child(even) {
-    background-color: #f9f9f9;
+  background-color: #f9f9f9;
 }
 
 .pacientes-relatorio__table tr:hover {
-    background-color: #f1f1f1;
+  background-color: #f1f1f1;
 }

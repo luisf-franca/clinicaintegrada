@@ -1,92 +1,92 @@
 .agendamentos-resumo {
-    width: 100%;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    overflow: hidden;
-    background-color: #fff;
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  overflow: hidden;
+  background-color: var(--branco);
 }
 
 .agendamentos-resumo__header {
-    background-color: #d71c23;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: #fff;
-    padding: 10px;
+  background-color: var(--vermelho);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--branco);
+  padding: 10px;
 }
 
 .agendamentos-resumo__header h4 {
-    margin: 0;
-    font-size: 1.0rem;
+  margin: 0;
+  font-size: 1rem;
 }
 
 .agendamentos-resumo__filtro {
-    display: flex;
-    justify-content: center; /* Centraliza horizontalmente */
-    align-items: center; /* Centraliza verticalmente */
-    gap: 10px; /* Espaçamento entre os elementos */
-    background-color: #f8f9fa; /* Cor de fundo opcional */
-    border: 1px solid #ddd; /* Borda leve para destaque */
-    border-radius: 5px; /* Bordas arredondadas */
-    margin: 20px auto; /* Margem para espaçamento externo */
-    max-width: 500px; /* Define um tamanho máximo para a div */
-    text-align: center; /* Centraliza o texto */
+  display: flex;
+  justify-content: center; /* Centraliza horizontalmente */
+  align-items: center; /* Centraliza verticalmente */
+  gap: 10px; /* Espaçamento entre os elementos */
+  background-color: var(--gelo); /* Cor de fundo opcional */
+  border: 1px solid #ddd; /* Borda leve para destaque */
+  border-radius: 5px; /* Bordas arredondadas */
+  margin: 20px auto; /* Margem para espaçamento externo */
+  max-width: 500px; /* Define um tamanho máximo para a div */
+  text-align: center; /* Centraliza o texto */
 }
 
 .agendamentos-resumo__intervalo {
-    display: flex;
-    justify-content: space-around;
-    padding: 10px;
-    background-color: #f4f4f4;
-    border-bottom: 1px solid #ddd;
+  display: flex;
+  justify-content: space-around;
+  padding: 10px;
+  background-color: #f4f4f4;
+  border-bottom: 1px solid #ddd;
 }
 
 .agendamentos-resumo__intervalo button {
-    padding: 5px 10px;
-    border: 1px solid #ddd;
-    background-color: #fff;
-    cursor: pointer;
-    font-size: 0.8rem;
-    border-radius: 4px;
+  padding: 5px 10px;
+  border: 1px solid #ddd;
+  background-color: var(--branco);
+  cursor: pointer;
+  font-size: 0.8rem;
+  border-radius: 4px;
 }
 
 .agendamentos-resumo__intervalo button.active {
-    background-color: #d71c23;
-    color: #fff;
-    border-color: #d71c23;
+  background-color: var(--vermelho);
+  color: var(--branco);
+  border-color: var(--vermelho);
 }
 
 .agendamentos-resumo__intervalo button:hover {
-    background-color: #d71c23;
-    color: #fff;
+  background-color: var(--vermelho);
+  color: var(--branco);
 }
 
 .agendamentos-resumo__body {
-    padding: 10px;
+  padding: 10px;
 }
 
 .agendamentos-resumo__table {
-    width: 100%;
-    border-collapse: collapse;
-    text-align: left;
-    font-size: 0.8rem;
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.8rem;
 }
 
 .agendamentos-resumo__table th,
 .agendamentos-resumo__table td {
-    border: 1px solid #ddd;
-    padding: 8px;
+  border: 1px solid #ddd;
+  padding: 8px;
 }
 
 .agendamentos-resumo__table th {
-    background-color: #f4f4f4;
-    font-weight: bold;
+  background-color: #f4f4f4;
+  font-weight: bold;
 }
 
 .agendamentos-resumo__table tr:nth-child(even) {
-    background-color: #f9f9f9;
+  background-color: #f9f9f9;
 }
 
 .agendamentos-resumo__table tr:hover {
-    background-color: #f1f1f1;
+  background-color: #f1f1f1;
 }
