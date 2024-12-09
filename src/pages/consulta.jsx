@@ -11,36 +11,14 @@ import PesquisarConsultas from '../components/Consultas/PesquisarConsultas';
 // FUNCTIONS
 import GetAgendamentoById from '../functions/Agendamentos/GetAgendamentoById';
 import GetConsultaById from '../functions/Consultas/GetConsultaById';
+import FormatarDateTimeToLocal from '../functions/FormatarDateTime/FormatDateTimeToLocal';
 
 const Consulta = () => {
     const [selectedSpecialty, setSelectedSpecialty] = useState(1);
     const [registros, setRegistros] = useState([]);
     const [activeTab, setActiveTab] = useState(0);
-    const [agendamentoSelecionado, setAgendamentoSelecionado] = useState({
-        id: "0123ea41-2b3c-4f55-a115-4e1573696c95",
-        nome: null,
-        dataHoraInicio: "2024-12-09T09:00:00",
-        dataHoraFim: "2024-12-09T10:00:00",
-        tipo: "Triagem",
-        status: "Reservado",
-        statusConsulta: "0",
-        pacienteId: "d6bb34d4-2e61-49ac-b8fa-0ac4396ce389",
-        sala: null,
-        salaId: "29f5a94f-a05f-4e1c-8f5d-65fdf64b4488",
-        consultaId: "73d9919a-5076-449e-afd3-9a3e3dfdc5ba"
-    });
-    const [consultaSelecionada, setConsultaSelecionada] = useState({
-        id: "01a36e53-2285-4767-a500-0e4ddc9c2984",
-        nome: null,
-        observacao: "string",
-        dataHoraInicio: null,
-        dataHoraFim: null,
-        especialidade: "Psicologia",
-        status: "Agendada",
-        agendamentoId: "50e7ca30-98f9-46ab-b114-4ee5ca385a43",
-        equipeId: "f579920f-2b30-46d8-8d99-72ff20b650f6"
-    });
-
+    const [agendamentoSelecionado, setAgendamentoSelecionado] = useState({});
+    const [consultaSelecionada, setConsultaSelecionada] = useState({});
 
     useEffect(() => {
         const fetchAgendamento = async () => {
@@ -107,12 +85,10 @@ const Consulta = () => {
                     <TabPanel>
                         <div className="consulta-tab-content">
                             <div className="search-container">
-
                                 <h4>Paciente</h4>
                                 <PesquisarConsultas setConsultas={setRegistros} especialidade={selectedSpecialty} />
                             </div>
                             <div className="table-container">
-
                                 <table>
                                     <thead>
                                         <tr>
@@ -122,8 +98,6 @@ const Consulta = () => {
                                             <th>Data/Hora Fim</th>
                                             <th>Especialidade</th>
                                             <th>Status</th>
-                                            {/* <th>Agendamento ID</th>
-                                        <th>Equipe ID</th> */}
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -135,8 +109,6 @@ const Consulta = () => {
                                                 <td>{registro.dataHoraFim}</td>
                                                 <td>{registro.especialidade}</td>
                                                 <td>{registro.status}</td>
-                                                {/* <td>{registro.agendamentoId}</td> */}
-                                                {/* <td>{registro.equipeId}</td> */}
                                             </tr>
                                         ))}
                                     </tbody>
@@ -147,41 +119,39 @@ const Consulta = () => {
 
                     <TabPanel>
                         <div className="consulta-detalhes">
-                            <div className="top-section"></div>
-                            <div className="name-section">
-                                <div className="centered-content">Caio Arthur</div>
-                            </div>
-                            <div className="bottom-section">
-                                <div className="left-column">
-                                    <h4>Agendamento</h4>
-                                    <div>
-                                        <p><strong>ID:</strong> {agendamentoSelecionado.id}</p>
-                                        <p><strong>Nome:</strong> {agendamentoSelecionado.nome}</p>
-                                        <p><strong>Data/Hora Início:</strong> {agendamentoSelecionado.dataHoraInicio}</p>
-                                        <p><strong>Data/Hora Fim:</strong> {agendamentoSelecionado.dataHoraFim}</p>
-                                        <p><strong>Tipo:</strong> {agendamentoSelecionado.tipo}</p>
-                                        <p><strong>Status:</strong> {agendamentoSelecionado.status}</p>
-                                        <p><strong>Status Consulta:</strong> {agendamentoSelecionado.statusConsulta}</p>
-                                        <p><strong>Paciente ID:</strong> {agendamentoSelecionado.pacienteId}</p>
-                                        <p><strong>Sala:</strong> {agendamentoSelecionado.sala}</p>
-                                        <p><strong>Sala ID:</strong> {agendamentoSelecionado.salaId}</p>
-                                        <p><strong>Consulta ID:</strong> {agendamentoSelecionado.consultaId}</p>                                </div>
-                                </div>
-                                <div className="right-column">
-                                    <h4>Consulta</h4>
-                                    <div>
-                                        <p><strong>ID:</strong> {consultaSelecionada.id}</p>
-                                        <p><strong>Nome:</strong> {consultaSelecionada.nome}</p>
-                                        <p><strong>Observação:</strong> {consultaSelecionada.observacao}</p>
-                                        <p><strong>Data/Hora Início:</strong> {consultaSelecionada.dataHoraInicio}</p>
-                                        <p><strong>Data/Hora Fim:</strong> {consultaSelecionada.dataHoraFim}</p>
-                                        <p><strong>Especialidade:</strong> {consultaSelecionada.especialidade}</p>
-                                        <p><strong>Status:</strong> {consultaSelecionada.status}</p>
-                                        <p><strong>Agendamento ID:</strong> {consultaSelecionada.agendamentoId}</p>
-                                        <p><strong>Equipe ID:</strong> {consultaSelecionada.equipeId}</p>
+                            {Object.keys(agendamentoSelecionado).length === 0 && Object.keys(consultaSelecionada).length === 0 ? (
+                                <p>Selecione uma consulta na página anterior</p>
+                            ) : (
+                                <>
+                                    <div className="top-section"></div>
+                                    <div className="name-section">
+                                        <div className="centered-content">{agendamentoSelecionado.nome}</div>
                                     </div>
-                                </div>
-                            </div>
+                                    <div className="bottom-section">
+                                        <div className="left-column">
+                                            <h3>Agendamento</h3>
+                                            <div>
+                                                <p><strong>Data/Hora Início:</strong> {FormatarDateTimeToLocal(agendamentoSelecionado.dataHoraInicio)}</p>
+                                                <p><strong>Data/Hora Fim:</strong> {FormatarDateTimeToLocal(agendamentoSelecionado.dataHoraFim)}</p>
+                                                <p><strong>Tipo:</strong> {agendamentoSelecionado.tipo}</p>
+                                                <p><strong>Status:</strong> {agendamentoSelecionado.status}</p>
+                                                <p><strong>Status Consulta:</strong> {agendamentoSelecionado.statusConsulta}</p>
+                                                <p><strong>Sala:</strong> {agendamentoSelecionado.sala}</p>
+                                            </div>
+                                        </div>
+                                        <div className="right-column">
+                                            <h3>Consulta</h3>
+                                            <div>
+                                                <p><strong>Observação:</strong> {consultaSelecionada.observacao}</p>
+                                                <p><strong>Data/Hora Início:</strong> {FormatarDateTimeToLocal(consultaSelecionada.dataHoraInicio)}</p>
+                                                <p><strong>Data/Hora Fim:</strong> {FormatarDateTimeToLocal(consultaSelecionada.dataHoraFim)}</p>
+                                                <p><strong>Especialidade:</strong> {consultaSelecionada.especialidade}</p>
+                                                <p><strong>Status:</strong> {consultaSelecionada.status}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </>
+                            )}
                         </div>
                     </TabPanel>
                 </Tabs>

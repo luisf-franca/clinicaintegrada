@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'; // Import necessário para naveg
 
 // FUNCTIONS
 import GetListaEspera from '../../../functions/ListaEspera/GetListaEntries';
+import FormatarDateTimeToLocal from '../../../functions/FormatarDateTime/FormatDateTimeToLocal';
 
 
 const ListaEsperaResumo = ({ pacienteId, especialidade }) => {
@@ -84,7 +85,7 @@ const ListaEsperaResumo = ({ pacienteId, especialidade }) => {
                             listaEspera.slice(0, 4).map((item) => (
                                 <tr key={item.id}>
                                     <td>{item.nome}</td>
-                                    <td>{item.dataEntrada}</td>
+                                    <td>{FormatarDateTimeToLocal(item.dataEntrada)}</td>
                                     <td>{item.prioridade}</td>
                                     <td>
                                         <button onClick={() => handleAgendarConsulta(item.id)}>Agendar</button>
