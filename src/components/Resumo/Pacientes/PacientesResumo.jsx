@@ -37,7 +37,7 @@ const PacientesResumo = ({ pacientes, setPacienteEtapa, setPacienteSelecionadoId
                 {pacientes && pacientes.length > 0 ? (
                     pacientes.slice(0, 5).map((paciente, index) => (
                         <div 
-                            className={`paciente-item ${selectedPaciente === index ? 'selected' : ''}`} 
+                            className={`pacientes-relatorio__item ${selectedPaciente === index ? 'selected' : ''}`} 
                             key={index} 
                             onClick={() => handleSelectPaciente(index)}
                         >

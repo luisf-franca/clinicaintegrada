@@ -22,15 +22,15 @@
 
 .agendamentos-resumo__filtro {
   display: flex;
-  justify-content: center; /* Centraliza horizontalmente */
-  align-items: center; /* Centraliza verticalmente */
-  gap: 10px; /* Espaçamento entre os elementos */
-  background-color: var(--gelo); /* Cor de fundo opcional */
-  border: 1px solid #ddd; /* Borda leve para destaque */
-  border-radius: 5px; /* Bordas arredondadas */
-  margin: 20px auto; /* Margem para espaçamento externo */
-  max-width: 500px; /* Define um tamanho máximo para a div */
-  text-align: center; /* Centraliza o texto */
+  justify-content: center;
+  align-items: center; 
+  gap: 10px; 
+  background-color: var(--gelo); 
+  border: 1px solid #ddd; 
+  border-radius: 5px; 
+  margin: 20px auto; 
+  max-width: 500px; 
+  text-align: center; 
 }
 
 .agendamentos-resumo__intervalo {

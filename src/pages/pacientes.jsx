@@ -87,8 +87,8 @@ const Pacientes = () => {
         </div>
 
         <div className="lista-pacientes">
-          <table className="pacientes-table">
-            <thead className="header-lista">
+          <table>
+            <thead>
               <tr>
                 <th>Nome</th>
                 <th>Idade</th>
@@ -100,7 +100,7 @@ const Pacientes = () => {
                 <th>Ações</th>
               </tr>
             </thead>
-            <tbody className="body-lista">
+            <tbody>
               {pacientes.map((paciente) => (
                 <tr
                   key={paciente.id}

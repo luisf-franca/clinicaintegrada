@@ -15,7 +15,7 @@
 
 .pacientes-relatorio__header h4 {
   margin: 0;
-  font-size: 1rem; /* Reduzido para 1.0 conforme padrão */
+  font-size: 1rem;
 }
 
 .pacientes-relatorio__body {
@@ -26,7 +26,7 @@
   width: 100%;
   border-collapse: collapse;
   text-align: left;
-  font-size: 0.8rem; /* Reduzido para 0.8 conforme padrão */
+  font-size: 0.8rem; 
 }
 
 .pacientes-relatorio__table th,
