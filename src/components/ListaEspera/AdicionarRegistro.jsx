@@ -10,12 +10,12 @@ const AdicionarRegistro = ({ atualizarRegistros }) => {
         pacienteId: '',
         dataEntrada: '',
         status: 1,
-        especialidade: 1,
+        especialidade: localStorage.getItem('selectedSpecialty') || 1,
         prioridade: 0,
     });
     const [pacientes, setPacientes] = useState([]);
     const [pacienteSelecionado, setPacienteSelecionado] = useState(null);
-    const [selectedSpecialty, setSelectedSpecialty] = useState(1);
+    const [selectedSpecialty, setSelectedSpecialty] = useState(localStorage.getItem('selectedSpecialty') || 1);
     const [step, setStep] = useState(1); // Controle do passo atual
 
     useEffect(() => {
@@ -39,10 +39,11 @@ const AdicionarRegistro = ({ atualizarRegistros }) => {
             const { pacienteId, dataEntrada, status, especialidade, prioridade } = listaEspera;
             const listaEsperaData = {
                 dataEntrada,
-                status,
-                especialidade,
-                prioridade,
+                status: parseInt(status, 10),
+                especialidade: parseInt(especialidade, 10),
+                prioridade: parseInt(prioridade, 10),
             };
+            console.log('listaEsperaData:', listaEsperaData);
             await CreateListaEsperaEntry(pacienteId, listaEsperaData);
             atualizarRegistros();
             setPacienteSelecionado(null);
@@ -51,7 +52,7 @@ const AdicionarRegistro = ({ atualizarRegistros }) => {
                 pacienteId: '',
                 dataEntrada: '',
                 status: 1,
-                especialidade: 1,
+                especialidade: localStorage.getItem('selectedSpecialty') || 1,
                 prioridade: 1,
             });
             alert('Registro adicionado com sucesso!');

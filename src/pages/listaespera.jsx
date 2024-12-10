@@ -14,7 +14,7 @@ const ListaEspera = () => {
   const [selectedComponent, setSelectedComponent] = useState('Pesquisar');
   const [registros, setRegistros] = useState([]);
   const [registroSelecionado, setRegistroSelecionado] = useState({});
-  const [selectedSpecialty, setSelectedSpecialty] = useState(1);
+  const [selectedSpecialty, setSelectedSpecialty] = useState(localStorage.getItem('selectedSpecialty') || 1);
 
   // Função para atualizar os registros
   const atualizarRegistros = async () => {

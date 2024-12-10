@@ -18,6 +18,7 @@ const AgendamentosResumo = ({ pacienteId, especialidade }) => {
                 const filters = [];
                 if (especialidade) filters.push(`especialidade=${especialidade}`);
                 if (pacienteFilter) filters.push(`pacienteId=${pacienteFilter}`);
+                filters.push('status=1') // Apenas registros status agendados
 
                 // Adiciona filtro de intervalo conforme necessário
                 if (intervalo !== 'sempre') {
@@ -59,10 +60,10 @@ const AgendamentosResumo = ({ pacienteId, especialidade }) => {
     // Define a mensagem apropriada
     const getEmptyMessage = () => {
         if (pacienteId && agendamentos.length === 0) {
-            return 'Nenhum registro encontrado para o paciente selecionado, considere cadastrar um novo registro.';
+            return 'Nenhum registro não concluído para o paciente selecionado, considere cadastrar um novo registro.';
         }
         if (!pacienteId && agendamentos.length === 0) {
-            return 'Nenhum registro encontrado, considere cadastrar um novo registro.';
+            return 'Nenhum registro não concluído encontrado, considere cadastrar um novo registro.';
         }
         return null;
     };
@@ -133,8 +134,8 @@ const AgendamentosResumo = ({ pacienteId, especialidade }) => {
                 </table>
                 {pacienteFilter && (
                     <div className="agendamentos-resumo__filtro">
-                        <span>Filtro por paciente ativo</span>
-                        <button onClick={() => setPacienteFilter(null)}>Mostrar Todos</button>
+                        <span>Filtrando por paciente selecionado</span>
+                        <button onClick={() => setPacienteFilter(null)}>Mostrar Tudo</button>
                     </div>
                 )}
             </div>

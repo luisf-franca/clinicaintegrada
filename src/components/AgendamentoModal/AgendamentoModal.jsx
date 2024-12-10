@@ -37,7 +37,7 @@ const AgendamentoModal = ({
     },
     consulta: {
       observacao: '',
-      especialidade: 1,
+      especialidade: localStorage.getItem('selectedSpecialty') || 1,
       equipeId: ''
     }
   });

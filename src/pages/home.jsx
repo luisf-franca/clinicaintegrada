@@ -13,7 +13,7 @@ import PesquisarPacientes from '../components/Pacientes/PesquisarPacientes';
 import PacientesResumo from '../components/Resumo/Pacientes/PacientesResumo';
 
 const Home = () => {
-  const [selectedSpecialty, setSelectedSpecialty] = useState(1);
+  const [selectedSpecialty, setSelectedSpecialty] = useState(localStorage.getItem('selectedSpecialty') || 1);
 
   const [pacientes, setPacientes] = useState([]);
   const [pacienteEtapa, setPacienteEtapa] = useState(null);
@@ -62,10 +62,10 @@ const Home = () => {
     <div className="home">
       <div className="home-header">
         <h1>Início</h1>
-        {/* <Especialidade
+        <Especialidade
           selectedSpecialty={selectedSpecialty}
           onSelectSpecialty={setSelectedSpecialty}
-        /> */}
+        />
       </div>
       <div className="home-body">
         <Tabs selectedIndex={activeTab} onSelect={handleTabChange}>
@@ -85,17 +85,17 @@ const Home = () => {
           </TabPanel>
           <TabPanel>
             <div className="body-section">
-              <ListaEsperaResumo pacienteId={pacienteSelecionadoId} />
+              <ListaEsperaResumo pacienteId={pacienteSelecionadoId} especialidade={selectedSpecialty} />
             </div>
           </TabPanel>
           <TabPanel>
             <div className="body-section">
-              <AgendamentosResumo pacienteId={pacienteSelecionadoId} />
+              <AgendamentosResumo pacienteId={pacienteSelecionadoId} especialidade={selectedSpecialty} />
             </div>
           </TabPanel>
           <TabPanel>
             <div className="body-section">
-              <ConsultaResumo pacienteId={pacienteSelecionadoId} />
+              <ConsultaResumo pacienteId={pacienteSelecionadoId} especialidade={selectedSpecialty} />
             </div>
           </TabPanel>
           <TabPanel>

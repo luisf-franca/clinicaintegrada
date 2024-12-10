@@ -12,6 +12,7 @@ import FinalizarConsulta from '../../../functions/Consultas/FinalizarConsulta';
 
 const ConsultaResumo = ({ pacienteId, especialidade }) => {
     const [consultas, setConsultas] = useState([]);
+    const [pacienteFilter, setPacienteFilter] = useState(pacienteId);
     const [atualizarRegistros, setAtualizarRegistros] = useState(false);
     const navigate = useNavigate(); // Hook para navegação
 
@@ -22,7 +23,7 @@ const ConsultaResumo = ({ pacienteId, especialidade }) => {
                 // Monta o filtro no formato esperado
                 const filters = [];
                 if (especialidade) filters.push(`especialidade=${especialidade}`);
-                if (pacienteId) filters.push(`pacienteId=${pacienteId}`);
+                if (pacienteFilter) filters.push(`pacienteId=${pacienteFilter}`);
                 const filterString = filters.length > 0 ? filters.join(',') : null;
 
                 // Chama a função passando o filtro
@@ -36,7 +37,7 @@ const ConsultaResumo = ({ pacienteId, especialidade }) => {
 
         // Executa a função ao montar o componente ou alterar os parâmetros
         fetchConsultas();
-    }, [especialidade, pacienteId, atualizarRegistros]);
+    }, [especialidade, pacienteFilter, atualizarRegistros]);
 
     const getEmptyMessage = () => {
         if (pacienteId && consultas.length === 0) {
@@ -170,6 +171,12 @@ const ConsultaResumo = ({ pacienteId, especialidade }) => {
                         )}
                     </tbody>
                 </table>
+                {pacienteFilter && (
+                    <div className="agendamentos-resumo__filtro">
+                        <span>Filtrando por paciente selecionado</span>
+                        <button onClick={() => setPacienteFilter(null)}>Mostrar Tudo</button>
+                    </div>
+                )}
             </div>
         </div>
     );

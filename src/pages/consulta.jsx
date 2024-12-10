@@ -14,7 +14,7 @@ import GetConsultaById from '../functions/Consultas/GetConsultaById';
 import FormatarDateTimeToLocal from '../functions/FormatarDateTime/FormatDateTimeToLocal';
 
 const Consulta = () => {
-    const [selectedSpecialty, setSelectedSpecialty] = useState(1);
+    const [selectedSpecialty, setSelectedSpecialty] = useState(localStorage.getItem('selectedSpecialty') || 1);
     const [registros, setRegistros] = useState([]);
     const [activeTab, setActiveTab] = useState(0);
     const [agendamentoSelecionado, setAgendamentoSelecionado] = useState({});
@@ -105,8 +105,8 @@ const Consulta = () => {
                                             <tr key={registro.id} onClick={() => handleAgendamentoClick(registro.agendamentoId, registro.id)}>
                                                 <td>{registro.nome}</td>
                                                 <td>{registro.observacao}</td>
-                                                <td>{registro.dataHoraInicio}</td>
-                                                <td>{registro.dataHoraFim}</td>
+                                                <td>{FormatarDateTimeToLocal(registro.dataHoraInicio)}</td>
+                                                <td>{FormatarDateTimeToLocal(registro.dataHoraFim)}</td>
                                                 <td>{registro.especialidade}</td>
                                                 <td>{registro.status}</td>
                                             </tr>

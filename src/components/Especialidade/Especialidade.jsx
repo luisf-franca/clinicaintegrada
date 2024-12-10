@@ -1,11 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 const Especialidade = ({ selectedSpecialty, onSelectSpecialty }) => {
+
+  // armazenar a especialidade selecionada no local storage para que a seleção persista entre as sessões
+
+  const handleSpecialtyChange = (e) => {
+    onSelectSpecialty(Number(e.target.value));
+    localStorage.setItem('selectedSpecialty', e.target.value);
+  }
+
   return (
     <div className="especialidade">
       <select
         value={selectedSpecialty}
-        onChange={(e) => onSelectSpecialty(Number(e.target.value))}
+        onChange={handleSpecialtyChange} // Agora apenas chama a função corretamente
       >
         <option value={1}>Psicologia</option>
         <option value={2}>Odontologia</option>

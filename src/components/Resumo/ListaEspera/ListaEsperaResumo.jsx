@@ -9,6 +9,7 @@ import FormatarDateTimeToLocal from '../../../functions/FormatarDateTime/FormatD
 
 const ListaEsperaResumo = ({ pacienteId, especialidade }) => {
     const [listaEspera, setListaEspera] = useState([]);
+    const [pacienteFilter, setPacienteFilter] = useState(pacienteId);
     const navigate = useNavigate(); // Hook para navegação
 
     // atualiza a lista de espera ao montar o componente, com os parâmetros opcionais pacienteId e especialidade
@@ -18,11 +19,12 @@ const ListaEsperaResumo = ({ pacienteId, especialidade }) => {
                 // Monta o filtro no formato esperado
                 const filters = [];
                 if (especialidade) filters.push(`especialidade=${especialidade}`);
-                if (pacienteId) filters.push(`pacienteId=${pacienteId}`);
+                if (pacienteFilter) filters.push(`pacienteId=${pacienteFilter}`);
+                filters.push('status=1'); // Apenas registros aguardando
                 const filterString = filters.length > 0 ? filters.join(',') : null;
 
                 // Chama a função passando o filtro
-                const response = await GetListaEspera({ filter: filterString });
+                const response = await GetListaEspera({ filter: filterString, orderBy: 'dataEntrada' });
                 setListaEspera(response);
             } catch (error) {
                 console.error('Erro ao buscar lista de espera:', error);
@@ -31,15 +33,15 @@ const ListaEsperaResumo = ({ pacienteId, especialidade }) => {
 
         // Executa a função ao montar o componente ou alterar os parâmetros
         fetchListaEspera();
-    }, [especialidade, pacienteId]);
+    }, [especialidade, pacienteFilter]);
 
     // Define a mensagem apropriada
     const getEmptyMessage = () => {
         if (pacienteId && listaEspera.length === 0) {
-            return 'Nenhum registro encontrado para o paciente selecionado, considere cadastrar um novo registro.';
+            return 'Nenhum registro não concluído para o paciente selecionado, considere cadastrar um novo registro.';
         }
         if (!pacienteId && listaEspera.length === 0) {
-            return 'Nenhum registro encontrado, considere cadastrar um novo registro.';
+            return 'Nenhum registro não concluído encontrado, considere cadastrar um novo registro.';
         }
         return null;
     };
@@ -61,7 +63,7 @@ const ListaEsperaResumo = ({ pacienteId, especialidade }) => {
         navigate(`/agendamento?agendamentoId=${registroId}`); // Navegação com query string
     }
 
-        
+
 
     return (
         <div className="lista-espera-resumo">
@@ -101,6 +103,12 @@ const ListaEsperaResumo = ({ pacienteId, especialidade }) => {
                         )}
                     </tbody>
                 </table>
+                {pacienteFilter && (
+                    <div className="agendamentos-resumo__filtro">
+                        <span>Filtrando por paciente selecionado</span>
+                        <button onClick={() => setPacienteFilter(null)}>Mostrar Tudo</button>
+                    </div>
+                )}
             </div>
         </div>
     );

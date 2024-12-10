@@ -9,11 +9,14 @@ const PesquisarConsultas = ({ setConsultas, especialidade }) => {
     const [orderBy, setOrderBy] = useState('');
     const [nome, setNome] = useState('');
 
+    const [status, setStatus] = useState(null);
+    const [tipo, setTipo] = useState(null);
+
     useEffect(() => {
         if (nome === '') {
             getConsultas();
         }
-    }, [nome, especialidade]);
+    }, [nome, especialidade, status, tipo]);
 
     const getConsultas = async () => {
         try {
@@ -22,6 +25,8 @@ const PesquisarConsultas = ({ setConsultas, especialidade }) => {
             let filters = [];
             if (nome !== '') filters.push(`PacienteNome^${nome}`);
             if (especialidade) filters.push(`Especialidade=${especialidade}`);
+            if (status) filters.push(`Status=${status}`);
+            if (tipo) filters.push(`Tipo=${tipo}`);
 
             if (filters.length > 0) options.filter = filters.join(',');
 
@@ -72,6 +77,25 @@ const PesquisarConsultas = ({ setConsultas, especialidade }) => {
                             Limpar
                         </button>
                     )}
+                    <h4>Status</h4>
+                    <select value={status || ''} onChange={(e) => setStatus(e.target.value)}>
+                        <option value="">Todos</option>
+                        <option value={1}>Agendada</option>
+                        <option value={2}>Triagem</option>
+                        <option value={3}>Aguardando Consulta</option>
+                        <option value={4}>Em Andamento</option>
+                        <option value={5}>Concluída</option>
+                        <option value={6}>Cancelada</option>
+                    </select>
+
+                    <h4>Tipo</h4>
+                    <select value={tipo || ''} onChange={(e) => setTipo(e.target.value)}>
+                        <option value="">Todas</option>
+                        <option value={1}>Triagens</option>
+                        <option value={2}>Consultas</option>
+                        {/* <option value={3}>Cancelado</option> */}
+                    </select>
+
                     <button onClick={getConsultas}>Buscar</button>
                 </div>
             </div>

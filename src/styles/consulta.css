@@ -55,10 +55,22 @@
 }
 
 .search-container {
-  /* Nova classe para o container da pesquisa */
-  flex: 1;
-  /* Ocupa uma parte do espaço */
+  display: flex;
+  flex-direction: column; /* Alinha os itens em uma coluna */
+  gap: 1rem; /* Espaçamento entre os elementos */
   padding: 1rem;
+}
+
+.search-container select {
+  border: 2px solid #ccc; /* Adiciona a borda personalizada */
+  border-radius: 4px; /* Borda arredondada (opcional) */
+  padding: 0.5rem; /* Espaçamento interno para melhor usabilidade */
+}
+
+.search-container input {
+  border: 1px solid #ccc; /* Caso queira também uma borda nos inputs */
+  border-radius: 4px;
+  padding: 0.5rem;
 }
 
 .table-container {

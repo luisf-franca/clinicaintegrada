@@ -7,8 +7,11 @@ import GetListaEntries from '../../functions/ListaEspera/GetListaEntries';
 const PesquisarRegistros = ({ setRegistros, especialidade }) => {
   const [page, setPage] = useState(1);
   const [pageSize] = useState(5); // Limite para dropdown
-  const [orderBy, setOrderBy] = useState('');
+  const [orderBy, setOrderBy] = useState('dataEntrada');
   const [nome, setNome] = useState('');
+
+  const [prioridade, setPrioridade] = useState(null);
+  const [status, setStatus] = useState(1);
 
   useEffect(() => {
     if (nome === '') {
@@ -19,7 +22,7 @@ const PesquisarRegistros = ({ setRegistros, especialidade }) => {
   useEffect(() => {
     getRegistrosListaEspera();
   }
-  , [especialidade]);
+    , [especialidade, prioridade, status]);
 
   const getRegistrosListaEspera = async () => {
     try {
@@ -28,6 +31,8 @@ const PesquisarRegistros = ({ setRegistros, especialidade }) => {
       // Constrói o filtro baseado nos valores preenchidos
       let filters = [`especialidade=${especialidade}`];
       if (nome !== '') filters.push(`PacienteNome^${nome}`);
+      if (prioridade) filters.push(`prioridade=${prioridade}`);
+      if (status) filters.push(`status=${status}`);
 
       // Concatena os filtros com vírgulas
       if (filters.length > 0) options.filter = filters.join(',');
@@ -78,6 +83,23 @@ const PesquisarRegistros = ({ setRegistros, especialidade }) => {
               Limpar
             </button>
           )}
+          <label>Prioridade:
+            <select value={prioridade || ''} onChange={(e) => setPrioridade(e.target.value)}>
+              <option value="">Todas</option>
+              <option value={1}>Baixa</option>
+              <option value={2}>Média</option>
+              <option value={3}>Alta</option>
+            </select>
+          </label>
+
+          <label>Status:
+            <select value={status || ''} onChange={(e) => setStatus(e.target.value)}>
+              <option value="">Todas</option>
+              <option value={1}>Aguardando</option>
+              <option value={2}>Atendido</option>
+              <option value={3}>Cancelado</option>
+            </select>
+          </label>
         </div>
       </div>
 

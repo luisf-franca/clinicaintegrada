@@ -16,8 +16,10 @@ import GetAgendamentoById from '../functions/Agendamentos/GetAgendamentoById';
 
 const Agendamento = () => {
   const [reloadAgendamentos, setReloadAgendamentos] = useState(false);
+  const [tipo, setTipo] = useState('');
+  const [status, setStatus] = useState(1);
   const [selectedSlots, setSelectedSlots] = useState({});
-  const [selectedSpecialty, setSelectedSpecialty] = useState(1);
+  const [selectedSpecialty, setSelectedSpecialty] = useState(localStorage.getItem('selectedSpecialty') || 1);
   const [selectedSala, setSelectedSala] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
   const [currentDay, setCurrentDay] = useState(null);
@@ -52,7 +54,13 @@ const Agendamento = () => {
   useEffect(() => {
     const fetchAgendamentos = async () => {
       try {
-        const agendamentos = await GetAgendamentos({ filter: `especialidade=${selectedSpecialty},salaId=${selectedSala}` });
+        let filters = [];
+        if (selectedSpecialty) filters.push(`especialidade=${selectedSpecialty}`);
+        if (selectedSala) filters.push(`salaId=${selectedSala}`);
+        if (tipo) filters.push(`tipo=${tipo}`);
+        if (status) filters.push(`status=${status}`);
+
+        const agendamentos = await GetAgendamentos({ filter: filters.join(',') });
         const processedSlots = {};
 
         agendamentos.forEach((agendamento) => {
@@ -87,7 +95,7 @@ const Agendamento = () => {
       }
     };
     fetchAgendamentos();
-  }, [selectedSpecialty, reloadAgendamentos, selectedSala]);
+  }, [selectedSpecialty, reloadAgendamentos, selectedSala, tipo, status]);
 
   const generateDaysForWeek = (weekOffset) => {
     const today = new Date();
@@ -345,6 +353,20 @@ const Agendamento = () => {
 
         <button onClick={handlePreviousWeek}>← Semana Anterior</button>
         <button onClick={handleNextWeek}>Próxima Semana →</button>
+
+        <select value={status || ''} onChange={(e) => setStatus(e.target.value)}>
+          <option value="">Todos</option>
+          <option value={1}>Reservados</option>
+          <option value={2}>Concluídos</option>
+          {/* <option value={3}>Cancelado</option> */}
+        </select>
+
+        <select value={tipo || ''} onChange={(e) => setTipo(e.target.value)}>
+          <option value="">Todos</option>
+          <option value={1}>Triagens</option>
+          <option value={2}>Consultas</option>
+          {/* <option value={3}>Cancelado</option> */}
+        </select>
       </nav>
 
       <div className="calendario-wrapper">
