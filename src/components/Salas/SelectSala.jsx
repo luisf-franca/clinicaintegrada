@@ -11,9 +11,9 @@ const SelectSala = ({ especialidade, onSelectSala }) => {
             case 1:
                 return 'psicologia';
             case 2:
-                return 'fisioterapia';
-            case 3:
                 return 'odontologia';
+            case 3:
+                return 'fisioterapia';
             case 4:
                 return 'nutrição';
             default:

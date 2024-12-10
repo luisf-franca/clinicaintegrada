@@ -12,6 +12,7 @@ import FinalizarConsulta from '../../../functions/Consultas/FinalizarConsulta';
 
 const ConsultaResumo = ({ pacienteId, especialidade }) => {
     const [consultas, setConsultas] = useState([]);
+    const [atualizarRegistros, setAtualizarRegistros] = useState(false);
     const navigate = useNavigate(); // Hook para navegação
 
     // autaliza as consultas ao montar o componente, com os parâmetros opcionais pacienteId e especialidade
@@ -35,7 +36,7 @@ const ConsultaResumo = ({ pacienteId, especialidade }) => {
 
         // Executa a função ao montar o componente ou alterar os parâmetros
         fetchConsultas();
-    }, [especialidade, pacienteId]);
+    }, [especialidade, pacienteId, atualizarRegistros]);
 
     const getEmptyMessage = () => {
         if (pacienteId && consultas.length === 0) {
@@ -53,6 +54,10 @@ const ConsultaResumo = ({ pacienteId, especialidade }) => {
 
     const handleNavigateConsulta = (consultaId) => {
         navigate(`/consulta?${consultaId}`);
+    }
+
+    const handleAtualizarRegistros = () => {
+        setAtualizarRegistros(!atualizarRegistros);
     }
 
     const renderButton = ({ status, tipo, id }) => {
@@ -100,18 +105,23 @@ const ConsultaResumo = ({ pacienteId, especialidade }) => {
         switch (action) {
             case 'iniciar-triagem':
                 await IniciarTriagem(consultaId);
+                handleAtualizarRegistros();
                 break;
             case 'finalizar-triagem':
                 await FinalizarTriagem(consultaId);
+                handleAtualizarRegistros();
                 break;
             case 'iniciar-consulta':
                 await IniciarConsulta(consultaId);
+                handleAtualizarRegistros();
                 break;
             case 'finalizar-consulta':
                 await FinalizarConsulta(consultaId);
+                handleAtualizarRegistros();
                 break;
             case 'visualizar-consulta':
                 handleNavigateConsulta(consultaId);
+                handleAtualizarRegistros();
                 break;
             default:
                 console.log(`Ação desconhecida: ${action}`);

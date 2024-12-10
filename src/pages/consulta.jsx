@@ -135,7 +135,6 @@ const Consulta = () => {
                                                 <p><strong>Data/Hora Fim:</strong> {FormatarDateTimeToLocal(agendamentoSelecionado.dataHoraFim)}</p>
                                                 <p><strong>Tipo:</strong> {agendamentoSelecionado.tipo}</p>
                                                 <p><strong>Status:</strong> {agendamentoSelecionado.status}</p>
-                                                <p><strong>Status Consulta:</strong> {agendamentoSelecionado.statusConsulta}</p>
                                                 <p><strong>Sala:</strong> {agendamentoSelecionado.sala}</p>
                                             </div>
                                         </div>

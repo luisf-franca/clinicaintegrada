@@ -29,7 +29,7 @@ const Pacientes = () => {
 
   const handleDeletePaciente = async (pacienteId) => {
     const confirmDelete = window.confirm(
-      'Tem certeza que deseja deletar o paciente?',
+      'Tem certeza que deseja deletar? Todos os registros desse paciente serão perdidos.',
     );
     if (confirmDelete) {
       try {
