@@ -85,17 +85,17 @@ const Home = () => {
           </TabPanel>
           <TabPanel>
             <div className="body-section">
-              <ListaEsperaResumo pacienteId={pacienteSelecionadoId} especialidade={selectedSpecialty} />
+              <ListaEsperaResumo pacienteId={pacienteSelecionadoId} />
             </div>
           </TabPanel>
           <TabPanel>
             <div className="body-section">
-              <AgendamentosResumo pacienteId={pacienteSelecionadoId} especialidade={selectedSpecialty} />
+              <AgendamentosResumo pacienteId={pacienteSelecionadoId} />
             </div>
           </TabPanel>
           <TabPanel>
             <div className="body-section">
-              <ConsultaResumo pacienteId={pacienteSelecionadoId} especialidade={selectedSpecialty} />
+              <ConsultaResumo pacienteId={pacienteSelecionadoId} />
             </div>
           </TabPanel>
           <TabPanel>

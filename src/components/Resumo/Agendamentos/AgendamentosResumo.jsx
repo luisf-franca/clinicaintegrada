@@ -104,6 +104,7 @@ const AgendamentosResumo = ({ pacienteId, especialidade }) => {
                             <th>Data/Hora Fim</th>
                             <th>Sala</th>
                             <th>Status Consulta</th>
+                            <th>Especialidade</th>
                             <th>Ações</th>
                         </tr>
                     </thead>
@@ -116,6 +117,7 @@ const AgendamentosResumo = ({ pacienteId, especialidade }) => {
                                     <td>{FormatarDateTimeToLocal(item.dataHoraFim)}</td>
                                     <td>{item.sala}</td>
                                     <td>{item.statusConsulta}</td>
+                                    <td>{item.especialidade}</td>
                                     <td>
                                         <button onClick={() => handleNavigateConsulta(item.id)}>
                                             Visualizar Consulta

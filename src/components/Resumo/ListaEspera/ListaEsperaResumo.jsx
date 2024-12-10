@@ -79,6 +79,7 @@ const ListaEsperaResumo = ({ pacienteId, especialidade }) => {
                             <th>Nome</th>
                             <th>Data Entrada</th>
                             <th>Prioridade</th>
+                            <th>Especialidade</th>
                             <th>Ações</th>
                         </tr>
                     </thead>
@@ -89,6 +90,7 @@ const ListaEsperaResumo = ({ pacienteId, especialidade }) => {
                                     <td>{item.nome}</td>
                                     <td>{FormatarDateTimeToLocal(item.dataEntrada)}</td>
                                     <td>{item.prioridade}</td>
+                                    <td>{item.especialidade}</td>
                                     <td>
                                         <button onClick={() => handleAgendarConsulta(item.id)}>Agendar</button>
                                     </td>

@@ -142,9 +142,9 @@ const ConsultaResumo = ({ pacienteId, especialidade }) => {
                         <tr>
                             <th>Data Início</th>
                             <th>Data Fim</th>
-                            <th>Especialidade</th>
                             <th>Status</th>
                             <th>Observação</th>
+                            <th>Especialidade</th>
                             <th>Ações</th>
                         </tr>
                     </thead>
@@ -154,9 +154,9 @@ const ConsultaResumo = ({ pacienteId, especialidade }) => {
                                 <tr key={id}>
                                     <td>{FormatarDateTimeToLocal(dataHoraInicio)}</td>
                                     <td>{FormatarDateTimeToLocal(dataHoraFim)}</td>
-                                    <td>{especialidade}</td>
                                     <td>{status}</td>
                                     <td>{observacao}</td>
+                                    <td>{especialidade}</td>
                                     <td>
                                         {renderButton({ status, tipo, id })}
                                     </td>
