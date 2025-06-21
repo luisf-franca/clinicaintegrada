@@ -7,7 +7,7 @@
 }
 
 .equipes-profissionais-relatorio__header {
-  background-color: var(--vermelho);
+  background-color: #b0171b;
   color: var(--branco);
   padding: 10px;
   text-align: center;
@@ -15,7 +15,7 @@
 
 .equipes-profissionais-relatorio__header h4 {
   margin: 0;
-  font-size: 1rem; 
+  font-size: 1rem;
 }
 
 .equipes-profissionais-relatorio__body {

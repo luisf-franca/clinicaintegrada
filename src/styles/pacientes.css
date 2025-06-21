@@ -1,113 +1,199 @@
-/* Importando suas variáveis já definidas */
+/* Novo modelo baseado em agendamento.css */
 :root {
+  --vermelho: #d32f2f;
+  --cinza-claro: #fafbfc;
+  --cinza-medio: #e0e0e0;
+  --cinza-escuro: #333;
+  --cinza-borda: #d1d5db;
+  --cinza-hover: #f5f5f5;
   --branco: #fff;
-  --preto: #212529;
-  --cinza: #636466;
-  --vermelho: #d71c23;
-  --vermelho-claro: #e82137;
-  --roxo: #7d1474;
-  --gelo: #f8f9fa;
-  --shadow1: 0 2px 20px rgba(0, 0, 0, 0.1);
 }
 
 .pacientes {
-  padding: 2rem;
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+
   display: flex;
   flex-direction: column;
-  height: 100%;
-  width: 100%;
-  gap: 1.5rem; /* Adiciona espaçamento entre os filhos */
+  gap: 1.5rem;
+  padding: 2.5rem 2.5rem 2.5rem 2.5rem;
+
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 18px;
+  box-shadow: 0 4px 32px rgba(125, 20, 116, 0.1);
+  backdrop-filter: blur(2px);
 }
 
-/* === HEADER === */
+.pacientes-hgroup {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+.pacientes-hgroup h1 {
+  font-size: 2rem;
+  color: #b0171b;
+  text-shadow: 0 2px 8px rgba(125, 20, 116, 0.08);
+  font-weight: 700;
+  margin: 0;
+}
+
+.pacientes-nav {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.5rem;
+}
+.pacientes-nav .btn-secondary {
+  padding: 0.5rem 1.25rem;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.85);
+  color: #b0171b;
+  transition: background 0.2s, color 0.2s;
+}
+.pacientes-nav .btn-secondary.active,
+.pacientes-nav .btn-secondary:hover {
+  background: #b0171b;
+  color: #fff;
+}
+
+.pacientes-content-wrapper {
+  display: flex;
+  gap: 2rem;
+  width: 100%;
+  align-items: flex-start;
+}
+
+.pacientes-form-card {
+  width: 32%;
+  min-width: 260px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 6px 32px rgba(125, 20, 116, 0.1);
+  padding: 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.pacientes-list-card {
+  width: 68%;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 6px 32px rgba(125, 20, 116, 0.1);
+  padding: 1.5rem 1rem;
+  overflow-x: auto;
+}
+
 .pacientes-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  border-bottom: 2px solid var(--gelo);
-  padding-bottom: 0.5rem; /* Reduzido */
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: 0.5rem;
+  background: none;
+  border: none;
+  box-shadow: none;
+  padding: 0 1.5rem;
 }
 
 .pacientes-header h2 {
-  color: var(--preto);
-  font-size: 1.5rem; /* Reduzido */
-  margin: 0; /* Remove espaçamento extra */
+  color: #b0171b;
+  text-shadow: 0 2px 8px rgba(125, 20, 116, 0.08);
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
 }
 
 /* === BOTÕES === */
 /* Botão primário (Adicionar) */
 .btn-primary {
-  background: linear-gradient(to right, var(--roxo), var(--vermelho));
+  background: #b0171b;
   color: var(--branco);
   border: none;
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-weight: bold;
+  padding: 0.5rem 1.25rem;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 1rem;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  box-shadow: var(--shadow1);
+  transition: background 0.2s, color 0.2s;
+  box-shadow: none;
 }
 
 .btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.15);
+  background: #b0171b;
+  color: var(--branco);
 }
 
 /* Botão secundário (Deletar, Voltar) */
 .btn-secondary {
-  background-color: var(--gelo);
-  color: var(--cinza);
-  border: 1px solid #ccc;
-  padding: 8px 16px;
-  border-radius: 8px;
+  background: var(--cinza-medio);
+  color: var(--cinza-escuro);
+  border: none;
+  padding: 0.5rem 1.25rem;
+  border-radius: 6px;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: background 0.2s, color 0.2s;
+  font-size: 1rem;
 }
 
 .btn-secondary:hover {
-  background-color: #e2e6ea;
+  background: #b0171b;
+  color: var(--branco);
 }
 
 /* Botão de perigo (Deletar) */
 .btn-danger {
-  background-color: var(--vermelho-claro);
+  background: #e82137;
   color: var(--branco);
   border: none;
-  padding: 6px 12px;
-  border-radius: 5px;
+  padding: 0.5rem 1.25rem;
+  border-radius: 6px;
   cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.2s;
 }
 .btn-danger:hover {
-  background-color: var(--vermelho);
+  background: #b0171b;
 }
-
 
 /* === LAYOUT DO CORPO === */
 .pacientes-body {
   display: flex;
-  gap: 2rem; /* Espaçamento entre a área de formulário e a lista */
+  gap: 2rem;
+  height: 100%;
+  padding: 0 1.5rem 1.5rem 1.5rem;
+}
+
+.pacientes-content {
+  padding: 1.5rem 1rem;
+  overflow-y: auto;
   height: 100%;
 }
 
 /* === FORMULÁRIOS (Área Esquerda) === */
-.form-container { 
+.form-container {
   height: 100%;
   width: 30%;
-  background-color: var(--branco);
-  /* padding: 2rem; <--- REMOVA OU COMENTE ESTA LINHA */
-  padding: 0; /* Define todos os paddings como zero */
-  border-radius: 8px;
-  box-shadow: var(--shadow1);
-  display: flex; /* Adicionado para que o conteúdo ocupe a altura restante */
-  flex-direction: column; /* Empilha os filhos verticalmente */
+  background: var(--branco);
+  padding: 0;
+  border-radius: 12px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
 }
 
 .form-content {
-  padding: 2rem; /* O padding que estava no .form-container agora fica aqui */
-  overflow-y: auto; /* Garante que o conteúdo do formulário seja rolável */
-  height: 100%; /* Ocupa o espaço vertical restante */
+  padding: 1.5rem 1rem;
+  overflow-y: auto;
+  height: 100%;
 }
-
 
 .form-container h3 {
   color: var(--roxo);
@@ -122,71 +208,78 @@
 
 .form-group label {
   margin-bottom: 5px;
-  font-weight: bold;
-  color: var(--cinza);
+  font-weight: 600;
+  color: #b0171b;
 }
 
 .form-group input,
 .form-group select,
 .form-group textarea {
-  padding: 10px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  border: 1px solid var(--cinza-borda);
   width: 100%;
-  box-sizing: border-box; /* Garante que o padding não afete a largura */
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  box-sizing: border-box;
+  font-size: 1rem;
+  background: var(--cinza-claro);
+  transition: border 0.2s, box-shadow 0.2s;
 }
 
 .form-group input:focus,
 .form-group select:focus {
-  border-color: var(--roxo);
-  box-shadow: 0 0 0 3px rgba(125, 20, 116, 0.2);
+  border-color: #b0171b;
+  box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.12);
   outline: none;
 }
 
 /* === LISTA DE PACIENTES (Área Direita) === */
 .lista-pacientes {
   width: 70%;
-  overflow-x: auto; /* Para tabelas que podem ser largas */
+  overflow-x: auto;
 }
 
 .pacientes-table {
   width: 100%;
-  border-collapse: collapse;
-  background-color: var(--branco);
-  box-shadow: var(--shadow1);
-  border-radius: 8px;
-  overflow: hidden; /* Garante que o border-radius seja aplicado nas bordas da tabela */
+  border-collapse: separate;
+  border-spacing: 0;
+  background: var(--branco);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  overflow: hidden;
 }
 
 .pacientes-table th,
 .pacientes-table td {
-  padding: 12px 15px;
+  padding: 10px 8px;
   text-align: left;
-  border-bottom: 1px solid var(--gelo);
+  border-bottom: 1px solid #eee;
+  font-size: 0.98rem;
 }
 
 .pacientes-table thead th {
-  background-color: var(--gelo);
-  color: var(--roxo);
-  font-weight: bold;
-  text-transform: uppercase;
-  font-size: 0.85rem;
+  background: #f4f4f4;
+  color: #b0171b;
+  font-weight: 600;
+  text-align: center;
+  position: sticky;
+  top: 0;
+  z-index: 1;
 }
 
 .pacientes-table tbody tr {
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: background 0.2s;
 }
 
 .pacientes-table tbody tr:hover {
-  background-color: #f0f8ff; /* Um azul bem claro para hover */
+  background: #f9f9f9;
 }
 
 .pacientes-table tbody tr.selected {
-  background-color: #f3e6f7; /* Lilás claro da paleta (variação do roxo) */
-  font-weight: bold;
-  color: var(--preto); /* Garante cor de fonte visível */
+  background: #fff;
+  font-weight: 700;
+  color: #b0171b;
+  border-left: 3px solid #b0171b;
 }
 
 .pacientes-table tbody tr:last-child td {
@@ -196,42 +289,48 @@
 /* === ÁREA DOS BOTÕES DE AÇÃO DO FORMULÁRIO === */
 .pacientes-actions {
   display: flex;
-  /* margin-bottom: 2rem; <--- REMOVA OU COMENTE ESTA LINHA */
-  border-radius: 8px 8px 0 0; /* Arredonda apenas os cantos superiores */
-  overflow: hidden;
-  box-shadow: var(--shadow1);
-  flex-shrink: 0; /* Impede que a barra de botões encolha */
+  flex-direction: row;
+  gap: 0.5rem;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  overflow: visible;
+  background: none;
+  margin-bottom: 1rem;
+  padding: 0.25rem 0;
+  box-sizing: border-box;
 }
 
-/* Modificações na classe .btn-secondary QUANDO dentro de .pacientes-actions */
 .pacientes-actions .btn-secondary {
-  flex: 1;
-  border: none;
-  border-radius: 0;
-  padding: 0.4rem 0rem;   /* Reduz o espaço interno (vertical e horizontal) */
-  font-size: 0.9rem;      /* Reduz o tamanho da fonte */
-  background-color: #f3e6f7;
-  color: var(--roxo);
-  transition: background-color 0.2s ease, color 0.2s ease;
-  border-right: 1px solid #ddd;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  background: rgba(255, 255, 255, 0.85);
+  color: #b0171b;
+  font-weight: 600;
+  margin: 0;
+  width: auto;
+  max-width: 100%;
+  box-shadow: 0 2px 8px rgba(125, 20, 116, 0.04);
+  transition: background 0.2s, color 0.2s, border 0.2s;
+  flex: none;
 }
 
-/* Remove a borda do último botão para um acabamento limpo */
-.pacientes-actions .btn-secondary:last-child {
-  border-right: none;
-}
-
-/* Estilo do botão ativo/selecionado */
 .pacientes-actions .btn-secondary.active {
-  background: linear-gradient(to right, var(--roxo), var(--vermelho));
-  color: var(--branco);
-  font-weight: bold;
+  background: #b0171b;
+  color: #fff;
+  font-weight: 700;
+  border: 1.5px solid #b0171b;
 }
 
-/* Efeito hover para os botões não ativos */
 .pacientes-actions .btn-secondary:not(.active):hover {
-  background-color: #e2e6ea;
-  color: var(--preto);
+  background: #b0171b;
+  color: #fff;
+}
+
+.pacientes-actions .btn-secondary:last-child {
+  border-right: 1px solid #e0e0e0;
 }
 
 /* Adicionar ao final do seu arquivo pacientes.css */
@@ -240,21 +339,53 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 1rem; /* Espaçamento entre os botões e o texto */
-  margin-top: 1.5rem; /* Espaço acima dos controles */
-  padding-bottom: 1rem; /* Garante um respiro na parte inferior */
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding-bottom: 1rem;
   width: 100%;
 }
 
 .pagination-controls span {
-  color: var(--cinza);
-  font-weight: bold;
+  color: var(--cinza-escuro);
+  font-weight: 600;
 }
 
 /* Estilo para botões desabilitados para melhor feedback visual */
 .pagination-controls .btn-secondary:disabled {
-  background-color: #f1f1f1;
+  background: var(--cinza-hover);
   cursor: not-allowed;
   border-color: #ddd;
   color: #aaa;
+}
+
+@media (max-width: 900px) {
+  .pacientes-body {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 0 0.5rem 1rem 0.5rem;
+  }
+  .form-container,
+  .lista-pacientes {
+    width: 100%;
+  }
+  .form-content {
+    padding: 1rem 0.5rem;
+  }
+}
+@media (max-width: 600px) {
+  .pacientes-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding: 0 0.5rem;
+  }
+  .pacientes-body {
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0 0.25rem 0.5rem 0.25rem;
+  }
+  .form-content {
+    padding: 0.5rem 0.25rem;
+    border-radius: 8px;
+  }
 }

@@ -1,0 +1,295 @@
+/* Novo modelo baseado em agendamento.css, agora encapsulado em .listaespera */
+:root {
+  --vermelho: #d32f2f;
+  --cinza-claro: #fafbfc;
+  --cinza-medio: #e0e0e0;
+  --cinza-escuro: #333;
+  --cinza-borda: #d1d5db;
+  --cinza-hover: #f5f5f5;
+  --branco: #fff;
+}
+
+.listaespera {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 2.5rem 2.5rem 2.5rem 2.5rem;
+
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 18px;
+  box-shadow: 0 4px 32px rgba(125, 20, 116, 0.1);
+  backdrop-filter: blur(2px);
+}
+
+.listaespera .pacientes-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: 0.5rem;
+  background: none;
+  border: none;
+  box-shadow: none;
+  padding: 0 1.5rem;
+}
+
+.listaespera .pacientes-header h2 {
+  color: #b0171b;
+  text-shadow: 0 2px 8px rgba(125, 20, 116, 0.08);
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.listaespera .pacientes-body {
+  display: flex;
+  gap: 2rem;
+  height: 100%;
+  padding: 0 1.5rem 1.5rem 1.5rem;
+}
+
+.listaespera .pesquisar-pacientes {
+  width: 30%;
+  background: rgba(255, 255, 255, 0.98);
+  border-radius: 16px;
+  box-shadow: 0 6px 32px rgba(125, 20, 116, 0.1);
+  padding: 1.5rem 1rem;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.listaespera .lista-pacientes {
+  width: 70%;
+  overflow-x: auto;
+}
+
+.listaespera .pacientes-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: var(--branco);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.listaespera .pacientes-table th,
+.listaespera .pacientes-table td {
+  padding: 10px 8px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+  font-size: 0.98rem;
+}
+.listaespera .pacientes-table thead th {
+  background: rgba(244, 244, 244, 0.95);
+  color: #b0171b;
+  font-weight: 600;
+  text-align: center;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+.listaespera .pacientes-table tbody tr {
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.listaespera .pacientes-table tbody tr:hover {
+  background: #f9f9f9;
+}
+.listaespera .pacientes-table tbody tr.selected,
+.listaespera .pacientes-table tbody tr[style*='background-color: #f0f8ff'] {
+  background: #fff;
+  font-weight: 700;
+  color: #b0171b;
+  border-left: 3px solid #b0171b;
+}
+.listaespera .pacientes-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.listaespera button {
+  padding: 0.5rem 1.25rem;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.85);
+  color: #b0171b;
+  transition: background 0.2s, color 0.2s;
+}
+.listaespera button:hover {
+  background: #b0171b;
+  color: #fff;
+}
+.listaespera button:disabled {
+  background: var(--cinza-hover);
+  color: #aaa;
+  cursor: not-allowed;
+}
+
+.listaespera select,
+.listaespera input[type='text'],
+.listaespera input[type='date'] {
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  font-size: 1rem;
+  background: #fafbfc;
+  color: #333;
+  margin-bottom: 0.5rem;
+  width: 100%;
+  box-sizing: border-box;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+.listaespera select:focus,
+.listaespera input[type='text']:focus,
+.listaespera input[type='date']:focus {
+  border-color: #b0171b;
+  box-shadow: 0 0 0 3px rgba(125, 20, 116, 0.1);
+  outline: none;
+}
+
+.listaespera label {
+  color: #b0171b;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  display: block;
+}
+
+.listaespera-hgroup {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+.listaespera-hgroup h1 {
+  font-size: 2rem;
+  color: #b0171b;
+  text-shadow: 0 2px 8px rgba(125, 20, 116, 0.08);
+  font-weight: 700;
+  margin: 0;
+}
+
+.listaespera-nav {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.5rem;
+}
+.listaespera-nav .btn-secondary {
+  padding: 0.5rem 1.25rem;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.85);
+  color: #b0171b;
+  transition: background 0.2s, color 0.2s;
+}
+.listaespera-nav .btn-secondary.active,
+.listaesperta-nav .btn-secondary:hover {
+  background: #b0171b;
+  color: #fff;
+}
+
+.listaespera-content-wrapper {
+  display: flex;
+  gap: 2rem;
+  width: 100%;
+  align-items: flex-start;
+}
+
+.listaespera-form-card {
+  width: 32%;
+  min-width: 260px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 6px 32px rgba(125, 20, 116, 0.1);
+  padding: 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.listaespera-list-card {
+  width: 68%;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 6px 32px rgba(125, 20, 116, 0.1);
+  padding: 1.5rem 1rem;
+  overflow-x: auto;
+}
+
+.especialidade select {
+  border: 1.5px solid #b0171b;
+  border-radius: 8px;
+  padding: 0.5rem 1.25rem;
+  font-size: 1rem;
+  background: #fff;
+  color: #b0171b;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(125, 20, 116, 0.07);
+  transition: border 0.2s, box-shadow 0.2s;
+  outline: none;
+}
+.especialidade select:focus {
+  border-color: #7d1474;
+  box-shadow: 0 0 0 2px rgba(176, 23, 27, 0.12);
+}
+
+.empty-state-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #b0171b;
+  background: rgba(244, 244, 244, 0.7);
+  border-radius: 10px;
+  padding: 2rem 1rem;
+  font-size: 1.08rem;
+  font-weight: 500;
+  margin: 1.5rem 0;
+  text-align: center;
+  min-height: 80px;
+  gap: 0.5rem;
+}
+
+@media (max-width: 900px) {
+  .listaespera .pacientes-body {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 0 0.5rem 1rem 0.5rem;
+  }
+  .listaespera .pesquisar-pacientes,
+  .listaespera .lista-pacientes {
+    width: 100%;
+  }
+  .listaespera .pesquisar-pacientes {
+    padding: 1rem 0.5rem;
+  }
+}
+@media (max-width: 600px) {
+  .listaespera .pacientes-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding: 0 0.5rem;
+  }
+  .listaespera .pacientes-body {
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0 0.25rem 0.5rem 0.25rem;
+  }
+  .listaespera .pesquisar-pacientes {
+    padding: 0.5rem 0.25rem;
+    border-radius: 8px;
+  }
+}

@@ -13,13 +13,14 @@ import GetAgendamentos from '../functions/Agendamentos/GetAgendamentos';
 import DeleteAgendamento from '../functions/Agendamentos/DeleteAgendamento';
 import GetAgendamentoById from '../functions/Agendamentos/GetAgendamentoById';
 
-
 const Agendamento = () => {
   const [reloadAgendamentos, setReloadAgendamentos] = useState(false);
   const [tipo, setTipo] = useState('');
   const [status, setStatus] = useState(1);
   const [selectedSlots, setSelectedSlots] = useState({});
-  const [selectedSpecialty, setSelectedSpecialty] = useState(localStorage.getItem('selectedSpecialty') || 1);
+  const [selectedSpecialty, setSelectedSpecialty] = useState(
+    localStorage.getItem('selectedSpecialty') || 1,
+  );
   const [selectedSala, setSelectedSala] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
   const [currentDay, setCurrentDay] = useState(null);
@@ -55,12 +56,15 @@ const Agendamento = () => {
     const fetchAgendamentos = async () => {
       try {
         let filters = [];
-        if (selectedSpecialty) filters.push(`especialidade=${selectedSpecialty}`);
+        if (selectedSpecialty)
+          filters.push(`especialidade=${selectedSpecialty}`);
         if (selectedSala) filters.push(`salaId=${selectedSala}`);
         if (tipo) filters.push(`tipo=${tipo}`);
         if (status) filters.push(`status=${status}`);
 
-        const agendamentos = await GetAgendamentos({ filter: filters.join(',') });
+        const agendamentos = await GetAgendamentos({
+          filter: filters.join(','),
+        });
         const processedSlots = {};
 
         agendamentos.forEach((agendamento) => {
@@ -72,10 +76,20 @@ const Agendamento = () => {
           });
 
           const startSlotIndex = timeSlots.findIndex(
-            (time) => time === `${startTime.getHours().toString().padStart(2, '0')}:${startTime.getMinutes().toString().padStart(2, '0')}`
+            (time) =>
+              time ===
+              `${startTime.getHours().toString().padStart(2, '0')}:${startTime
+                .getMinutes()
+                .toString()
+                .padStart(2, '0')}`,
           );
           const endSlotIndex = timeSlots.findIndex(
-            (time) => time === `${endTime.getHours().toString().padStart(2, '0')}:${endTime.getMinutes().toString().padStart(2, '0')}`
+            (time) =>
+              time ===
+              `${endTime.getHours().toString().padStart(2, '0')}:${endTime
+                .getMinutes()
+                .toString()
+                .padStart(2, '0')}`,
           );
 
           if (!processedSlots[dayLabel]) processedSlots[dayLabel] = {};
@@ -83,7 +97,7 @@ const Agendamento = () => {
           for (let i = startSlotIndex; i <= endSlotIndex; i++) {
             processedSlots[dayLabel][timeSlots[i]] = {
               nome: agendamento.nome,
-              agendamentoId: agendamento.id
+              agendamentoId: agendamento.id,
             };
           }
         });
@@ -117,7 +131,6 @@ const Agendamento = () => {
     return days;
   };
 
-
   const getDaysForWeek = () => {
     return generateDaysForWeek(currentWeek);
   };
@@ -141,7 +154,7 @@ const Agendamento = () => {
     // Update currentRange based on dragging direction
     const newRange = timeSlots.slice(
       Math.min(startIndex, endIndex),
-      Math.max(startIndex, endIndex) + 1 // include the end slot
+      Math.max(startIndex, endIndex) + 1, // include the end slot
     );
 
     // console.log('New range:', newRange);
@@ -163,8 +176,16 @@ const Agendamento = () => {
     const lastSlot = currentRange[currentRange.length - 1];
 
     // Parse the hours and minutes from the first and last slots
-    const [startHour, startMinute] = firstSlot.split(':').map((v) => parseInt(v, 10));
-    const [endHour, endMinute] = lastSlot.split(':').map((v) => parseInt(v, 10));
+    const [startHour, startMinute] = firstSlot
+      .split(':')
+      .map((v) => parseInt(v, 10));
+    // Para o horário final, pegamos o próximo slot após o último selecionado
+    let endSlotIndex = timeSlots.indexOf(lastSlot) + 1;
+    // Se passar do último slot do dia, mantemos o último slot
+    if (endSlotIndex >= timeSlots.length) endSlotIndex = timeSlots.length - 1;
+    const [endHour, endMinute] = timeSlots[endSlotIndex]
+      .split(':')
+      .map((v) => parseInt(v, 10));
 
     const startDate = new Date();
     startDate.setDate(day);
@@ -174,7 +195,7 @@ const Agendamento = () => {
     startDate.setSeconds(0);
     startDate.setMilliseconds(0);
 
-    // Calculate endDate directly from the last slot
+    // Calculate endDate diretamente do slot seguinte ao último selecionado
     const endDate = new Date(startDate);
     endDate.setHours(endHour);
     endDate.setMinutes(endMinute);
@@ -230,31 +251,34 @@ const Agendamento = () => {
 
   const handleDeleteProcedure = async () => {
     if (!selectedSlotForDelete || selectedSlotForDelete.length === 0) {
-      alert('Nenhum slot selecionado para exclusão.');
+      // alert('Nenhum slot selecionado para exclusão.');
       return;
     }
 
     // Obter o ID do agendamento do primeiro slot selecionado
-    const agendamentoId = selectedSlots[selectedSlotForDelete[0].day][selectedSlotForDelete[0].time].agendamentoId;
+    const agendamentoId =
+      selectedSlots[selectedSlotForDelete[0].day][selectedSlotForDelete[0].time]
+        .agendamentoId;
     // console.log('Agendamento ID:', agendamentoId);
 
     // Confirmar exclusão
-    const confirmDelete = window.confirm('Tem certeza que deseja excluir o agendamento?');
+    const confirmDelete = window.confirm(
+      'Tem certeza que deseja excluir o agendamento?',
+    );
     if (confirmDelete) {
       try {
         await DeleteAgendamento(agendamentoId);
-        alert('Agendamento deletado com sucesso!');
+        // alert('Agendamento deletado com sucesso!');
         setSelectedSlotForDelete(null);
         handleReloadAgendamentos();
       } catch (error) {
         console.error('Erro ao deletar agendamento:', error);
-        alert('Erro ao deletar agendamento.');
+        // alert('Erro ao deletar agendamento.');
       }
     } else {
       // alert('Ação cancelada.');
     }
   };
-
 
   const isSelected = (day, time) => selectedSlots[day]?.[time];
 
@@ -298,7 +322,9 @@ const Agendamento = () => {
 
   // Função para navegar para a página de consulta
   const handleNavigateConsulta = async () => {
-    const agendamentoId = selectedSlots[selectedSlotForDelete[0].day][selectedSlotForDelete[0].time].agendamentoId;
+    const agendamentoId =
+      selectedSlots[selectedSlotForDelete[0].day][selectedSlotForDelete[0].time]
+        .agendamentoId;
     // consultar agendamento, obter consultaId e navegar para a página de consulta
     try {
       const agendamento = await GetAgendamentoById(agendamentoId);
@@ -326,7 +352,6 @@ const Agendamento = () => {
           selectedSpecialty={selectedSpecialty}
           onSelectSpecialty={setSelectedSpecialty}
         />
-
       </hgroup>
 
       {/* {isDetailsOpen && (
@@ -335,26 +360,28 @@ const Agendamento = () => {
 
       <nav>
         {selectedSlotForDelete === null && (
-          <button onClick={handleOpenModal} disabled={currentRange.length === 0}>
+          <button
+            onClick={handleOpenModal}
+            disabled={currentRange.length === 0}
+          >
             Agendar
           </button>
         )}
 
         {selectedSlotForDelete && (
           <>
-            <button onClick={handleNavigateConsulta}>
-              Ver Detalhes
-            </button>
-            <button onClick={handleDeleteProcedure}>
-              Excluir
-            </button>
+            <button onClick={handleNavigateConsulta}>Ver Detalhes</button>
+            <button onClick={handleDeleteProcedure}>Excluir</button>
           </>
         )}
 
         <button onClick={handlePreviousWeek}>← Semana Anterior</button>
         <button onClick={handleNextWeek}>Próxima Semana →</button>
 
-        <select value={status || ''} onChange={(e) => setStatus(e.target.value)}>
+        <select
+          value={status || ''}
+          onChange={(e) => setStatus(e.target.value)}
+        >
           <option value="">Todos</option>
           <option value={1}>Reservados</option>
           <option value={2}>Concluídos</option>
@@ -386,13 +413,24 @@ const Agendamento = () => {
                 {getDaysForWeek().map((day, dayIndex) => (
                   <td
                     key={dayIndex}
-                    className={`${isSelected(day.label, time) ? 'selected' : ''} 
-                              ${currentRange.includes(time) && currentDay === day.label ? 'dragging' : ''} 
-                              ${selectedSlotForDelete?.some(
-                      (slot) => slot.day === day.label && slot.time === time
-                    )
-                        ? 'dragging'
-                        : ''}`}
+                    className={`${
+                      isSelected(day.label, time) ? 'selected' : ''
+                    } 
+                              ${
+                                currentRange.includes(time) &&
+                                currentDay === day.label
+                                  ? 'dragging'
+                                  : ''
+                              } 
+                              ${
+                                selectedSlotForDelete?.some(
+                                  (slot) =>
+                                    slot.day === day.label &&
+                                    slot.time === time,
+                                )
+                                  ? 'dragging'
+                                  : ''
+                              }`}
                     onMouseDown={() => handleMouseDown(day.label, time)}
                     onMouseEnter={() => handleMouseEnter(time)}
                     onClick={() => handleSlotClick(day.label, time)}
@@ -418,7 +456,6 @@ const Agendamento = () => {
           atualizarRegistros={handleReloadAgendamentos}
         />
       )}
-
     </div>
   );
 };

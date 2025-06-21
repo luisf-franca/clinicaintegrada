@@ -1,88 +1,274 @@
+/* Novo modelo baseado em agendamento.css */
+:root {
+  --vermelho: #d32f2f;
+  --cinza-claro: #fafbfc;
+  --cinza-medio: #e0e0e0;
+  --cinza-escuro: #333;
+  --cinza-borda: #d1d5db;
+  --cinza-hover: #f5f5f5;
+  --branco: #fff;
+}
+
 .home {
+  position: relative;
   width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  background-color: var(--branco);
-  border-radius: 8px;
-  overflow-y: auto;
+  min-height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 2.5rem 2.5rem 2.5rem 2.5rem;
+
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 18px;
+  box-shadow: 0 4px 32px rgba(125, 20, 116, 0.1);
+  backdrop-filter: blur(2px);
 }
 
 .home-header {
-  background-color: var(--branco);
-  box-shadow: var(--shadow1);
-  color: var(--branco);
-  padding: 20px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: 0.5rem;
+  background: none;
+  border: none;
+  box-shadow: none;
 }
 
 .home-header h1 {
+  color: #b0171b;
+  font-size: 2rem;
+  font-weight: 700;
   margin: 0;
-  font-size: 1.8rem;
-  color: var(--vermelho-claro);
+  text-shadow: 0 2px 8px rgba(125, 20, 116, 0.08);
 }
 
 .home-header select {
-  color: black;
-  border: 1px solid gray;
+  color: var(--cinza-escuro);
+  border: 1px solid var(--cinza-borda);
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  background: var(--cinza-claro);
 }
 
 .home-body {
-  padding: 20px;
+  padding: 0;
 }
 
 .body-section {
-  margin-bottom: 20px;
+  margin-bottom: 0;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: flex-start;
+  align-items: stretch;
   flex-direction: column;
-}
-
-.body-section input {
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  padding: 8px;
-  margin: 8px;
+  gap: 1.5rem;
+  width: 100%;
+  background: none;
+  box-shadow: none;
+  border-radius: 0;
+  padding: 0;
 }
 
 .component {
-  margin-bottom: 20px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  overflow: hidden;
-  background-color: var(--branco);
-  padding: 20px;
+  margin-bottom: 2rem;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  background: var(--branco);
+  padding: 1.5rem 1rem;
   width: 100%;
   max-width: 600px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
 }
 
 .component label {
   display: block;
   margin-bottom: 8px;
-  font-weight: bold;
+  font-weight: 600;
+  color: #b0171b;
 }
 
 .component input {
-  width: calc(100% - 22px);
-  padding: 10px;
-  margin-bottom: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid var(--cinza-borda);
+  border-radius: 6px;
   box-sizing: border-box;
+  font-size: 1rem;
+  background: var(--cinza-claro);
+}
+
+.component input:focus {
+  border: 1.5px solid #b0171b;
+  outline: none;
 }
 
 .component button {
-  padding: 10px 20px;
-  background-color: #ddd;
+  padding: 0.5rem 1.25rem;
+  background: var(--cinza-medio);
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
-  font-weight: bold;
+  font-weight: 500;
+  font-size: 1rem;
+  color: var(--cinza-escuro);
+  transition: background 0.2s, color 0.2s;
 }
 
 .component button:hover {
-  background-color: #ccc;
+  background: #b0171b;
+  color: var(--branco);
+}
+
+.react-tabs__tab-list {
+  border-bottom: none;
+  margin: 0 0 1.5rem 0;
+  padding: 0;
+  display: flex;
+  gap: 0.5rem;
+  background: none;
+  justify-content: flex-start;
+}
+
+.react-tabs__tab {
+  background: var(--cinza-medio);
+  color: var(--cinza-escuro);
+  border: none;
+  border-radius: 8px 8px 0 0;
+  padding: 0.7rem 2rem;
+  font-size: 1.08rem;
+  font-weight: 500;
+  cursor: pointer;
+  margin-right: 0.5rem;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(211, 47, 47, 0.04);
+  outline: none;
+  position: relative;
+  top: 0;
+}
+
+.react-tabs__tab--selected {
+  background: #b0171b;
+  color: var(--branco);
+  font-weight: 700;
+  z-index: 2;
+  box-shadow: 0 4px 18px rgba(211, 47, 47, 0.1);
+}
+
+.react-tabs__tab:not(.react-tabs__tab--selected):hover {
+  background: #b0171b;
+  color: var(--branco);
+}
+
+.react-tabs__tab:focus {
+  box-shadow: 0 0 0 2px #b0171b;
+  outline: none;
+}
+
+.react-tabs__tab--selected:after {
+  content: '';
+  display: block;
+  position: absolute;
+  left: 10%;
+  right: 10%;
+  bottom: -6px;
+  height: 6px;
+  background: #b0171b;
+  border-radius: 0 0 8px 8px;
+  z-index: 3;
+}
+
+/* Estilos para a barra de abas e botões de tabs manuais */
+.tab-bar {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  background: none;
+  border-bottom: none;
+  padding-left: 0;
+}
+.tab-btn {
+  background: rgba(255, 255, 255, 0.85);
+  color: #b0171b;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  padding: 0.5rem 1.25rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 0;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(125, 20, 116, 0.04);
+  outline: none;
+  position: relative;
+  top: 0;
+  border-bottom: none;
+}
+.tab-btn.active {
+  background: #b0171b;
+  color: #fff;
+  font-weight: 700;
+  z-index: 2;
+  box-shadow: 0 4px 18px rgba(125, 20, 116, 0.1);
+  border: 1.5px solid #b0171b;
+}
+.tab-btn:not(.active):hover {
+  background: #b0171b;
+  color: #fff;
+}
+.tab-content {
+  width: 100%;
+}
+
+@media (max-width: 900px) {
+  .home-header,
+  .home-body {
+    padding: 1rem 0.5rem;
+  }
+  .component {
+    padding: 1rem 0.5rem;
+  }
+  .react-tabs__tab {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+  }
+  .tab-btn {
+    padding: 0.5rem 1.2rem;
+    font-size: 1rem;
+  }
+}
+@media (max-width: 600px) {
+  .home {
+    border-radius: 0;
+    min-height: 100vh;
+  }
+  .home-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding: 1rem 0.5rem 0.5rem 0.5rem;
+    border-radius: 0;
+  }
+  .home-body {
+    padding: 0.5rem;
+  }
+  .component {
+    padding: 0.5rem 0.25rem;
+    border-radius: 8px;
+  }
+  .react-tabs__tab {
+    padding: 0.4rem 0.5rem;
+    font-size: 0.95rem;
+  }
+  .tab-bar {
+    gap: 0.2rem;
+    margin-bottom: 1rem;
+    padding-left: 0;
+  }
+  .tab-btn {
+    padding: 0.4rem 0.5rem;
+    font-size: 0.95rem;
+  }
 }

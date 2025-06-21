@@ -2,14 +2,14 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import './SideBar.css';
 
-import iconHome from '../../assets/icons/icon-home.jpg';
-import iconListaEspera from '../../assets/icons/icon-listaEspera.png';
-import iconPaciente from '../../assets/icons/icon-paciente.png';
-import iconAgendamento from '../../assets/icons/icon-agendamento.png';
-import iconConsulta from '../../assets/icons/icon-consulta.png';
-import iconRelatorio from '../../assets/icons/icon-relatorio.png';
-import iconEquipe from '../../assets/icons/icon-equipe.png';
-import iconSala from '../../assets/icons/icon-sala.png';
+import HomeIcon from '../../icons/HomeIcon';
+import ListaEsperaIcon from '../../icons/ListaEsperaIcon';
+import PacienteIcon from '../../icons/PacienteIcon';
+import AgendamentoIcon from '../../icons/AgendamentoIcon';
+import ConsultaIcon from '../../icons/ConsultaIcon';
+import RelatorioIcon from '../../icons/RelatorioIcon';
+import EquipeIcon from '../../icons/EquipeIcon';
+import SalaIcon from '../../icons/SalaIcon';
 
 const SideBar = () => {
   return (
@@ -21,7 +21,7 @@ const SideBar = () => {
         }
         title="Home"
       >
-        <img src={iconHome} alt="Inicio" />
+        <HomeIcon />
       </NavLink>
       <NavLink
         to="/agendamento"
@@ -30,7 +30,7 @@ const SideBar = () => {
         }
         title="Agendamento"
       >
-        <img src={iconAgendamento} alt="Agendamento" />
+        <AgendamentoIcon />
       </NavLink>
       <NavLink
         to="/listaespera"
@@ -39,7 +39,7 @@ const SideBar = () => {
         }
         title="Lista Espera"
       >
-        <img src={iconListaEspera} alt="Lista Espera" />
+        <ListaEsperaIcon />
       </NavLink>
       <NavLink
         to="/pacientes"
@@ -48,7 +48,7 @@ const SideBar = () => {
         }
         title="Paciente"
       >
-        <img src={iconPaciente} alt="Paciente" />
+        <PacienteIcon />
       </NavLink>
       <NavLink
         to="/consulta"
@@ -57,7 +57,7 @@ const SideBar = () => {
         }
         title="Consulta"
       >
-        <img src={iconConsulta} alt="Consulta" />
+        <ConsultaIcon />
       </NavLink>
       <NavLink
         to="/relatorio"
@@ -66,7 +66,7 @@ const SideBar = () => {
         }
         title="Relatório"
       >
-        <img src={iconRelatorio} alt="Relatório" />
+        <RelatorioIcon />
       </NavLink>
       <NavLink
         to="/equipe"
@@ -75,7 +75,7 @@ const SideBar = () => {
         }
         title="Equipe"
       >
-        <img src={iconEquipe} alt="Equipe" />
+        <EquipeIcon />
       </NavLink>
       <NavLink
         to="/sala"
@@ -84,7 +84,7 @@ const SideBar = () => {
         }
         title="Sala"
       >
-        <img src={iconSala} alt="Sala" />
+        <SalaIcon />
       </NavLink>
     </div>
   );

@@ -1,25 +1,59 @@
 .agendar-modal {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 1rem;
 
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  width: 300px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  background: #fff;
+  padding: 2rem 2.5rem;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 480px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18), 0 1.5px 4px rgba(0, 0, 0, 0.08);
+  position: relative;
+  animation: modalPop 0.25s;
+
+  & hgroup {
+    margin-bottom: 0.5rem;
+  }
+
+  & h3 {
+    margin: 0 0 0.25rem 0;
+    font-size: 1.5rem;
+    color: #d32f2f;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
 
   & form {
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
+    gap: 1rem;
+
+    & label {
+      font-weight: 500;
+      color: #333;
+      margin-bottom: 0.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
 
     & input,
+    & select,
     & textarea {
-      border: 1px solid #ccc;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      padding: 0.5rem 0.75rem;
+      font-size: 1rem;
+      background: #fafbfc;
+      transition: border 0.2s;
       width: 100%;
-      padding: 0.5rem;
+
+      &:focus {
+        border: 1.5px solid #d32f2f;
+        outline: none;
+      }
     }
   }
 
@@ -32,39 +66,96 @@
   }
 }
 
+@keyframes modalPop {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
 .time-range {
   display: flex;
+  gap: 1.25rem;
+  font-size: 1rem;
+  color: #444;
+  margin-bottom: 0.5rem;
+}
+
+.step-buttons {
+  display: flex;
   gap: 0.75rem;
+  justify-content: flex-end;
+  margin-top: 1rem;
+
+  & button {
+    padding: 0.5rem 1.25rem;
+    border-radius: 6px;
+    border: none;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    background: #e0e0e0;
+    color: #333;
+    transition: background 0.2s, color 0.2s;
+
+    &:hover {
+      background: #d32f2f;
+      color: #fff;
+    }
+
+    &:last-child {
+      background: #fff;
+      color: #d32f2f;
+      border: 1px solid #d32f2f;
+
+      &:hover {
+        background: #d32f2f;
+        color: #fff;
+      }
+    }
+  }
 }
 
 .custom-checkbox {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  margin-top: 0.5rem;
 
   & input[type='checkbox'] {
     appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
     width: 20px;
     height: 20px;
-    border: 1px solid #ccc;
+    border: 1.5px solid #d32f2f;
     border-radius: 4px;
-    background-color: var(--branco);
+    background-color: #fff;
     cursor: pointer;
+    position: relative;
+    transition: background 0.2s, border 0.2s;
   }
 
   & input[type='checkbox']:checked {
-    background-color: var(--vermelho);
-    border-color: var(--vermelho);
+    background-color: #d32f2f;
+    border-color: #d32f2f;
   }
 
   & input[type='checkbox']:checked::after {
+    content: '\2713';
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: var(--branco);
-    font-size: 14px;
+    top: 2px;
+    left: 5px;
+    color: #fff;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .agendar-modal {
+    max-width: 98vw;
+    padding: 1rem 0.5rem;
   }
 }

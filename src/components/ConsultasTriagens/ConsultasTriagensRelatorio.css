@@ -7,7 +7,7 @@
 }
 
 .consultas-triagens-relatorio__header {
-  background-color: var(--vermelho);
+  background-color: #b0171b;
   color: var(--branco);
   padding: 10px;
   text-align: center;
@@ -15,7 +15,7 @@
 
 .consultas-triagens-relatorio__header h4 {
   margin: 0;
-  font-size: 1rem; 
+  font-size: 1rem;
 }
 
 .consultas-triagens-relatorio__body {
@@ -26,7 +26,7 @@
   width: 100%;
   border-collapse: collapse;
   text-align: left;
-  font-size: 0.8rem; 
+  font-size: 0.8rem;
 }
 
 .consultas-triagens-relatorio__table th,

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import ReactDOM from 'react-dom';
 import './AgendamentoModal.css';
 
 // COMPONENTS
@@ -14,7 +15,7 @@ const AgendamentoModal = ({
   isModalOpen,
   setIsModalOpen,
   modalData,
-  atualizarRegistros
+  atualizarRegistros,
 }) => {
   const [step, setStep] = useState(1); // Controle dos passos
 
@@ -38,8 +39,8 @@ const AgendamentoModal = ({
     consulta: {
       observacao: '',
       especialidade: localStorage.getItem('selectedSpecialty') || 1,
-      equipeId: ''
-    }
+      equipeId: '',
+    },
   });
 
   // Monitorar mudanças em requestData
@@ -47,12 +48,11 @@ const AgendamentoModal = ({
     // console.log(requestData);
   }, [requestData]);
 
-  const handlePacienteChange = (e) => {
-    const pacienteId = e.target.value;
+  const handlePacienteChange = (pacienteId) => {
     setPacienteSelecionado(pacienteId);
     setRequestData((prev) => ({
       ...prev,
-      agendamento: { ...prev.agendamento, pacienteId }
+      agendamento: { ...prev.agendamento, pacienteId },
     }));
   };
 
@@ -71,7 +71,12 @@ const AgendamentoModal = ({
 
   const getDiaStringFromDateTime = (dateTime) => {
     const dateObj = new Date(dateTime);
-    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    const options = {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    };
     return dateObj.toLocaleDateString('pt-BR', options);
   };
 
@@ -88,15 +93,21 @@ const AgendamentoModal = ({
 
   const handlePostAgendamento = async () => {
     try {
-      requestData.agendamento.status = parseInt(requestData.agendamento.status, 10);
+      requestData.agendamento.status = parseInt(
+        requestData.agendamento.status,
+        10,
+      );
       requestData.agendamento.tipo = parseInt(requestData.agendamento.tipo, 10);
-      requestData.consulta.especialidade = parseInt(requestData.consulta.especialidade, 10);
+      requestData.consulta.especialidade = parseInt(
+        requestData.consulta.especialidade,
+        10,
+      );
       const response = await CreateAgendamento(requestData);
       atualizarRegistros();
       setIsModalOpen(false);
     } catch (error) {
       console.error('Erro ao criar agendamento:', error);
-      alert('Erro ao criar agendamento. Por favor, tente novamente.');
+      // alert('Erro ao criar agendamento. Por favor, tente novamente.');
     }
   };
 
@@ -106,22 +117,11 @@ const AgendamentoModal = ({
         return (
           <>
             <label>
-              Paciente
               <div>
-                <select
-                  name="pacienteId"
-                  value={requestData.agendamento.pacienteId || ''}
-                  onChange={handlePacienteChange}
-                  required
-                >
-                  <option value={null}>Selecione o paciente</option>
-                  {pacientes.map((paciente) => (
-                    <option key={paciente.id} value={paciente.id}>
-                      {paciente.nome}
-                    </option>
-                  ))}
-                </select>
-
+                <PesquisarPacientes
+                  setPacientes={setPacientes}
+                  onSelectPaciente={handlePacienteChange}
+                />
                 {pacienteSelecionado && (
                   <button
                     type="button"
@@ -129,7 +129,7 @@ const AgendamentoModal = ({
                       setPacienteSelecionado(null);
                       setRequestData((prev) => ({
                         ...prev,
-                        agendamento: { ...prev.agendamento, pacienteId: '' }
+                        agendamento: { ...prev.agendamento, pacienteId: '' },
                       }));
                     }}
                   >
@@ -140,19 +140,13 @@ const AgendamentoModal = ({
             </label>
 
             <label>
-              {pacienteSelecionado === null && (
-                <PesquisarPacientes setPacientes={setPacientes} />
-              )}
-            </label>
-
-            <label>
               Especialidade
               <Especialidade
                 selectedSpecialty={requestData.consulta.especialidade || ''}
                 onSelectSpecialty={(especialidade) =>
                   setRequestData((prev) => ({
                     ...prev,
-                    consulta: { ...prev.consulta, especialidade }
+                    consulta: { ...prev.consulta, especialidade },
                   }))
                 }
               />
@@ -166,7 +160,10 @@ const AgendamentoModal = ({
                   onChange={(e) =>
                     setRequestData({
                       ...requestData,
-                      agendamento: { ...requestData.agendamento, tipo: e.target.value }
+                      agendamento: {
+                        ...requestData.agendamento,
+                        tipo: e.target.value,
+                      },
                     })
                   }
                 >
@@ -193,7 +190,7 @@ const AgendamentoModal = ({
                       setEquipeSelecionada(equipeId);
                       setRequestData((prev) => ({
                         ...prev,
-                        consulta: { ...prev.consulta, equipeId }
+                        consulta: { ...prev.consulta, equipeId },
                       }));
                     }}
                     required
@@ -213,7 +210,7 @@ const AgendamentoModal = ({
                         setEquipeSelecionada(null);
                         setRequestData((prev) => ({
                           ...prev,
-                          consulta: { ...prev.consulta, equipeId: '' }
+                          consulta: { ...prev.consulta, equipeId: '' },
                         }));
                       }}
                     >
@@ -225,13 +222,20 @@ const AgendamentoModal = ({
 
               <label>
                 {equipeSelecionada === null && (
-                  <PesquisarEquipes setEquipes={setEquipes} especialidade={requestData.consulta.especialidade} />
+                  <PesquisarEquipes
+                    setEquipes={setEquipes}
+                    especialidade={requestData.consulta.especialidade}
+                  />
                 )}
               </label>
 
               <label class="custom-checkbox">
                 Reservar sala?
-                <input type="checkbox" checked={reservarSala} onChange={handleReservarSalaChange} />
+                <input
+                  type="checkbox"
+                  checked={reservarSala}
+                  onChange={handleReservarSalaChange}
+                />
               </label>
               {reservarSala && (
                 <label>
@@ -258,7 +262,10 @@ const AgendamentoModal = ({
                   onChange={(e) =>
                     setRequestData({
                       ...requestData,
-                      consulta: { ...requestData.consulta, observacao: e.target.value }
+                      consulta: {
+                        ...requestData.consulta,
+                        observacao: e.target.value,
+                      },
                     })
                   }
                 />
@@ -273,21 +280,30 @@ const AgendamentoModal = ({
   };
 
   return (
-    isModalOpen && (
-      <div className="overlay" onClick={() => setIsModalOpen(false)}>
+    isModalOpen &&
+    ReactDOM.createPortal(
+      <div className="overlay fade-in" onClick={() => setIsModalOpen(false)}>
         <div className="agendar-modal" onClick={(e) => e.stopPropagation()}>
           <hgroup>
-            <h3>Fazer Agendamento</h3>
+            <h3>Agendar</h3>
             <div className="time-range">
-              <span>{getDiaStringFromDateTime(requestData.agendamento.dataHoraInicio)}</span>
-              <span>Início: {formatDateTimeToLocal(requestData.agendamento.dataHoraInicio)}</span>
-              <span>Término: {formatDateTimeToLocal(requestData.agendamento.dataHoraFim)}</span>
+              <span>
+                {getDiaStringFromDateTime(
+                  requestData.agendamento.dataHoraInicio,
+                )}
+              </span>
+              <span>
+                Início:{' '}
+                {formatDateTimeToLocal(requestData.agendamento.dataHoraInicio)}
+              </span>
+              <span>
+                Término:{' '}
+                {formatDateTimeToLocal(requestData.agendamento.dataHoraFim)}
+              </span>
             </div>
           </hgroup>
 
-          <form>
-            {renderStep()}
-          </form>
+          <form>{renderStep()}</form>
 
           <div className="step-buttons">
             {/* Botão para voltar */}
@@ -316,7 +332,8 @@ const AgendamentoModal = ({
             <button onClick={() => setIsModalOpen(false)}>Cancelar</button>
           </div>
         </div>
-      </div>
+      </div>,
+      document.body,
     )
   );
 };

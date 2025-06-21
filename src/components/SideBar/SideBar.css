@@ -1,17 +1,24 @@
 .sidebar {
-  min-width: 6.5%;
-  background-color: var(--vermelho);
-  color: var(--branco);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 70px;
+  min-width: 70px;
+  height: 100vh;
+  background: rgba(255, 255, 255, 0.92);
+  color: #b0171b;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  position: relative;
-  height: 100%;
-  border-radius: 16px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  border-radius: 0 18px 18px 0;
+  box-shadow: 2px 0 24px rgba(125, 20, 116, 0.1);
+  padding: 1.5rem 0.5rem 1rem 0.5rem;
+  gap: 0.5rem;
   opacity: 1;
   overflow: hidden;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
+  z-index: 100;
+  border-right: 1.5px solid #e0e0e0;
 }
 
 .sidebar-menu {
@@ -22,43 +29,85 @@
 }
 
 .sidebar-item {
-  width: 100%;
+  width: 48px;
+  height: 48px;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: calc(100% / 8);
-  color: var(--branco);
+  color: #b0171b;
   text-decoration: none;
-  transition: background-color 0.15s, color 0.15s;
+  transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+  border-radius: 50%;
+  margin-bottom: 0.25rem;
+  font-size: 1.1rem;
+  font-weight: 500;
+  box-sizing: border-box;
+  background: none;
+  box-shadow: none;
+  padding: 0;
 }
 
 .sidebar-item img {
-  margin: 8px;
-  max-width: 60%;
-  max-height: 60%;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: none;
+  transition: filter 0.3s, background 0.2s;
+  padding: 6px;
 }
 
-.sidebar-item:hover {
-  background-color: #b0171b;
-  color: rgba(255, 255, 255, 0.8);
+.sidebar-item svg {
+  border-radius: 50%;
+  background: none;
+  transition: background 0.2s, filter 0.2s, fill 0.2s, color 0.2s;
+  width: 36px;
+  height: 36px;
+  display: block;
+  fill: none !important;
+  color: #b0171b;
 }
 
-.sidebar-item img {
-  width: 24px;
-  height: 24px;
-  font: 1.5rem;
-  transition: filter 0.3s;
+.sidebar-item:hover svg {
+  background: rgba(176, 23, 27, 0.65);
 }
 
-.sidebar-item:hover img {
-  filter: brightness(0.8);
+.selected svg {
+  background: #b0171b;
+
+  &:hover {
+    background: #b0171b;
+  }
 }
 
+.sidebar-item:hover,
 .selected {
-  background-color: #b0171b;
-  color: rgba(255, 255, 255, 0.8);
+  background: none;
+  color: #b0171b;
+  box-shadow: none;
 }
 
-.selected img {
-  filter: brightness(0.8);
+/* Oculta os 3 últimos NavLink (Relatório, Equipe, Sala) */
+.sidebar .sidebar-item:nth-last-child(-n + 3) {
+  display: none !important;
+}
+
+@media (max-width: 700px) {
+  .sidebar {
+    width: 48px;
+    min-width: 48px;
+    padding: 0.5rem 0.1rem;
+    border-radius: 0 12px 12px 0;
+  }
+
+  .sidebar-item {
+    height: 40px;
+    font-size: 1rem;
+    padding: 0;
+  }
+
+  .sidebar-item img {
+    width: 24px;
+    height: 24px;
+    padding: 4px;
+  }
 }

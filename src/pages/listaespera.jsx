@@ -9,17 +9,20 @@ import AtualizarRegistro from '../components/ListaEspera/AtualizarRegistro';
 import GetListaEntries from '../functions/ListaEspera/GetListaEntries';
 import DeleteRegistro from '../functions/ListaEspera/DeleteListaEsperaEntry';
 
-
 const ListaEspera = () => {
   const [selectedComponent, setSelectedComponent] = useState('Pesquisar');
   const [registros, setRegistros] = useState([]);
   const [registroSelecionado, setRegistroSelecionado] = useState({});
-  const [selectedSpecialty, setSelectedSpecialty] = useState(localStorage.getItem('selectedSpecialty') || 1);
+  const [selectedSpecialty, setSelectedSpecialty] = useState(
+    localStorage.getItem('selectedSpecialty') || 1,
+  );
 
   // Função para atualizar os registros
   const atualizarRegistros = async () => {
     try {
-      const items = await GetListaEntries({ filter: "especialidade=" + selectedSpecialty });
+      const items = await GetListaEntries({
+        filter: 'especialidade=' + selectedSpecialty,
+      });
       setRegistros(items);
     } catch (error) {
       console.error('Erro ao buscar registros:', error);
@@ -33,15 +36,16 @@ const ListaEspera = () => {
   };
 
   const handleDeleteRegistro = async (id) => {
-    const confirmDelete = window.confirm('Tem certeza que deseja deletar o registro?');
+    const confirmDelete = window.confirm(
+      'Tem certeza que deseja deletar o registro?',
+    );
     if (confirmDelete) {
       try {
         await DeleteRegistro(id);
-        alert('Registro deletado com sucesso!');
         atualizarRegistros(); // Atualiza a lista após deletar
       } catch (error) {
         console.error('Erro ao deletar registro:', error);
-        alert('Erro ao deletar registro.');
+        // alert('Erro ao deletar registro.');
       }
     } else {
       // alert('Ação cancelada.');
@@ -50,44 +54,58 @@ const ListaEspera = () => {
 
   useEffect(() => {
     atualizarRegistros();
-  }, []);
+  }, [selectedSpecialty]);
 
   return (
-    <div className="pacientes">
-      <div className="pacientes-header">
-        <h2>Lista de Espera</h2>
-        {/* <button onClick={() => setSelectedComponent('Adicionar')}>
-          Adicionar Registro
-        </button> */}
-        {selectedComponent === "Pesquisar" && (
-          <Especialidade
-            selectedSpecialty={selectedSpecialty}
-            onSelectSpecialty={setSelectedSpecialty}
-          />
-        )}
-
+    <div className="listaespera">
+      <div className="listaespera-hgroup">
+        <h1>Lista de Espera</h1>
+        <Especialidade
+          selectedSpecialty={selectedSpecialty}
+          onSelectSpecialty={setSelectedSpecialty}
+        />
       </div>
-
-      <div className="pacientes-body">
-        <div className="pesquisar-pacientes">
-          <select
-            value={selectedComponent}
-            onChange={(e) => setSelectedComponent(e.target.value)}
-          >
-            <option value="Pesquisar">Pesquisar</option>
-            <option value="Adicionar">Adicionar</option>
-            <option value="Atualizar">Atualizar</option>
-          </select>
-
-          {selectedComponent === "Pesquisar" && (
-            <PesquisarRegistros setRegistros={setRegistros} especialidade={selectedSpecialty} />
+      <nav className="listaespera-nav">
+        <button
+          className={`btn-secondary${
+            selectedComponent === 'Pesquisar' ? ' active' : ''
+          }`}
+          onClick={() => setSelectedComponent('Pesquisar')}
+        >
+          Pesquisar
+        </button>
+        <button
+          className={`btn-secondary${
+            selectedComponent === 'Adicionar' ? ' active' : ''
+          }`}
+          onClick={() => setSelectedComponent('Adicionar')}
+        >
+          Adicionar
+        </button>
+        <button
+          className={`btn-secondary${
+            selectedComponent === 'Atualizar' ? ' active' : ''
+          }`}
+          onClick={() => setSelectedComponent('Atualizar')}
+        >
+          Atualizar
+        </button>
+      </nav>
+      <div className="listaespera-content-wrapper">
+        <div className="listaespera-form-card">
+          {selectedComponent === 'Pesquisar' && (
+            <PesquisarRegistros
+              setRegistros={setRegistros}
+              especialidade={selectedSpecialty}
+            />
           )}
-
-          {selectedComponent === "Adicionar" && (
-            <AdicionarRegistro atualizarRegistros={atualizarRegistros} especialidade={selectedSpecialty} />
+          {selectedComponent === 'Adicionar' && (
+            <AdicionarRegistro
+              atualizarRegistros={atualizarRegistros}
+              especialidade={selectedSpecialty}
+            />
           )}
-
-          {selectedComponent === "Atualizar" && (
+          {selectedComponent === 'Atualizar' && (
             <AtualizarRegistro
               registroId={registroSelecionado.id}
               registroInicial={registroSelecionado}
@@ -95,8 +113,7 @@ const ListaEspera = () => {
             />
           )}
         </div>
-
-        <div className="lista-pacientes">
+        <div className="listaespera-list-card">
           <table className="pacientes-table">
             <thead className="header-lista">
               <tr>
@@ -113,15 +130,11 @@ const ListaEspera = () => {
               {registros.map((registro) => (
                 <tr
                   key={registro.id}
-                  className="paciente-item"
+                  className={
+                    registroSelecionado.id === registro.id ? 'selected' : ''
+                  }
                   onClick={() => handleRegistroClick(registro)}
-                  style={{
-                    cursor: 'pointer',
-                    backgroundColor:
-                      registroSelecionado.id === registro.id
-                        ? '#f0f8ff'
-                        : 'transparent',
-                  }}
+                  style={{ cursor: 'pointer' }}
                 >
                   <td>{registro.nome}</td>
                   <td>{new Date(registro.dataEntrada).toLocaleString()}</td>

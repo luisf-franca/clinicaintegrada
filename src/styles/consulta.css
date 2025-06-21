@@ -1,118 +1,263 @@
 .consulta {
-  padding: 2rem;
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+
   display: flex;
   flex-direction: column;
-  height: 100%;
-  width: 100%;
-  overflow-y: scroll;
+  gap: 1.5rem;
+  padding: 2.5rem 2.5rem 2.5rem 2.5rem;
+
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 18px;
+  box-shadow: 0 4px 32px rgba(125, 20, 116, 0.1);
+  backdrop-filter: blur(2px);
 }
 
-.consulta-header {
-  flex: 1;
+.consulta-hgroup {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin: 20px;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+.consulta-hgroup h1 {
+  font-size: 2rem;
+  color: #b0171b;
+  text-shadow: 0 2px 8px rgba(125, 20, 116, 0.08);
+  font-weight: 700;
+  margin: 0;
+}
+
+.consulta-nav {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.5rem;
+}
+.consulta-nav .btn-secondary {
+  padding: 0.5rem 1.25rem;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.85);
+  color: #b0171b;
+  transition: background 0.2s, color 0.2s;
+}
+.consulta-nav .btn-secondary.active,
+.consulta-nav .btn-secondary:hover {
+  background: #b0171b;
+  color: #fff;
 }
 
 .consulta-body {
-  flex: 20;
-  /* Ocupa o restante do espaço */
+  padding: 0 1.5rem 1.5rem 1.5rem;
   display: flex;
   flex-direction: column;
+  gap: 1.5rem;
 }
 
-.consulta-tabs {
-  /* Nova classe para as abas */
-  flex: 0 0 auto;
-  /* Altura mínima, não cresce */
-}
-
-.consulta-tab-content {
+.consulta-tab-bar {
   display: flex;
-  gap: 1rem;
-  /* Adiciona espaçamento entre os elementos */
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  background: none;
+  border-bottom: 2px solid #eee;
+  padding-left: 0.2rem;
 }
-
-.consulta-tab-content input {
-  border: 1px solid #ccc;
-  /* Adiciona uma borda cinza clara */
-  border-radius: 4px;
-  /* Bordas arredondadas */
-  padding: 0.5rem;
-  /* Adiciona espaçamento interno */
-  font-size: 1rem;
-  /* Ajusta o tamanho da fonte */
+.consulta-tab-btn {
+  background: var(--cinza-medio, #e0e0e0);
+  color: var(--cinza-escuro, #333);
+  border: none;
+  border-radius: 10px 10px 0 0;
+  padding: 0.8rem 2.2rem;
+  font-size: 1.08rem;
+  font-weight: 500;
+  cursor: pointer;
+  margin-bottom: -2px;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(211, 47, 47, 0.04);
   outline: none;
-  /* Remove o contorno padrão ao focar */
-  transition: border-color 0.3s ease;
-  /* Animação para o foco */
+  position: relative;
+  top: 0;
+  border-bottom: 2px solid transparent;
+}
+.consulta-tab-btn.active {
+  background: #b0171b;
+  color: var(--branco, #fff);
+  font-weight: 700;
+  z-index: 2;
+  box-shadow: 0 4px 18px rgba(211, 47, 47, 0.1);
+  border-bottom: 2px solid #b0171b;
+}
+.consulta-tab-btn:not(.active):hover {
+  background: #b0171b;
+  color: var(--branco, #fff);
 }
 
-.consulta-tab-content input:focus {
-  border-color: #007bff;
-  /* Cor da borda ao focar */
+.consulta-content-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 100%;
+  align-items: stretch;
+}
+
+.consulta-list-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 6px 32px rgba(125, 20, 116, 0.1);
+  padding: 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.consulta-detalhes-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 6px 32px rgba(125, 20, 116, 0.1);
+  padding: 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.consulta-detalhes-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
 .search-container {
-  display: flex;
-  flex-direction: column; /* Alinha os itens em uma coluna */
-  gap: 1rem; /* Espaçamento entre os elementos */
-  padding: 1rem;
+  background: var(--branco, #fff);
+  border-radius: 12px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+  padding: 1.5rem 1rem;
+  margin-bottom: 1.5rem;
 }
 
-.search-container select {
-  border: 2px solid #ccc; /* Adiciona a borda personalizada */
-  border-radius: 4px; /* Borda arredondada (opcional) */
-  padding: 0.5rem; /* Espaçamento interno para melhor usabilidade */
+.search-container h4 {
+  color: #b0171b;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
 }
 
+.search-container label {
+  font-weight: 600;
+  color: #b0171b;
+  margin-bottom: 0.25rem;
+  display: block;
+}
+
+.search-container select,
 .search-container input {
-  border: 1px solid #ccc; /* Caso queira também uma borda nos inputs */
-  border-radius: 4px;
-  padding: 0.5rem;
+  border: 1px solid var(--cinza-borda, #d1d5db);
+  border-radius: 6px;
+  padding: 0.5rem 0.75rem;
+  font-size: 1rem;
+  background: var(--cinza-claro, #fafbfc);
+  margin-bottom: 0.5rem;
+  width: 100%;
+  box-sizing: border-box;
+  transition: border 0.2s, box-shadow 0.2s;
+  color: var(--cinza-escuro, #333);
+}
+.search-container select:focus,
+.search-container input:focus {
+  border-color: #b0171b;
+  box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.12);
+  outline: none;
+}
+
+.search-container button {
+  padding: 0.5rem 1.25rem;
+  border-radius: 6px;
+  border: none;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  background: var(--cinza-medio, #e0e0e0);
+  color: var(--cinza-escuro, #333);
+  transition: background 0.2s, color 0.2s;
+  margin-top: 0.5rem;
+}
+.search-container button:hover {
+  background: #b0171b;
+  color: var(--branco, #fff);
 }
 
 .table-container {
-  /* Nova classe para o container da tabela */
-  flex: 6;
-  /* Ocupa o dobro do espaço da pesquisa */
+  background: var(--branco, #fff);
+  border-radius: 12px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+  padding: 1.5rem 1rem;
   overflow-x: auto;
-  /* Permite rolagem horizontal se necessário */
 }
 
-table {
-  border-collapse: collapse;
-  /* Remove espaçamento entre as células */
+.table-container table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  background: var(--branco, #fff);
 }
 
-tr:hover {
-  background-color: #f5f5f5;
-  /* Cor de fundo cinza claro ao passar o mouse */
-}
-
-th,
-td {
-  border: 1px solid #ddd;
-  /* Adiciona uma borda de 1px sólida cinza claro */
-  padding: 8px;
-  /* Adiciona um pouco de espaço interno para melhor visualização */
+.table-container th,
+.table-container td {
+  border: 1px solid #eee;
+  padding: 10px 8px;
   text-align: left;
+  font-size: 1rem;
+}
+
+.table-container th {
+  background: #f4f4f4;
+  color: #b0171b;
+  font-weight: 600;
+  text-align: center;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.table-container tr {
+  transition: background 0.2s;
+}
+
+.table-container tr:hover {
+  background-color: #f9f9f9;
+}
+
+.table-container tr.selected {
+  background: #fff;
+  font-weight: 700;
+  color: #b0171b;
+  border-left: 3px solid #b0171b;
+}
+
+.table-container tr:last-child td {
+  border-bottom: none;
 }
 
 .consulta-detalhes {
   width: 100%;
-  /* Ajustar a largura conforme necessário */
   margin: 0 auto;
+  background: var(--branco, #fff);
+  border-radius: 12px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+  padding: 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
 .top-section {
-  top: 0;
-  left: 0;
   width: 100%;
   height: 5vh;
-  /* Ajustar a altura conforme necessário */
-  background-color: var(--vermelho);
+  background-color: #b0171b;
+  border-radius: 12px 12px 0 0;
 }
 
 .name-section {
@@ -121,6 +266,9 @@ td {
   align-items: center;
   height: 20vh;
   padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .centered-content {
@@ -128,23 +276,126 @@ td {
   justify-content: center;
   align-items: center;
   height: 100%;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #b0171b;
 }
 
 .bottom-section {
   display: flex;
   justify-content: space-between;
   padding: 10px;
-  width: 100%; /* Ajuste para ocupar 100% da largura */
+  width: 100%;
   flex: 1;
-  /* Ocupa o restante da tela disponível */
+  gap: 1.5rem;
 }
 
 .left-column,
 .right-column {
-  background-color: #ddd;
-  text-align: center;
-  justify-content: center;
-  align-items: center;
+  background-color: #f9f9f9;
+  text-align: left;
   width: 50%;
-  /* Ajustar a largura conforme necessário */
+  border-radius: 8px;
+  padding: 1.5rem 1rem;
+  box-shadow: 0 2px 8px rgba(211, 47, 47, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.left-column h3,
+.right-column h3 {
+  color: #b0171b;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.left-column p,
+.right-column p {
+  margin: 0.2rem 0;
+  font-size: 1rem;
+}
+
+.especialidade select {
+  border: 1.5px solid #b0171b;
+  border-radius: 8px;
+  padding: 0.5rem 1.25rem;
+  font-size: 1rem;
+  background: #fff;
+  color: #b0171b;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(125, 20, 116, 0.07);
+  transition: border 0.2s, box-shadow 0.2s;
+  outline: none;
+}
+.especialidade select:focus {
+  border-color: #7d1474;
+  box-shadow: 0 0 0 2px rgba(176, 23, 27, 0.12);
+}
+
+.empty-state-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #b0171b;
+  background: rgba(244, 244, 244, 0.7);
+  border-radius: 10px;
+  padding: 2rem 1rem;
+  font-size: 1.08rem;
+  font-weight: 500;
+  margin: 1.5rem 0;
+  text-align: center;
+  min-height: 80px;
+  gap: 0.5rem;
+}
+
+@media (max-width: 900px) {
+  .consulta-header,
+  .consulta-body {
+    padding: 1rem 0.5rem;
+  }
+  .consulta-tab-btn {
+    padding: 0.5rem 1.2rem;
+    font-size: 1rem;
+  }
+  .bottom-section {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .left-column,
+  .right-column {
+    width: 100%;
+    padding: 1rem 0.5rem;
+  }
+}
+@media (max-width: 600px) {
+  .consulta {
+    border-radius: 0;
+    min-height: 100vh;
+    padding: 0.5rem;
+  }
+  .consulta-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding: 1rem 0.5rem 0.5rem 0.5rem;
+    border-radius: 0;
+  }
+  .consulta-body {
+    padding: 0.5rem;
+  }
+  .consulta-tab-bar {
+    gap: 0.2rem;
+    margin-bottom: 1rem;
+    padding-left: 0;
+  }
+  .consulta-tab-btn {
+    padding: 0.4rem 0.5rem;
+    font-size: 0.95rem;
+  }
+  .consulta-detalhes {
+    padding: 0.5rem 0.25rem;
+    border-radius: 8px;
+  }
 }

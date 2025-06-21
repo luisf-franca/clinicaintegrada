@@ -63,7 +63,11 @@ const AdicionarPaciente = ({ onSuccess }) => {
     e.preventDefault();
     const pacienteData = { paciente };
 
-    if (desejaListaEspera && listaEspera.especialidade && listaEspera.prioridade) {
+    if (
+      desejaListaEspera &&
+      listaEspera.especialidade &&
+      listaEspera.prioridade
+    ) {
       pacienteData.listaEspera = {
         especialidade: parseInt(listaEspera.especialidade, 10),
         prioridade: parseInt(listaEspera.prioridade, 10),
@@ -72,11 +76,11 @@ const AdicionarPaciente = ({ onSuccess }) => {
 
     try {
       await CreatePaciente(pacienteData);
-      alert('Paciente adicionado com sucesso!');
+      // alert('Paciente adicionado com sucesso!');
       if (onSuccess) onSuccess(); // Chama a função do componente pai para fechar o form e atualizar a lista
     } catch (error) {
       console.error('Erro ao adicionar paciente:', error);
-      alert('Erro ao adicionar paciente. Verifique os dados e tente novamente.');
+      // alert('Erro ao adicionar paciente. Verifique os dados e tente novamente.');
     }
   };
 
@@ -85,19 +89,38 @@ const AdicionarPaciente = ({ onSuccess }) => {
       case 1:
         return (
           <>
-            <h3>Dados Pessoais</h3>
             {/* <br /> */}
             <div className="form-group">
               <label htmlFor="nome">Nome Completo</label>
-              <input id="nome" type="text" name="nome" value={paciente.nome} onChange={handleInputChange} required />
+              <input
+                id="nome"
+                type="text"
+                name="nome"
+                value={paciente.nome}
+                onChange={handleInputChange}
+                required
+              />
             </div>
             <div className="form-group">
               <label htmlFor="telefone">Telefone</label>
-              <input id="telefone" type="text" name="telefone" value={paciente.telefone} onChange={handleInputChange} />
+              <input
+                id="telefone"
+                type="text"
+                name="telefone"
+                value={paciente.telefone}
+                onChange={handleInputChange}
+              />
             </div>
             <div className="form-group">
               <label htmlFor="idade">Idade</label>
-              <input id="idade" type="number" name="idade" value={paciente.idade} onChange={handleInputChange} required />
+              <input
+                id="idade"
+                type="number"
+                name="idade"
+                value={paciente.idade}
+                onChange={handleInputChange}
+                required
+              />
             </div>
           </>
         );
@@ -108,11 +131,25 @@ const AdicionarPaciente = ({ onSuccess }) => {
             {/* <br /> */}
             <div className="form-group">
               <label htmlFor="nomeResponsavel">Nome do Responsável</label>
-              <input id="nomeResponsavel" type="text" name="nomeResponsavel" value={paciente.nomeResponsavel} onChange={handleInputChange} required />
+              <input
+                id="nomeResponsavel"
+                type="text"
+                name="nomeResponsavel"
+                value={paciente.nomeResponsavel}
+                onChange={handleInputChange}
+                required
+              />
             </div>
             <div className="form-group">
               <label htmlFor="parentescoResponsavel">Parentesco</label>
-              <input id="parentescoResponsavel" type="text" name="parentescoResponsavel" value={paciente.parentescoResponsavel} onChange={handleInputChange} required />
+              <input
+                id="parentescoResponsavel"
+                type="text"
+                name="parentescoResponsavel"
+                value={paciente.parentescoResponsavel}
+                onChange={handleInputChange}
+                required
+              />
             </div>
           </>
         );
@@ -122,54 +159,87 @@ const AdicionarPaciente = ({ onSuccess }) => {
             <h3>Detalhes Adicionais</h3>
             {/* <br /> */}
             <div className="form-group">
-              <label className="custom-checkbox" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
-          <input
-            type="checkbox"
-            checked={desejaListaEspera}
-            onChange={(e) => setDesejaListaEspera(e.target.checked)}
-            style={{ display: 'none' }}
-          />
-          <span className="checkmark" style={{
-            width: '20px',
-            height: '20px',
-            border: '1px solid #aaa',
-            display: 'inline-flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: '1rem',
-            background: desejaListaEspera ? '#e6f7e6' : '#fff'
-          }}>
-            {desejaListaEspera ? '✔' : ''}
-          </span>
-          Incluir na lista de espera?
+              <label
+                className="custom-checkbox"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  cursor: 'pointer',
+                }}
+              >
+                <input
+                  type="checkbox"
+                  checked={desejaListaEspera}
+                  onChange={(e) => setDesejaListaEspera(e.target.checked)}
+                  style={{ display: 'none' }}
+                />
+                <span
+                  className="checkmark"
+                  style={{
+                    width: '20px',
+                    height: '20px',
+                    border: '1px solid #aaa',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '1rem',
+                    background: desejaListaEspera ? '#e6f7e6' : '#fff',
+                  }}
+                >
+                  {desejaListaEspera ? '✔' : ''}
+                </span>
+                Incluir na lista de espera?
               </label>
             </div>
             {desejaListaEspera && (
               <>
-          <div className="form-group">
-            <label htmlFor="especialidade">Especialidade</label>
-            <select id="especialidade" name="especialidade" value={listaEspera.especialidade} onChange={handleListaEsperaChange} required>
-              <option value="" disabled>Selecione...</option>
-              <option value="1">Psicologia</option>
-              <option value="2">Odontologia</option>
-              <option value="3">Fisioterapia</option>
-              <option value="4">Nutrição</option>
-            </select>
-          </div>
-          <div className="form-group">
-            <label htmlFor="prioridade">Prioridade</label>
-            <select id="prioridade" name="prioridade" value={listaEspera.prioridade} onChange={handleListaEsperaChange} required>
-              <option value="" disabled>Selecione...</option>
-              <option value="1">Baixa</option>
-              <option value="2">Média</option>
-              <option value="3">Alta</option>
-            </select>
-          </div>
+                <div className="form-group">
+                  <label htmlFor="especialidade">Especialidade</label>
+                  <select
+                    id="especialidade"
+                    name="especialidade"
+                    value={listaEspera.especialidade}
+                    onChange={handleListaEsperaChange}
+                    required
+                  >
+                    <option value="" disabled>
+                      Selecione...
+                    </option>
+                    <option value="1">Psicologia</option>
+                    <option value="2">Odontologia</option>
+                    <option value="3">Fisioterapia</option>
+                    <option value="4">Nutrição</option>
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label htmlFor="prioridade">Prioridade</label>
+                  <select
+                    id="prioridade"
+                    name="prioridade"
+                    value={listaEspera.prioridade}
+                    onChange={handleListaEsperaChange}
+                    required
+                  >
+                    <option value="" disabled>
+                      Selecione...
+                    </option>
+                    <option value="1">Baixa</option>
+                    <option value="2">Média</option>
+                    <option value="3">Alta</option>
+                  </select>
+                </div>
               </>
             )}
             <div className="form-group">
               <label htmlFor="observacao">Observações</label>
-              <textarea id="observacao" name="observacao" value={paciente.observacao} onChange={handleInputChange} rows="3"></textarea>
+              <textarea
+                id="observacao"
+                name="observacao"
+                value={paciente.observacao}
+                onChange={handleInputChange}
+                rows="3"
+              ></textarea>
             </div>
           </>
         );
@@ -185,7 +255,13 @@ const AdicionarPaciente = ({ onSuccess }) => {
         {renderStepContent()}
 
         {/* ======================= ÁREA DA CORREÇÃO ======================= */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '2rem' }}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            marginTop: '2rem',
+          }}
+        >
           {step > 1 && (
             <button
               type="button"
@@ -204,7 +280,7 @@ const AdicionarPaciente = ({ onSuccess }) => {
             disabled={!paciente.nome || !paciente.idade}
             style={{
               marginLeft: 'auto',
-              display: step < 3 ? 'block' : 'none' // Mostra se a etapa for menor que 3
+              display: step < 3 ? 'block' : 'none', // Mostra se a etapa for menor que 3
             }}
           >
             Avançar
@@ -216,7 +292,7 @@ const AdicionarPaciente = ({ onSuccess }) => {
             className="btn-primary"
             style={{
               marginLeft: 'auto',
-              display: step === 3 ? 'block' : 'none' // Mostra apenas na etapa 3
+              display: step === 3 ? 'block' : 'none', // Mostra apenas na etapa 3
             }}
           >
             Concluir Cadastro

@@ -1,92 +1,185 @@
 .agendamentos-resumo {
   width: 100%;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(125, 20, 116, 0.07);
   overflow: hidden;
-  background-color: var(--branco);
+  margin-bottom: 1.2rem;
+  padding: 0.5rem 0.5rem 1rem 0.5rem;
 }
 
 .agendamentos-resumo__header {
-  background-color: var(--vermelho);
   display: flex;
+  flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  color: var(--branco);
-  padding: 10px;
+  background: #b0171b;
+  color: #fff;
+  padding: 0.7rem 1rem;
+  border-radius: 10px 10px 0 0;
 }
 
 .agendamentos-resumo__header h4 {
+  color: #fff;
+  text-shadow: 0 2px 8px rgba(125, 20, 116, 0.08);
+  font-size: 1.15rem;
   margin: 0;
+}
+
+.agendamentos-resumo__header button {
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid #e0e0e0;
+  color: #b0171b;
+  font-weight: 600;
+  border-radius: 6px;
+  padding: 0.5rem 1.25rem;
   font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.agendamentos-resumo__header button:hover {
+  background: #b0171b;
+  color: #fff;
+}
+
+.agendamentos-resumo__intervalo {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.5rem 1.5rem 0.5rem 1.5rem;
+  background: #f4f4f4;
+  border-bottom: 1px solid #eee;
+}
+
+.agendamentos-resumo__intervalo button {
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid #e0e0e0;
+  color: #b0171b;
+  font-weight: 600;
+  border-radius: 6px;
+  padding: 0.4rem 1rem;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.agendamentos-resumo__intervalo button.active,
+.agendamentos-resumo__intervalo button:hover {
+  background: #b0171b;
+  color: #fff;
+}
+
+.agendamentos-resumo__body {
+  padding: 0.5rem 0.5rem 0 0.5rem;
+}
+
+.agendamentos-resumo__table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: var(--branco);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: none;
+  font-size: 0.98rem;
+}
+
+.agendamentos-resumo__table th,
+.agendamentos-resumo__table td {
+  padding: 10px 8px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.agendamentos-resumo__table th {
+  background: rgba(244, 244, 244, 0.95);
+  color: #b0171b;
+  font-weight: 600;
+  text-align: center;
+}
+
+.agendamentos-resumo__table tr.selected {
+  background: #fff;
+  font-weight: 700;
+  color: #b0171b;
+  border-left: 3px solid #b0171b;
+}
+
+.agendamentos-resumo__table tr:nth-child(even) {
+  background: #f9f9f9;
+}
+
+.agendamentos-resumo__table tr:hover {
+  background: #f1f1f1;
+}
+
+.agendamentos-resumo__table tr:last-child td {
+  border-bottom: none;
+}
+
+.agendamentos-resumo__table button {
+  background: var(--cinza-medio);
+  color: var(--cinza-escuro);
+  border: none;
+  border-radius: 6px;
+  padding: 0.4rem 1rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.agendamentos-resumo__table button:hover {
+  background: #b0171b;
+  color: var(--branco);
+}
+
+.agendamentos-resumo__empty {
+  text-align: center;
+  color: #888;
+  padding: 1rem 0;
 }
 
 .agendamentos-resumo__filtro {
   display: flex;
   justify-content: center;
-  align-items: center; 
-  gap: 10px; 
-  background-color: var(--gelo); 
-  border: 1px solid #ddd; 
-  border-radius: 5px; 
-  margin: 20px auto; 
-  max-width: 500px; 
-  text-align: center; 
+  align-items: center;
+  gap: 10px;
+  background: #f9f9f9;
+  border: 1px solid #eee;
+  border-radius: 5px;
+  margin: 20px auto 0 auto;
+  max-width: 500px;
+  text-align: center;
+  padding: 0.5rem 1rem;
 }
 
-.agendamentos-resumo__intervalo {
-  display: flex;
-  justify-content: space-around;
-  padding: 10px;
-  background-color: #f4f4f4;
-  border-bottom: 1px solid #ddd;
-}
-
-.agendamentos-resumo__intervalo button {
-  padding: 5px 10px;
-  border: 1px solid #ddd;
-  background-color: var(--branco);
+.agendamentos-resumo__filtro button {
+  background: var(--cinza-medio);
+  color: var(--cinza-escuro);
+  border: none;
+  border-radius: 6px;
+  padding: 0.4rem 1rem;
+  font-size: 0.95rem;
+  font-weight: 500;
   cursor: pointer;
-  font-size: 0.8rem;
-  border-radius: 4px;
+  transition: background 0.2s, color 0.2s;
 }
 
-.agendamentos-resumo__intervalo button.active {
-  background-color: var(--vermelho);
-  color: var(--branco);
-  border-color: var(--vermelho);
-}
-
-.agendamentos-resumo__intervalo button:hover {
-  background-color: var(--vermelho);
+.agendamentos-resumo__filtro button:hover {
+  background: #b0171b;
   color: var(--branco);
 }
 
-.agendamentos-resumo__body {
-  padding: 10px;
-}
-
-.agendamentos-resumo__table {
-  width: 100%;
-  border-collapse: collapse;
-  text-align: left;
-  font-size: 0.8rem;
-}
-
-.agendamentos-resumo__table th,
-.agendamentos-resumo__table td {
-  border: 1px solid #ddd;
-  padding: 8px;
-}
-
-.agendamentos-resumo__table th {
-  background-color: #f4f4f4;
-  font-weight: bold;
-}
-
-.agendamentos-resumo__table tr:nth-child(even) {
-  background-color: #f9f9f9;
-}
-
-.agendamentos-resumo__table tr:hover {
-  background-color: #f1f1f1;
+@media (max-width: 600px) {
+  .agendamentos-resumo__header,
+  .agendamentos-resumo__body,
+  .agendamentos-resumo__intervalo {
+    padding: 0.5rem 0.25rem;
+  }
+  .agendamentos-resumo__table th,
+  .agendamentos-resumo__table td {
+    padding: 6px 4px;
+    font-size: 0.92rem;
+  }
 }

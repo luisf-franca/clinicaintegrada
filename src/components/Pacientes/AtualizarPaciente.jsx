@@ -5,7 +5,7 @@ import UpdatePaciente from '../../functions/Pacientes/UpdatePaciente';
 
 const AtualizarPaciente = ({ pacienteInicial, onSuccess }) => {
   // Inicializa o estado do formulário com os dados do paciente selecionado
-  const [paciente, setPaciente] = useState(pacienteInicial); 
+  const [paciente, setPaciente] = useState(pacienteInicial);
   const [step, setStep] = useState(1);
 
   // Efeito para atualizar o formulário se o paciente selecionado mudar
@@ -26,11 +26,11 @@ const AtualizarPaciente = ({ pacienteInicial, onSuccess }) => {
     e.preventDefault();
     try {
       await UpdatePaciente(paciente.id, paciente);
-      alert('Paciente atualizado com sucesso!');
+      // alert('Paciente atualizado com sucesso!');
       if (onSuccess) onSuccess();
     } catch (error) {
       console.error('Erro ao atualizar paciente:', error);
-      alert('Erro ao atualizar paciente.');
+      // alert('Erro ao atualizar paciente.');
     }
   };
 
@@ -48,53 +48,71 @@ const AtualizarPaciente = ({ pacienteInicial, onSuccess }) => {
             {/* Usa a classe "form-group" para cada campo */}
             <div className="form-group">
               <label htmlFor="nome">Nome</label>
-              <input id="nome" type="text" name="nome" value={paciente.nome} onChange={handleInputChange} />
+              <input
+                id="nome"
+                type="text"
+                name="nome"
+                value={paciente.nome}
+                onChange={handleInputChange}
+              />
             </div>
 
             <div className="form-group">
               <label htmlFor="telefone">Telefone</label>
-              <input id="telefone" type="text" name="telefone" value={paciente.telefone} onChange={handleInputChange} />
+              <input
+                id="telefone"
+                type="text"
+                name="telefone"
+                value={paciente.telefone}
+                onChange={handleInputChange}
+              />
             </div>
 
             <div className="form-group">
               <label htmlFor="idade">Idade</label>
-              <input id="idade" type="number" name="idade" value={paciente.idade} onChange={handleInputChange} />
+              <input
+                id="idade"
+                type="number"
+                name="idade"
+                value={paciente.idade}
+                onChange={handleInputChange}
+              />
             </div>
-            
+
             {/* Checkbox estilizado seguindo o padrão do AdicionarPaciente */}
             <div className="form-group">
               <label
-          className="custom-checkbox"
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.5rem',
-            cursor: 'pointer'
-          }}
+                className="custom-checkbox"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  cursor: 'pointer',
+                }}
               >
-          <input
-            type="checkbox"
-            name="recebeuAlta"
-            checked={paciente.recebeuAlta}
-            onChange={handleInputChange}
-            style={{ display: 'none' }}
-          />
-          <span
-            className="checkmark"
-            style={{
-              width: '20px',
-              height: '20px',
-              border: '1px solid #aaa',
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '1rem',
-              background: paciente.recebeuAlta ? '#e6f7e6' : '#fff'
-            }}
-          >
-            {paciente.recebeuAlta ? '✔' : ''}
-          </span>
-          Paciente já recebeu alta
+                <input
+                  type="checkbox"
+                  name="recebeuAlta"
+                  checked={paciente.recebeuAlta}
+                  onChange={handleInputChange}
+                  style={{ display: 'none' }}
+                />
+                <span
+                  className="checkmark"
+                  style={{
+                    width: '20px',
+                    height: '20px',
+                    border: '1px solid #aaa',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '1rem',
+                    background: paciente.recebeuAlta ? '#e6f7e6' : '#fff',
+                  }}
+                >
+                  {paciente.recebeuAlta ? '✔' : ''}
+                </span>
+                Paciente já recebeu alta
               </label>
             </div>
           </>
@@ -108,17 +126,37 @@ const AtualizarPaciente = ({ pacienteInicial, onSuccess }) => {
             {/* Esta parte já estava quase correta, apenas ajustando */}
             <div className="form-group">
               <label htmlFor="nomeResponsavel">Nome do Responsável</label>
-              <input id="nomeResponsavel" type="text" name="nomeResponsavel" value={paciente.nomeResponsavel || ''} onChange={handleInputChange} />
+              <input
+                id="nomeResponsavel"
+                type="text"
+                name="nomeResponsavel"
+                value={paciente.nomeResponsavel || ''}
+                onChange={handleInputChange}
+              />
             </div>
 
             <div className="form-group">
-              <label htmlFor="parentescoResponsavel">Parentesco do Responsável</label>
-              <input id="parentescoResponsavel" type="text" name="parentescoResponsavel" value={paciente.parentescoResponsavel || ''} onChange={handleInputChange} />
+              <label htmlFor="parentescoResponsavel">
+                Parentesco do Responsável
+              </label>
+              <input
+                id="parentescoResponsavel"
+                type="text"
+                name="parentescoResponsavel"
+                value={paciente.parentescoResponsavel || ''}
+                onChange={handleInputChange}
+              />
             </div>
 
             <div className="form-group">
               <label htmlFor="observacao">Observações</label>
-              <textarea id="observacao" name="observacao" value={paciente.observacao || ''} onChange={handleInputChange} rows="3"></textarea>
+              <textarea
+                id="observacao"
+                name="observacao"
+                value={paciente.observacao || ''}
+                onChange={handleInputChange}
+                rows="3"
+              ></textarea>
             </div>
           </>
         );

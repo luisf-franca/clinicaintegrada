@@ -8,13 +8,6 @@
   --gelo: #f8f9fa;
 }
 
-/* GRADIENTE */
-:root {
-  --background: url('./src/assets/bg.png'),
-    linear-gradient(to right, var(--roxo), var(--vermelho)),
-    linear-gradient(to bottom, var(--gelo) 60%, transparent 60%);
-}
-
 /* SOMBRAS */
 :root {
   --shadow1: 0 2px 20px rgba(0, 0, 0, 0.1);

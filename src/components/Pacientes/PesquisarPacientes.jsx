@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 // FUNCTIONS
 import GetPacientes from '../../functions/Pacientes/GetPacientes';
@@ -6,58 +6,108 @@ import GetPacientes from '../../functions/Pacientes/GetPacientes';
 // Agora recebe "onPesquisar" como prop
 const PesquisarPacientes = ({ onPesquisar }) => {
   const [nome, setNome] = useState('');
+  const [resultados, setResultados] = useState([]);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const dropdownRef = useRef(null);
 
-  const handleSearchClick = () => {
-    // Chama a função do componente pai com o valor do input
-    onPesquisar(nome);
+  useEffect(() => {
+    if (nome.trim() === '') {
+      setResultados([]);
+      setShowDropdown(false);
+      return;
+    }
+    const fetchPacientes = async () => {
+      try {
+        const pacientes = await GetPacientes(nome);
+        setResultados(pacientes);
+        setShowDropdown(true);
+      } catch (error) {
+        setResultados([]);
+        setShowDropdown(false);
+      }
+    };
+    fetchPacientes();
+  }, [nome]);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  const handleSelectPaciente = (paciente) => {
+    setNome(paciente.nome);
+    setShowDropdown(false);
+    setResultados([]);
+    if (onPesquisar) onPesquisar(paciente.id);
   };
 
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter') {
-      handleSearchClick();
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    setNome(value);
+    if (value === '' && onPesquisar) {
+      onPesquisar('');
     }
   };
 
-  const handleLimparFiltro = () => {
-    setNome('');
-    // Informa o pai que o filtro foi limpo
-    onPesquisar('');
-  };
-
   return (
-    <div className="pesquisar-paciente-form">
-      <h3>Pesquisar</h3>
-      
+    <div
+      className="pesquisar-paciente-form"
+      style={{ position: 'relative' }}
+      ref={dropdownRef}
+    >
       <div className="form-group">
         <label htmlFor="nome-pesquisa">Nome do Paciente</label>
         <input
           id="nome-pesquisa"
           type="text"
           value={nome}
-          onChange={(e) => setNome(e.target.value)}
-          onKeyDown={handleKeyDown}
+          onChange={handleInputChange}
           placeholder="Digite o nome para buscar..."
+          autoComplete="off"
+          onFocus={() => {
+            if (resultados.length > 0) setShowDropdown(true);
+          }}
         />
       </div>
-
-      <div className="form-actions-container">
-        {nome && (
-          <button
-            type="button"
-            className="btn-secondary"
-            onClick={handleLimparFiltro}
-          >
-            Limpar
-          </button>
-        )}
-        <button
-          type="button"
-          className="btn-primary"
-          onClick={handleSearchClick}
+      {showDropdown && resultados.length > 0 && (
+        <div
+          className="paciente-dropdown-modal"
+          style={{
+            position: 'absolute',
+            top: '100%',
+            left: 0,
+            right: 0,
+            background: '#fff',
+            border: '1px solid #ccc',
+            zIndex: 1000,
+            maxHeight: 200,
+            overflowY: 'auto',
+          }}
         >
-          Pesquisar
-        </button>
-      </div>
+          {resultados.map((paciente) => (
+            <div
+              key={paciente.id}
+              className="paciente-dropdown-item"
+              style={{ padding: 8, cursor: 'pointer' }}
+              onClick={() => handleSelectPaciente(paciente)}
+            >
+              {paciente.nome}
+            </div>
+          ))}
+          {resultados.length === 0 && (
+            <div style={{ padding: 8, color: '#888' }}>
+              Nenhum paciente encontrado
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };

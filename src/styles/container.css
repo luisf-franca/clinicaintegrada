@@ -2,12 +2,12 @@
 
 .container {
   display: flex;
-  max-width: 85%;
+  max-width: 85vw;
   width: 100vw;
   height: 85vh;
-  background-color: var(--branco);
-  box-shadow: var(--shadow1);
-  border-radius: 1rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08), 0 1.5px 4px rgba(0, 0, 0, 0.04);
+  border-radius: 16px;
+  overflow: hidden;
 }
 
 /* RESPONSIVO */
@@ -23,5 +23,13 @@
   .container {
     max-width: 48rem;
     padding-inline: 1.25rem;
+  }
+}
+@media (max-width: 600px) {
+  .container {
+    border-radius: 0;
+    height: 100vh;
+    max-width: 100vw;
+    padding-inline: 0.25rem;
   }
 }

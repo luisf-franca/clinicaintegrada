@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/home.css';
-import { Tabs, TabList, Tab, TabPanel } from 'react-tabs';
-import 'react-tabs/style/react-tabs.css';
 
 // COMPONENTS
 import Especialidade from '../components/Especialidade/Especialidade';
@@ -9,17 +7,26 @@ import ListaEsperaResumo from '../components/Resumo/ListaEspera/ListaEsperaResum
 import AgendamentosResumo from '../components/Resumo/Agendamentos/AgendamentosResumo';
 import ConsultaResumo from '../components/Resumo/Consultas/ConsultaResumo';
 import SalasResumo from '../components/Resumo/Salas/SalasResumo';
-import PesquisarPacientes from '../components/Pacientes/PesquisarPacientes';
 import PacientesResumo from '../components/Resumo/Pacientes/PacientesResumo';
 
 const Home = () => {
-  const [selectedSpecialty, setSelectedSpecialty] = useState(localStorage.getItem('selectedSpecialty') || 1);
+  const [selectedSpecialty, setSelectedSpecialty] = useState(
+    localStorage.getItem('selectedSpecialty') || 1,
+  );
 
   const [pacientes, setPacientes] = useState([]);
   const [pacienteEtapa, setPacienteEtapa] = useState(null);
   const [pacienteSelecionadoId, setPacienteSelecionadoId] = useState(null);
 
   const [activeTab, setActiveTab] = useState(0);
+
+  const tabList = [
+    { label: 'Pacientes' },
+    { label: 'Lista de Espera' },
+    { label: 'Agendamentos' },
+    { label: 'Consultas' },
+    // { label: 'Salas' },
+  ];
 
   //monitore activeTab, se for alterada para Pacientes, deve limpar o pacienteSelecionadoId e pacienteEtapa
   useEffect(() => {
@@ -53,11 +60,6 @@ const Home = () => {
     }
   }, [pacienteEtapa]);
 
-
-  const handleTabChange = (index) => {
-    setActiveTab(index);
-  };
-
   return (
     <div className="home">
       <div className="home-header">
@@ -68,42 +70,45 @@ const Home = () => {
         />
       </div>
       <div className="home-body">
-        <Tabs selectedIndex={activeTab} onSelect={handleTabChange}>
-          <TabList>
-            <Tab>Pacientes</Tab>
-            <Tab>Lista de Espera</Tab>
-            <Tab>Agendamentos</Tab>
-            <Tab>Consultas</Tab>
-            <Tab>Salas</Tab>
-          </TabList>
-
-          <TabPanel>
+        <div className="tab-bar">
+          {tabList.map((tab, idx) => (
+            <button
+              key={tab.label}
+              className={`tab-btn${activeTab === idx ? ' active' : ''}`}
+              onClick={() => setActiveTab(idx)}
+              type="button"
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+        <div className="tab-content">
+          {activeTab === 0 && (
             <div className="body-section">
-              <PesquisarPacientes setPacientes={setPacientes} />
-              <PacientesResumo pacientes={pacientes} setPacienteEtapa={setPacienteEtapa} setPacienteSelecionadoId={setPacienteSelecionadoId} />
+              <PacientesResumo
+                pacientes={pacientes}
+                setPacienteEtapa={setPacienteEtapa}
+                setPacienteSelecionadoId={setPacienteSelecionadoId}
+                onPesquisar={setPacientes}
+              />
             </div>
-          </TabPanel>
-          <TabPanel>
+          )}
+          {activeTab === 1 && (
             <div className="body-section">
               <ListaEsperaResumo pacienteId={pacienteSelecionadoId} />
             </div>
-          </TabPanel>
-          <TabPanel>
+          )}
+          {activeTab === 2 && (
             <div className="body-section">
               <AgendamentosResumo pacienteId={pacienteSelecionadoId} />
             </div>
-          </TabPanel>
-          <TabPanel>
+          )}
+          {activeTab === 3 && (
             <div className="body-section">
               <ConsultaResumo pacienteId={pacienteSelecionadoId} />
             </div>
-          </TabPanel>
-          <TabPanel>
-            <div className="body-section">
-              <SalasResumo especialidade={selectedSpecialty} />
-            </div>
-          </TabPanel>
-        </Tabs>
+          )}
+        </div>
       </div>
     </div>
   );

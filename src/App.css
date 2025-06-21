@@ -12,9 +12,8 @@
   --roxo: #7d1474;
   --gelo: #f8f9fa;
   --shadow1: 0 2px 20px rgba(0, 0, 0, 0.1);
-  --shadow-strong: 0 10px 30px rgba(0,0,0,0.2);
+  --shadow-strong: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
-
 
 /* ESTILOS GLOBAIS E RESETS */
 *,
@@ -54,52 +53,69 @@ img {
   max-width: 100%;
 }
 
-/* ================================================= */
-/* ESTRUTURA DE LAYOUT DA APLICAÇÃO         */
-/* ================================================= */
-
-/* 1. O corpo da página agora usa Flexbox para centralizar o layout.
-   - Isso elimina a necessidade de 'padding' e 'calc()'.
-*/
 body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  width: 100vw;
+  height: 100vh;
   min-height: 100vh;
-  background: linear-gradient(to right, var(--roxo), var(--vermelho));
-}
-
-
-/* 2. O contêiner da aplicação tem um tamanho definido, criando o efeito de margem.
-   - Usamos 'vw' e 'vh' para torná-lo responsivo ao tamanho da tela.
-   - Você pode ajustar os valores de width e height para aumentar ou diminuir a margem.
-*/
-.app-layout {
-  display: flex;
-  width: 80vw;
-  height: 85vh;
-  background-color: var(--gelo);
-  border-radius: 12px;
-  box-shadow: var(--shadow-strong);
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(120deg, var(--roxo) 0%, #b0171b 100%);
   overflow: hidden;
 }
 
-/* 3. A área de conteúdo principal.
-   - A altura continua sendo 100% do seu contêiner pai (.app-layout).
-   - A rolagem acontece apenas aqui.
-*/
-.content-area {
-  flex-grow: 1;
+.app-layout {
+  display: flex;
+  width: 100vw;
   height: 100%;
-  overflow-y: auto;
-  padding: 1.0rem;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 0;
+  box-shadow: var(--shadow-strong);
+  overflow: hidden;
+  gap: 2rem;
+  padding-left: 90px;
 }
 
-/* 4. Estilos para a Sidebar. */
+.content-area {
+  flex-grow: 1;
+  height: 100vh;
+  overflow-y: auto;
+  padding: 1.5rem 2rem 1.5rem 0;
+}
+
 .sidebar-container {
   width: 260px;
   flex-shrink: 0;
   background-color: var(--branco);
   border-right: 1px solid #eee;
   z-index: 10;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 100%;
+  z-index: 4;
+
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  animation: fade-in 0.5s forwards ease;
+}
+
+.fade-in {
+  opacity: 0;
+}
+
+@keyframes fade-in {
+  to {
+    opacity: 1;
+  }
 }
