@@ -3,13 +3,15 @@ import ReactDOM from 'react-dom';
 import './AgendamentoModal.css';
 
 // COMPONENTS
-import PesquisarPacientes from '../Pacientes/PesquisarPacientes';
+import PesquisarListaEspera from '../ListaEspera/PesquisarListaEspera';
 import PesquisarEquipes from '../Equipes/PesquisarEquipes';
 import SelectSala from '../Salas/SelectSala';
 import Especialidade from '../Especialidade/Especialidade';
 
 // FUNCTIONS
 import CreateAgendamento from '../../functions/Agendamentos/CreateAgendamento';
+// Função de listar lista de espera
+import GetListaEntries from '../../functions/ListaEspera/GetListaEntries';
 
 const AgendamentoModal = ({
   isModalOpen,
@@ -18,13 +20,13 @@ const AgendamentoModal = ({
   atualizarRegistros,
 }) => {
   const [step, setStep] = useState(1);
-  const [pacientes, setPacientes] = useState([]);
-  const [pacienteSelecionado, setPacienteSelecionado] = useState(null);
-
-  const [equipes, setEquipes] = useState([]);
-  const [equipeSelecionada, setEquipeSelecionada] = useState(null);
-
   const [reservarSala, setReservarSala] = useState(false);
+
+  // Estados para lista de espera
+  const [registroListaEspera, setRegistroListaEspera] = useState(null);
+
+  // Estados para equipes
+  const [equipeSelecionada, setEquipeSelecionada] = useState(null);
 
   const [requestData, setRequestData] = useState({
     agendamento: {
@@ -44,11 +46,35 @@ const AgendamentoModal = ({
 
   useEffect(() => {}, [requestData]);
 
-  const handlePacienteChange = (pacienteId) => {
-    setPacienteSelecionado(pacienteId);
+  const handleRegistroListaEsperaChange = (registro) => {
+    setRegistroListaEspera(registro);
     setRequestData((prev) => ({
       ...prev,
-      agendamento: { ...prev.agendamento, pacienteId },
+      agendamento: { ...prev.agendamento, pacienteId: registro.pacienteId },
+    }));
+  };
+
+  const handleLimparRegistroListaEspera = () => {
+    setRegistroListaEspera(null);
+    setRequestData((prev) => ({
+      ...prev,
+      agendamento: { ...prev.agendamento, pacienteId: '' },
+    }));
+  };
+
+  const handleEquipeChange = (equipe) => {
+    setEquipeSelecionada(equipe);
+    setRequestData((prev) => ({
+      ...prev,
+      consulta: { ...prev.consulta, equipeId: equipe.id },
+    }));
+  };
+
+  const handleLimparEquipe = () => {
+    setEquipeSelecionada(null);
+    setRequestData((prev) => ({
+      ...prev,
+      consulta: { ...prev.consulta, equipeId: '' },
     }));
   };
 
@@ -111,25 +137,13 @@ const AgendamentoModal = ({
         return (
           <>
             <label>
-              <div>
-                <PesquisarPacientes
-                  setPacientes={setPacientes}
-                  onSelectPaciente={handlePacienteChange}
+              <div style={{ position: 'relative' }}>
+                <PesquisarListaEspera
+                  especialidade={requestData.consulta.especialidade}
+                  onSelectRegistro={handleRegistroListaEsperaChange}
+                  registroSelecionado={registroListaEspera}
+                  onLimparRegistro={handleLimparRegistroListaEspera}
                 />
-                {pacienteSelecionado && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setPacienteSelecionado(null);
-                      setRequestData((prev) => ({
-                        ...prev,
-                        agendamento: { ...prev.agendamento, pacienteId: '' },
-                      }));
-                    }}
-                  >
-                    Resetar
-                  </button>
-                )}
               </div>
             </label>
 
@@ -174,53 +188,14 @@ const AgendamentoModal = ({
           <>
             <div>
               <label>
-                Equipe
-                <div>
-                  <select
-                    name="equipeId"
-                    value={requestData.consulta.equipeId || ''}
-                    onChange={(e) => {
-                      const equipeId = e.target.value;
-                      setEquipeSelecionada(equipeId);
-                      setRequestData((prev) => ({
-                        ...prev,
-                        consulta: { ...prev.consulta, equipeId },
-                      }));
-                    }}
-                    required
-                  >
-                    <option value={null}>Selecione a equipe</option>
-                    {equipes.map((equipe) => (
-                      <option key={equipe.id} value={equipe.id}>
-                        {equipe.nome}
-                      </option>
-                    ))}
-                  </select>
-
-                  {equipeSelecionada && (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setEquipeSelecionada(null);
-                        setRequestData((prev) => ({
-                          ...prev,
-                          consulta: { ...prev.consulta, equipeId: '' },
-                        }));
-                      }}
-                    >
-                      Resetar
-                    </button>
-                  )}
-                </div>
-              </label>
-
-              <label>
-                {equipeSelecionada === null && (
+                <div style={{ position: 'relative' }}>
                   <PesquisarEquipes
-                    setEquipes={setEquipes}
                     especialidade={requestData.consulta.especialidade}
+                    onSelectEquipe={handleEquipeChange}
+                    equipeSelecionada={equipeSelecionada}
+                    onLimparEquipe={handleLimparEquipe}
                   />
-                )}
+                </div>
               </label>
 
               <label class="custom-checkbox">
@@ -310,7 +285,7 @@ const AgendamentoModal = ({
               </button>
             )}
             {/* Botão para avançar */}
-            {step < 2 && pacienteSelecionado && (
+            {step < 2 && registroListaEspera && (
               <button
                 type="button"
                 onClick={() => setStep((prevStep) => prevStep + 1)}
