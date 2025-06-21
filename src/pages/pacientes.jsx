@@ -16,31 +16,70 @@ const Pacientes = () => {
   const [pacienteSelecionado, setPacienteSelecionado] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Usar useCallback para evitar recriações desnecessárias da função
-  const atualizarListaPacientes = useCallback(async () => {
+  // ======================= NOVOS ESTADOS PARA PAGINAÇÃO E FILTRO =======================
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(7); // Pode ser ajustado conforme necessário
+  const [totalCount, setTotalCount] = useState(0); // Total de itens no backend
+  const [filtroNome, setFiltroNome] = useState(''); // Termo da busca
+
+  // Este cálculo agora funcionará corretamente
+  const totalPages = Math.ceil(totalCount / pageSize);
+
+  const atualizarListaPacientes = useCallback(async (pageToLoad) => {
     setIsLoading(true);
     try {
-      const items = await GetPacientes();
-      setPacientes(items);
+      const options = {
+        page: pageToLoad,
+        pageSize: pageSize,
+      };
+      if (filtroNome) {
+        options.filter = `nome^${filtroNome}`;
+      }
+
+      console.log(options);
+
+      const response = await GetPacientes(options);
+
+      // ======================= INÍCIO DA CORREÇÃO PRINCIPAL =======================
+      // CORREÇÃO 1: Acessar 'response.items' em vez de 'response.data'
+      setPacientes(response?.items || []);
+
+      // Acessar 'response.totalCount' continua correto, então mantemos.
+      setTotalCount(response?.totalCount || 0);
+      // ======================== FIM DA CORREÇÃO PRINCIPAL =========================
+
     } catch (error) {
       console.error('Erro ao buscar pacientes:', error);
+      setPacientes([]);
+      setTotalCount(0);
       alert('Falha ao carregar a lista de pacientes.');
     } finally {
       setIsLoading(false);
     }
-  }, []); // Array de dependências vazio, a função não muda
+  }, [pageSize, filtroNome]);
 
   useEffect(() => {
-    atualizarListaPacientes();
-  }, [atualizarListaPacientes]);
+    atualizarListaPacientes(currentPage);
+  }, [currentPage, atualizarListaPacientes]);
 
+  const handlePesquisar = (novoFiltro) => {
+    setFiltroNome(novoFiltro);
+    setCurrentPage(1);
+  };
+
+  const handleMudarPagina = (novaPagina) => {
+    if (novaPagina >= 1 && novaPagina <= totalPages && novaPagina !== currentPage) {
+      setCurrentPage(novaPagina);
+    }
+  };
+
+  // ... Suas outras funções handlePacienteClick e handleDeletePaciente ...
   const handlePacienteClick = (paciente) => {
     setPacienteSelecionado(paciente);
     setView('update');
   };
 
   const handleDeletePaciente = async (pacienteId) => {
-    // e.stopPropagation() é necessário se o botão estiver dentro da linha <tr>
     const confirmDelete = window.confirm(
       'Tem certeza que deseja deletar? Todos os registros desse paciente serão perdidos.',
     );
@@ -48,47 +87,53 @@ const Pacientes = () => {
       try {
         await DeletePaciente(pacienteId);
         alert('Paciente deletado com sucesso!');
-        // Se a view de atualização estava aberta para o paciente deletado, volte para a lista
         if (pacienteSelecionado && pacienteSelecionado.id === pacienteId) {
-            setView('list');
-            setPacienteSelecionado(null);
+          setView('list');
+          setPacienteSelecionado(null);
         }
-        atualizarListaPacientes();
+        // Volta para a primeira página se o item deletado era o último da página atual
+        if (pacientes.length === 1 && currentPage > 1) {
+          setCurrentPage(currentPage - 1);
+        } else {
+          atualizarListaPacientes(currentPage);
+        }
       } catch (error) {
         console.error('Erro ao deletar paciente:', error);
         alert('Erro ao deletar paciente.');
       }
     }
   };
-  
+
+
   // Função para renderizar o painel lateral (formulário)
   const renderFormPanel = () => {
-    switch(view) {
-        case 'add':
-            return <AdicionarPaciente onSuccess={() => { setView('list'); atualizarListaPacientes(); }} />;
-        
-        case 'update':
-            // --- INÍCIO DA ALTERAÇÃO ---
-            // Se a view for 'update', mas nenhum paciente estiver selecionado,
-            // exiba uma mensagem em vez de renderizar o formulário.
-            if (!pacienteSelecionado) {
-              return (
-                <div style={{ textAlign: 'center', paddingTop: '2rem' }}>
-                  <p style={{ color: 'var(--cinza)', marginTop: '1rem' }}>
-                    Por favor, pesquise e selecione um paciente na lista ao lado para editar as informações.
-                  </p>
-                </div>
-              );
-            }
-            // Se houver um paciente selecionado, renderize o formulário de atualização.
-            return <AtualizarPaciente 
-                      pacienteInicial={pacienteSelecionado} 
-                      onSuccess={() => { setView('list'); setPacienteSelecionado(null); atualizarListaPacientes(); }} 
-                   />;
-            // --- FIM DA ALTERAÇÃO ---
+    switch (view) {
+      case 'add':
+        return <AdicionarPaciente onSuccess={() => { setView('list'); atualizarListaPacientes(); }} />;
 
-        default: // 'list'
-            return <PesquisarPacientes setPacientes={setPacientes} />;
+      case 'update':
+        // --- INÍCIO DA ALTERAÇÃO ---
+        // Se a view for 'update', mas nenhum paciente estiver selecionado,
+        // exiba uma mensagem em vez de renderizar o formulário.
+        if (!pacienteSelecionado) {
+          return (
+            <div style={{ textAlign: 'center', paddingTop: '2rem' }}>
+              <p style={{ color: 'var(--cinza)', marginTop: '1rem' }}>
+                Pesquise e Selecione um paciente na lista ao lado para editar as informações.
+                👉
+              </p>
+            </div>
+          );
+        }
+        // Se houver um paciente selecionado, renderize o formulário de atualização.
+        return <AtualizarPaciente
+          pacienteInicial={pacienteSelecionado}
+          onSuccess={() => { setView('list'); setPacienteSelecionado(null); atualizarListaPacientes(); }}
+        />;
+      // --- FIM DA ALTERAÇÃO ---
+
+      default: // 'list'
+        return <PesquisarPacientes onPesquisar={handlePesquisar} />;
     }
   }
 
@@ -101,10 +146,10 @@ const Pacientes = () => {
         </button>
       </div>
 
-      {/* Aqui deve conter três botões colados no topo do form, um ao lado do outro */}
       <div className="pacientes-body">
         <div className="form-container">
           <div className="pacientes-actions">
+            {/* Seus botões continuam aqui... */}
             <button className={`btn-secondary ${view === 'list' ? 'active' : ''}`} onClick={() => setView('list')}>
               Pesquisar 🔎
             </button>
@@ -115,7 +160,14 @@ const Pacientes = () => {
               Alterar 🖊
             </button>
           </div>
-          {renderFormPanel()}
+
+          {/* Adicionamos um wrapper para o conteúdo do formulário */}
+          <div className="form-content">
+            {renderFormPanel()}
+          </div>
+
+
+
         </div>
 
         <div className="lista-pacientes">
@@ -161,8 +213,31 @@ const Pacientes = () => {
               )}
             </tbody>
           </table>
+          {!isLoading && totalCount > 0 && (
+            <div className="pagination-controls">
+              <button
+                className="btn-secondary"
+                onClick={() => handleMudarPagina(currentPage - 1)}
+                disabled={currentPage === 1}
+              >
+                Anterior
+              </button>
+              <span>
+                Página {currentPage} de {totalPages}
+              </span>
+              <button
+                className="btn-secondary"
+                onClick={() => handleMudarPagina(currentPage + 1)}
+                disabled={currentPage >= totalPages}
+              >
+                Próxima
+              </button>
+            </div>
+          )}
         </div>
+
       </div>
+
     </div>
   );
 };

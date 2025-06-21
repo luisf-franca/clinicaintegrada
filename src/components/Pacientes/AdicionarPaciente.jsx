@@ -85,8 +85,8 @@ const AdicionarPaciente = ({ onSuccess }) => {
       case 1:
         return (
           <>
-            <h4>Dados Pessoais</h4>
-            <br />
+            <h3>Dados Pessoais</h3>
+            {/* <br /> */}
             <div className="form-group">
               <label htmlFor="nome">Nome Completo</label>
               <input id="nome" type="text" name="nome" value={paciente.nome} onChange={handleInputChange} required />
@@ -104,8 +104,8 @@ const AdicionarPaciente = ({ onSuccess }) => {
       case 2:
         return (
           <>
-            <h4>Informações do Responsável</h4>
-            <br />
+            <h3>Informações do Responsável</h3>
+            {/* <br /> */}
             <div className="form-group">
               <label htmlFor="nomeResponsavel">Nome do Responsável</label>
               <input id="nomeResponsavel" type="text" name="nomeResponsavel" value={paciente.nomeResponsavel} onChange={handleInputChange} required />
@@ -119,8 +119,8 @@ const AdicionarPaciente = ({ onSuccess }) => {
       case 3:
         return (
           <>
-            <h4>Detalhes Adicionais</h4>
-            <br />
+            <h3>Detalhes Adicionais</h3>
+            {/* <br /> */}
             <div className="form-group">
               <label className="custom-checkbox" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
           <input
@@ -141,7 +141,7 @@ const AdicionarPaciente = ({ onSuccess }) => {
           }}>
             {desejaListaEspera ? '✔' : ''}
           </span>
-          Deseja incluir na lista de espera?
+          Incluir na lista de espera?
               </label>
             </div>
             {desejaListaEspera && (
@@ -180,7 +180,7 @@ const AdicionarPaciente = ({ onSuccess }) => {
 
   return (
     <div>
-      <h3>Adicionar Paciente</h3>
+      {/* <h3>Adicionar Paciente</h3> */}
       <form onSubmit={handleSubmit}>
         {renderStepContent()}
 

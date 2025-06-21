@@ -90,15 +90,24 @@
 }
 
 /* === FORMULÁRIOS (Área Esquerda) === */
-.form-container { /* Substitui .pesquisar-pacientes */
+.form-container { 
   height: 100%;
-  width: 30%; /* Um pouco mais de espaço para os formulários */
+  width: 30%;
   background-color: var(--branco);
-  padding: 2rem;
+  /* padding: 2rem; <--- REMOVA OU COMENTE ESTA LINHA */
+  padding: 0; /* Define todos os paddings como zero */
   border-radius: 8px;
   box-shadow: var(--shadow1);
-  overflow-y: auto; /* Garante que o form seja rolável se for grande */
+  display: flex; /* Adicionado para que o conteúdo ocupe a altura restante */
+  flex-direction: column; /* Empilha os filhos verticalmente */
 }
+
+.form-content {
+  padding: 2rem; /* O padding que estava no .form-container agora fica aqui */
+  overflow-y: auto; /* Garante que o conteúdo do formulário seja rolável */
+  height: 100%; /* Ocupa o espaço vertical restante */
+}
+
 
 .form-container h3 {
   color: var(--roxo);
@@ -175,8 +184,9 @@
 }
 
 .pacientes-table tbody tr.selected {
-  background-color: #e6e6fa; /* Um lilás claro para o item selecionado */
+  background-color: #f3e6f7; /* Lilás claro da paleta (variação do roxo) */
   font-weight: bold;
+  color: var(--preto); /* Garante cor de fonte visível */
 }
 
 .pacientes-table tbody tr:last-child td {
@@ -185,24 +195,25 @@
 
 /* === ÁREA DOS BOTÕES DE AÇÃO DO FORMULÁRIO === */
 .pacientes-actions {
-  display: flex; /* Alinha os botões lado a lado */
-  margin-bottom: 2rem; /* Adiciona um espaço antes do conteúdo do formulário */
-  border-radius: 8px; /* Arredonda o conjunto de botões */
-  overflow: hidden;   /* Garante que o border-radius dos filhos não escape */
-  box-shadow: var(--shadow1); /* Sombra sutil para o grupo de botões */
+  display: flex;
+  /* margin-bottom: 2rem; <--- REMOVA OU COMENTE ESTA LINHA */
+  border-radius: 8px 8px 0 0; /* Arredonda apenas os cantos superiores */
+  overflow: hidden;
+  box-shadow: var(--shadow1);
+  flex-shrink: 0; /* Impede que a barra de botões encolha */
 }
 
 /* Modificações na classe .btn-secondary QUANDO dentro de .pacientes-actions */
 .pacientes-actions .btn-secondary {
-  flex: 1; /* Faz cada botão ocupar o mesmo espaço */
-  border: none; /* Remove a borda individual */
-  border-radius: 0; /* Remove o arredondamento individual */
-  padding: 1px 0; /* Ajusta o padding vertical e remove o horizontal */
-  font-size: 0.8rem; /* Aumenta o tamanho dos ícones */
-  background-color: var(--gelo);
-  color: var(--cinza);
+  flex: 1;
+  border: none;
+  border-radius: 0;
+  padding: 0.4rem 0rem;   /* Reduz o espaço interno (vertical e horizontal) */
+  font-size: 0.9rem;      /* Reduz o tamanho da fonte */
+  background-color: #f3e6f7;
+  color: var(--roxo);
   transition: background-color 0.2s ease, color 0.2s ease;
-  border-right: 1px solid #ddd; /* Adiciona uma linha divisória à direita */
+  border-right: 1px solid #ddd;
 }
 
 /* Remove a borda do último botão para um acabamento limpo */
@@ -221,4 +232,29 @@
 .pacientes-actions .btn-secondary:not(.active):hover {
   background-color: #e2e6ea;
   color: var(--preto);
+}
+
+/* Adicionar ao final do seu arquivo pacientes.css */
+
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem; /* Espaçamento entre os botões e o texto */
+  margin-top: 1.5rem; /* Espaço acima dos controles */
+  padding-bottom: 1rem; /* Garante um respiro na parte inferior */
+  width: 100%;
+}
+
+.pagination-controls span {
+  color: var(--cinza);
+  font-weight: bold;
+}
+
+/* Estilo para botões desabilitados para melhor feedback visual */
+.pagination-controls .btn-secondary:disabled {
+  background-color: #f1f1f1;
+  cursor: not-allowed;
+  border-color: #ddd;
+  color: #aaa;
 }

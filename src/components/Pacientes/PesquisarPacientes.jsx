@@ -1,82 +1,63 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 // FUNCTIONS
 import GetPacientes from '../../functions/Pacientes/GetPacientes';
 
-const PesquisarPacientes = ({ setPacientes }) => {
-  const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(8);
-  const [orderBy, setOrderBy] = useState('');
+// Agora recebe "onPesquisar" como prop
+const PesquisarPacientes = ({ onPesquisar }) => {
   const [nome, setNome] = useState('');
 
-  useEffect(() => {
-    if (nome === '') {
-      getPacientes(); // Chama a função de busca sem filtro quando `nome` estiver vazio
-    }
-  }, [nome]);
-
-  const getPacientes = async () => {
-    try {
-      const options = {};
-
-      // Constrói o filtro baseado nos valores preenchidos
-      let filters = [];
-      if (nome !== '') filters.push(`nome^${nome}`);
-
-      // Concatena os filtros com vírgulas
-      if (filters.length > 0) options.filter = filters.join(',');
-
-      if (page) options.page = page;
-      if (pageSize) options.pageSize = pageSize;
-      if (orderBy) options.orderBy = orderBy;
-
-      const response = await GetPacientes(options);
-      setPacientes(response);
-    } catch (error) {
-      console.error('Erro ao buscar pacientes:', error);
-    }
-  };
-
-  const handleNomeChange = (e) => {
-    const { value } = e.target;
-    setNome(value);
+  const handleSearchClick = () => {
+    // Chama a função do componente pai com o valor do input
+    onPesquisar(nome);
   };
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
-      getPacientes();
+      handleSearchClick();
     }
   };
 
-  const clearFilter = async () => {
+  const handleLimparFiltro = () => {
     setNome('');
+    // Informa o pai que o filtro foi limpo
+    onPesquisar('');
   };
 
   return (
-    <div>
-      <div>
-        <div>
-          <label>Nome:</label>
-          <input
-            type="text"
-            value={nome}
-            onChange={handleNomeChange}
-            onKeyDown={handleKeyDown}
-          />
-          {nome && (
-            <button
-              onClick={() => {
-                clearFilter();
-                setPacientes([]);
-              }}
-            >
-              Limpar
-            </button>
-          )}
-        </div>
+    <div className="pesquisar-paciente-form">
+      <h3>Pesquisar</h3>
+      
+      <div className="form-group">
+        <label htmlFor="nome-pesquisa">Nome do Paciente</label>
+        <input
+          id="nome-pesquisa"
+          type="text"
+          value={nome}
+          onChange={(e) => setNome(e.target.value)}
+          onKeyDown={handleKeyDown}
+          placeholder="Digite o nome para buscar..."
+        />
       </div>
 
-      <button onClick={getPacientes}>Pesquisar</button>
+      <div className="form-actions-container">
+        {nome && (
+          <button
+            type="button"
+            className="btn-secondary"
+            onClick={handleLimparFiltro}
+          >
+            Limpar
+          </button>
+        )}
+        <button
+          type="button"
+          className="btn-primary"
+          onClick={handleSearchClick}
+        >
+          Pesquisar
+        </button>
+      </div>
     </div>
   );
 };
