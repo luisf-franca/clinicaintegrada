@@ -1,24 +1,71 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 // COMPONENTS
 import CreateListaEsperaEntry from '../../functions/ListaEspera/CreateListaEsperaEntry';
-import PesquisarPacientes from '../Pacientes/PesquisarPacientes';
+import GetPacientes from '../../functions/Pacientes/GetPacientes';
 import Especialidade from '../Especialidade/Especialidade';
 
-const AdicionarRegistro = ({ atualizarRegistros }) => {
+const AdicionarRegistro = ({ atualizarRegistros, especialidade }) => {
   const [listaEspera, setListaEspera] = useState({
     pacienteId: '',
     dataEntrada: '',
     status: 1,
-    especialidade: localStorage.getItem('selectedSpecialty') || 1,
-    prioridade: 0,
+    especialidade: especialidade || localStorage.getItem('selectedSpecialty') || 1,
+    prioridade: 1,
   });
   const [pacientes, setPacientes] = useState([]);
   const [pacienteSelecionado, setPacienteSelecionado] = useState(null);
   const [selectedSpecialty, setSelectedSpecialty] = useState(
-    localStorage.getItem('selectedSpecialty') || 1,
+    especialidade || localStorage.getItem('selectedSpecialty') || 1,
   );
   const [step, setStep] = useState(1);
+  const [nomePesquisa, setNomePesquisa] = useState('');
+  const [debouncedNome, setDebouncedNome] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Debounce para pesquisa de pacientes
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedNome(nomePesquisa);
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [nomePesquisa]);
+
+  // Buscar pacientes quando o nome debounced mudar
+  useEffect(() => {
+    const buscarPacientes = async () => {
+      if (!debouncedNome.trim()) {
+        setPacientes([]);
+        return;
+      }
+
+      setIsLoading(true);
+      try {
+        const options = { filter: `nome^${debouncedNome}` };
+        const response = await GetPacientes(options);
+        
+        // Verifica se a resposta tem a estrutura esperada
+        let pacientesData = [];
+        if (response && response.items) {
+          pacientesData = response.items;
+        } else if (response && Array.isArray(response)) {
+          pacientesData = response;
+        } else if (response && response.data) {
+          pacientesData = response.data;
+        }
+        
+        setPacientes(pacientesData);
+      } catch (error) {
+        console.error('Erro ao buscar pacientes:', error);
+        setPacientes([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    buscarPacientes();
+  }, [debouncedNome]);
 
   useEffect(() => {
     setListaEspera((prevState) => ({
@@ -33,6 +80,13 @@ const AdicionarRegistro = ({ atualizarRegistros }) => {
       ...prevState,
       [name]: value,
     }));
+  };
+
+  const handlePacienteSelect = (paciente) => {
+    setPacienteSelecionado(paciente);
+    setListaEspera((prev) => ({ ...prev, pacienteId: paciente.id }));
+    setNomePesquisa(paciente.nome);
+    setPacientes([]); // Limpa a lista de sugestões
   };
 
   const handleSubmit = async (e) => {
@@ -51,11 +105,12 @@ const AdicionarRegistro = ({ atualizarRegistros }) => {
       atualizarRegistros();
       setPacienteSelecionado(null);
       setStep(1);
+      setNomePesquisa('');
       setListaEspera({
         pacienteId: '',
         dataEntrada: '',
         status: 1,
-        especialidade: localStorage.getItem('selectedSpecialty') || 1,
+        especialidade: especialidade || localStorage.getItem('selectedSpecialty') || 1,
         prioridade: 1,
       });
     } catch (error) {
@@ -68,49 +123,60 @@ const AdicionarRegistro = ({ atualizarRegistros }) => {
       case 1:
         return (
           <>
-            <label>
-              Selecione
-              <div
-                style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
-              >
-                <select
-                  name="pacienteId"
-                  value={listaEspera.pacienteId}
-                  onChange={(e) => {
-                    handleInputChange(e);
-                    setPacienteSelecionado(e.target.value);
-                  }}
-                  required
-                >
-                  <option value={null}>Selecione o paciente</option>
-                  {pacientes.map((paciente) => (
-                    <option key={paciente.id} value={paciente.id}>
-                      {paciente.nome}
-                    </option>
-                  ))}
-                </select>
+            <div>
+              <label htmlFor="nome-pesquisa">Nome do Paciente</label>
+              <input
+                id="nome-pesquisa"
+                type="text"
+                value={nomePesquisa}
+                onChange={(e) => setNomePesquisa(e.target.value)}
+                placeholder="Digite o nome para buscar..."
+                autoComplete="off"
+              />
+              {isLoading && <div style={{ color: 'var(--cinza)', fontStyle: 'italic', marginTop: '0.5rem' }}>Carregando...</div>}
+              
+              {pacientes.length > 0 && !pacienteSelecionado && (
+                <div style={{ marginTop: '0.5rem' }}>
+                  <ul style={{ listStyle: 'none', margin: 0, padding: 0, border: '1px solid var(--border-color)', borderRadius: '4px', maxHeight: '200px', overflowY: 'auto', backgroundColor: 'var(--branco)', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)' }}>
+                    {pacientes.map((paciente) => (
+                      <li
+                        key={paciente.id}
+                        onClick={() => handlePacienteSelect(paciente)}
+                        style={{ padding: '0.75rem', cursor: 'pointer', borderBottom: '1px solid var(--border-color)', transition: 'background-color 0.2s ease' }}
+                        onMouseEnter={(e) => e.target.style.backgroundColor = 'var(--background-hover)'}
+                        onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
+                      >
+                        {paciente.nome} - {paciente.telefone}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
 
-                {pacienteSelecionado && (
+            {pacienteSelecionado && (
+              <div>
+                <label>Paciente Selecionado</label>
+                <div style={{ padding: '0.75rem', border: '1px solid var(--border-color)', borderRadius: '4px', backgroundColor: 'var(--branco)' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                    <strong style={{ fontSize: '1rem', color: 'var(--text-color)' }}>{pacienteSelecionado.nome}</strong>
+                    <span style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Telefone: {pacienteSelecionado.telefone}</span>
+                    <span style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Idade: {pacienteSelecionado.idade}</span>
+                  </div>
                   <button
                     type="button"
                     onClick={() => {
                       setPacienteSelecionado(null);
+                      setNomePesquisa('');
                       setListaEspera((prev) => ({ ...prev, pacienteId: '' }));
                     }}
-                    style={{
-                      border: '1px solid #ccc',
-                      borderRadius: '4px',
-                      padding: '4px 8px',
-                      cursor: 'pointer',
-                    }}
+                    className="btn-secondary"
+                    style={{ marginTop: '0.75rem' }}
                   >
-                    Resetar
+                    Trocar Paciente
                   </button>
-                )}
+                </div>
               </div>
-            </label>
-            {pacienteSelecionado === null && (
-              <PesquisarPacientes setPacientes={setPacientes} />
             )}
           </>
         );
@@ -118,26 +184,28 @@ const AdicionarRegistro = ({ atualizarRegistros }) => {
       case 2:
         return (
           <>
-            <label>
-              Especialidade
+            <div>
+              <label>Especialidade</label>
               <Especialidade
                 selectedSpecialty={selectedSpecialty}
                 onSelectSpecialty={setSelectedSpecialty}
               />
-            </label>
-            <label>
-              Data de Entrada
+            </div>
+            <div>
+              <label htmlFor="data-entrada">Data de Entrada</label>
               <input
+                id="data-entrada"
                 type="date"
                 name="dataEntrada"
                 value={listaEspera.dataEntrada}
                 onChange={handleInputChange}
                 required
               />
-            </label>
-            <label>
-              Status
+            </div>
+            <div>
+              <label htmlFor="status">Status</label>
               <select
+                id="status"
                 name="status"
                 value={listaEspera.status}
                 onChange={handleInputChange}
@@ -148,10 +216,11 @@ const AdicionarRegistro = ({ atualizarRegistros }) => {
                 <option value={2}>Atendido</option>
                 <option value={3}>Cancelado</option>
               </select>
-            </label>
-            <label>
-              Prioridade
+            </div>
+            <div>
+              <label htmlFor="prioridade">Prioridade</label>
               <select
+                id="prioridade"
                 name="prioridade"
                 value={listaEspera.prioridade}
                 onChange={handleInputChange}
@@ -162,7 +231,7 @@ const AdicionarRegistro = ({ atualizarRegistros }) => {
                 <option value={2}>Média</option>
                 <option value={3}>Alta</option>
               </select>
-            </label>
+            </div>
           </>
         );
       default:
@@ -171,14 +240,15 @@ const AdicionarRegistro = ({ atualizarRegistros }) => {
   };
 
   return (
-    <div className="adicionar-registro">
-      <div>
+    <div>
+      <form onSubmit={handleSubmit}>
         {renderStep()}
-        <div className="step-buttons">
+        <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem', justifyContent: 'flex-end' }}>
           {step > 1 && (
             <button
               type="button"
               onClick={() => setStep((prevStep) => prevStep - 1)}
+              className="btn-secondary"
             >
               Voltar
             </button>
@@ -187,17 +257,18 @@ const AdicionarRegistro = ({ atualizarRegistros }) => {
             <button
               type="button"
               onClick={() => setStep((prevStep) => prevStep + 1)}
+              className="btn-primary"
             >
               Avançar
             </button>
           )}
           {step === 2 && (
-            <button type="button" onClick={handleSubmit}>
+            <button type="submit" className="btn-primary">
               Adicionar Registro
             </button>
           )}
         </div>
-      </div>
+      </form>
     </div>
   );
 };

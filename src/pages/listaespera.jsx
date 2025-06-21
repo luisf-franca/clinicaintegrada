@@ -21,11 +21,18 @@ const ListaEspera = () => {
     prioridade: '',
     status: ''
   });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize] = useState(6);
+  const [totalCount, setTotalCount] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const totalPages = Math.ceil(totalCount / pageSize);
 
   const atualizarRegistros = useCallback(
-    async (filtrosAtuais = filtros) => {
+    async (pageToLoad = currentPage, filtrosAtuais = filtros) => {
+      setIsLoading(true);
       try {
-        const options = {};
+        const options = { page: pageToLoad, pageSize };
         let filters = [`especialidade=${selectedSpecialty}`];
         
         if (filtrosAtuais.nome && filtrosAtuais.nome.trim()) {
@@ -44,19 +51,56 @@ const ListaEspera = () => {
           options.filter = filters.join(',');
         }
         
-        const items = await GetListaEntries(options);
-        setRegistros(items);
+        const response = await GetListaEntries(options);
+        
+        // Verifica se a resposta tem a estrutura esperada
+        let registrosData = [];
+        let totalCountData = 0;
+        
+        if (response && response.data && response.data.items) {
+          registrosData = response.data.items;
+          totalCountData = response.data.totalCount || 0;
+        } else if (response && response.items) {
+          registrosData = response.items;
+          totalCountData = response.totalCount || 0;
+        } else if (response && response.data && Array.isArray(response.data)) {
+          registrosData = response.data;
+          totalCountData = response.data.length;
+        } else if (response && Array.isArray(response)) {
+          registrosData = response;
+          totalCountData = response.length;
+        } else {
+          registrosData = [];
+          totalCountData = 0;
+        }
+        
+        setRegistros(registrosData);
+        setTotalCount(totalCountData);
       } catch (error) {
         console.error('Erro ao buscar registros:', error);
         setRegistros([]);
+        setTotalCount(0);
+      } finally {
+        setIsLoading(false);
       }
     },
-    [selectedSpecialty],
+    [selectedSpecialty, pageSize, currentPage, filtros],
   );
 
   const handlePesquisar = useCallback((novosFiltros) => {
     setFiltros(novosFiltros);
+    setCurrentPage(1);
   }, []);
+
+  const handleMudarPagina = (novaPagina) => {
+    if (
+      novaPagina >= 1 &&
+      novaPagina <= Math.max(1, totalPages) &&
+      novaPagina !== currentPage
+    ) {
+      setCurrentPage(novaPagina);
+    }
+  };
 
   const handleRegistroClick = (registro) => {
     setRegistroSelecionado(registro);
@@ -70,7 +114,14 @@ const ListaEspera = () => {
     if (confirmDelete) {
       try {
         await DeleteRegistro(id);
-        atualizarRegistros(filtros);
+        
+        // Recalcula se precisa voltar uma página
+        const novaPagina = registros.length === 1 && currentPage > 1 
+          ? currentPage - 1 
+          : currentPage;
+        
+        setCurrentPage(novaPagina);
+        // A atualização será feita pelo useEffect quando currentPage mudar
       } catch (error) {
         console.error('Erro ao deletar registro:', error);
       }
@@ -78,8 +129,8 @@ const ListaEspera = () => {
   };
 
   useEffect(() => {
-    atualizarRegistros(filtros);
-  }, [selectedSpecialty, filtros, atualizarRegistros]);
+    atualizarRegistros();
+  }, [currentPage, selectedSpecialty, filtros]);
 
   return (
     <div className="listaespera container">
@@ -126,7 +177,7 @@ const ListaEspera = () => {
           )}
           {selectedComponent === 'Adicionar' && (
             <AdicionarRegistro
-              atualizarRegistros={() => atualizarRegistros(filtros)}
+              atualizarRegistros={() => atualizarRegistros()}
               especialidade={selectedSpecialty}
             />
           )}
@@ -134,7 +185,7 @@ const ListaEspera = () => {
             <AtualizarRegistro
               registroId={registroSelecionado.id}
               registroInicial={registroSelecionado}
-              atualizarRegistros={() => atualizarRegistros(filtros)}
+              atualizarRegistros={() => atualizarRegistros()}
             />
           )}
         </div>
@@ -152,7 +203,11 @@ const ListaEspera = () => {
               </tr>
             </thead>
             <tbody className="body-lista">
-              {registros.length === 0 ? (
+              {isLoading ? (
+                <tr>
+                  <td colSpan="7">Carregando...</td>
+                </tr>
+              ) : registros.length === 0 ? (
                 <tr>
                   <td colSpan="7" style={{ textAlign: 'center', color: 'var(--cinza)' }}>
                     {filtros.nome || filtros.prioridade || filtros.status ? 'Nenhum registro encontrado com os filtros aplicados.' : 'Nenhum registro encontrado.'}
@@ -193,6 +248,27 @@ const ListaEspera = () => {
               )}
             </tbody>
           </table>
+          {totalPages > 1 && (
+            <div className="pagination-controls">
+              <button
+                className="btn-secondary"
+                onClick={() => handleMudarPagina(currentPage - 1)}
+                disabled={currentPage === 1 || isLoading}
+              >
+                Anterior
+              </button>
+              <span>
+                Página {currentPage} de {totalPages}
+              </span>
+              <button
+                className="btn-secondary"
+                onClick={() => handleMudarPagina(currentPage + 1)}
+                disabled={currentPage >= totalPages || isLoading}
+              >
+                Próxima
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

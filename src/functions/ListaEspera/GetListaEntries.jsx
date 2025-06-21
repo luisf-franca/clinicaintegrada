@@ -21,14 +21,8 @@ const GetListaEntries = async (options = {}) => {
       },
     });
 
-    // Verifica se a resposta tem a estrutura esperada
-    if (response.data && response.data.data) {
-      return response.data.data;
-    } else if (response.data && response.data.items) {
-      return response.data.items;
-    } else {
-      return response.data || [];
-    }
+    // Retorna a estrutura completa para paginação
+    return response.data;
   } catch (error) {
     console.error('Erro ao buscar registros da lista de espera:', error);
     throw error;

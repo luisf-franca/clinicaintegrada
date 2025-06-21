@@ -10,7 +10,7 @@ const AtualizarRegistro = ({
 }) => {
   const [listaEspera, setListaEspera] = useState(registroInicial || {});
   const [paciente, setPaciente] = useState({
-    nome: registroInicial.nome,
+    nome: registroInicial?.nome,
   });
 
   useEffect(() => {
@@ -45,6 +45,18 @@ const AtualizarRegistro = ({
 
   const handleSubmit = async () => {
     try {
+      // se a data de saida for string vazia, setar para null
+      if (listaEspera.dataSaida === '') {
+        listaEspera.dataSaida = null;
+      }
+      // se a data de entrada for string vazia, setar para null
+      if (listaEspera.dataEntrada === '') {
+        listaEspera.dataEntrada = null;
+      }
+      listaEspera.prioridade = parseInt(listaEspera.prioridade);
+      listaEspera.status = parseInt(listaEspera.status);
+      listaEspera.especialidade = parseInt(listaEspera.especialidade);
+      console.log(listaEspera);
       await UpdateListaEsperaEntry(registroId, listaEspera);
       atualizarRegistros();
     } catch (error) {
@@ -52,6 +64,17 @@ const AtualizarRegistro = ({
       console.error('Erro ao atualizar registro:', error);
     }
   };
+
+  // Se não há registro selecionado, exibe a mensagem
+  if (!registroInicial || !registroId) {
+    return (
+      <div style={{ textAlign: 'center', paddingTop: '2rem' }}>
+        <p style={{ color: 'var(--cinza)', marginTop: '1rem' }}>
+          Pesquise e selecione um registro na lista ao lado para editar as informações.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <>

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import './PesquisarRegistros.css';
 
 const PesquisarRegistros = ({ onPesquisar, especialidade }) => {
   const [nome, setNome] = useState('');
@@ -41,8 +40,8 @@ const PesquisarRegistros = ({ onPesquisar, especialidade }) => {
   };
 
   return (
-    <div className="pesquisar-registro-form">
-      <div className="form-group">
+    <div>
+      <div>
         <label htmlFor="nome-pesquisa">Nome do Paciente</label>
         <input
           id="nome-pesquisa"
@@ -54,7 +53,7 @@ const PesquisarRegistros = ({ onPesquisar, especialidade }) => {
         />
       </div>
 
-      <div className="form-group">
+      <div>
         <label htmlFor="prioridade-filter">Prioridade</label>
         <select
           id="prioridade-filter"
@@ -68,7 +67,7 @@ const PesquisarRegistros = ({ onPesquisar, especialidade }) => {
         </select>
       </div>
 
-      <div className="form-group">
+      <div>
         <label htmlFor="status-filter">Status</label>
         <select
           id="status-filter"
