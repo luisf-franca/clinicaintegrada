@@ -1,17 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import GetListaEntries from '../../functions/ListaEspera/GetListaEntries';
 
-// FUNCTIONS
-import GetEquipes from '../../functions/Equipes/GetEquipes';
-
-const PesquisarEquipes = ({ 
+const PesquisarListaEspera = ({ 
   especialidade, 
-  onSelectEquipe, 
-  equipeSelecionada,
-  onLimparEquipe 
+  onSelectRegistro, 
+  registroSelecionado,
+  onLimparRegistro 
 }) => {
   const [nome, setNome] = useState('');
   const [debouncedNome, setDebouncedNome] = useState('');
-  const [equipes, setEquipes] = useState([]);
+  const [registros, setRegistros] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [showResults, setShowResults] = useState(false);
 
@@ -24,11 +22,11 @@ const PesquisarEquipes = ({
     return () => clearTimeout(timer);
   }, [nome]);
 
-  // Busca equipes quando o nome debounced mudar ou quando o input recebe foco sem texto
+  // Busca registros quando o nome debounced mudar ou quando o input recebe foco sem texto
   useEffect(() => {
-    const buscarEquipes = async () => {
+    const buscarRegistros = async () => {
       if (!especialidade) {
-        setEquipes([]);
+        setRegistros([]);
         setShowResults(false);
         return;
       }
@@ -36,32 +34,32 @@ const PesquisarEquipes = ({
       setIsLoading(true);
       try {
         const filters = [
-          `especialidade=${especialidade}`
+          `especialidade=${especialidade}`,
+          'status=1',
+          `PacienteNome^${debouncedNome}`
         ];
 
         // Se há texto digitado, adiciona filtro de nome
         if (debouncedNome.trim()) {
-          filters.push(`nome^${debouncedNome}`);
+          filters.push(`PacienteNome^${debouncedNome}`);
         }
 
-        const response = await GetEquipes({
+        const response = await GetListaEntries({
           filter: filters.join(','),
           pageSize: debouncedNome.trim() ? 10 : 3 // 3 registros se não há texto, 10 se há
         });
 
-        // Agora a resposta já vem com a estrutura correta
-        const equipesData = response?.data?.items || [];
-        setEquipes(equipesData);
+        setRegistros(response?.items || []);
         setShowResults(true);
       } catch (error) {
-        console.error('Erro ao buscar equipes:', error);
-        setEquipes([]);
+        console.error('Erro ao buscar registros da lista de espera:', error);
+        setRegistros([]);
       } finally {
         setIsLoading(false);
       }
     };
 
-    buscarEquipes();
+    buscarRegistros();
   }, [debouncedNome, especialidade]);
 
   const handleInputChange = (e) => {
@@ -73,14 +71,14 @@ const PesquisarEquipes = ({
     }
   };
 
-  const handleSelectEquipe = (equipe) => {
-    onSelectEquipe(equipe);
-    setNome(equipe.nome);
+  const handleSelectRegistro = (registro) => {
+    onSelectRegistro(registro);
+    setNome(registro.nome);
     setShowResults(false);
   };
 
-  const handleLimparEquipe = () => {
-    onLimparEquipe();
+  const handleLimparRegistro = () => {
+    onLimparRegistro();
     setNome('');
     setShowResults(false);
   };
@@ -98,44 +96,48 @@ const PesquisarEquipes = ({
   };
 
   return (
-    <div className="pesquisar-equipes-form">
+    <div className="pesquisar-lista-espera-form">
       <div className="form-group">
-        <label htmlFor="nome-equipe">Nome da Equipe</label>
+        <label htmlFor="nome-lista-espera">Nome do Paciente</label>
         <input
-          id="nome-equipe"
+          id="nome-lista-espera"
           type="text"
           value={nome}
           onChange={handleInputChange}
           onFocus={handleInputFocus}
           onBlur={handleInputBlur}
-          placeholder="Digite o nome da equipe..."
+          placeholder="Digite o nome para buscar..."
           autoComplete="off"
-          disabled={equipeSelecionada}
+          disabled={registroSelecionado}
         />
         
-        {equipeSelecionada && (
+        {registroSelecionado && (
           <button
             type="button"
-            onClick={handleLimparEquipe}
+            onClick={handleLimparRegistro}
           >
-            Limpar Equipe
+            Limpar Paciente
           </button>
         )}
       </div>
 
       {showResults && (
-        <div className="resultados-equipes">
+        <div className="resultados-lista-espera">
           {isLoading ? (
             <div>Carregando...</div>
-          ) : equipes.length === 0 ? (
-            <div>Nenhuma equipe encontrada</div>
+          ) : registros.length === 0 ? (
+            <div>Nenhum registro encontrado</div>
           ) : (
-            equipes.map((equipe) => (
+            registros.map((registro) => (
               <div
-                key={equipe.id}
-                onClick={() => handleSelectEquipe(equipe)}
+                key={registro.id}
+                onClick={() => handleSelectRegistro(registro)}
               >
-                <div>{equipe.nome}</div>
+                <div>{registro.nome}</div>
+                <div>
+                  Prioridade: {registro.prioridade} | 
+                  Entrada: {new Date(registro.dataEntrada).toLocaleDateString()}
+                </div>
               </div>
             ))
           )}
@@ -145,4 +147,4 @@ const PesquisarEquipes = ({
   );
 };
 
-export default PesquisarEquipes;
+export default PesquisarListaEspera; 
