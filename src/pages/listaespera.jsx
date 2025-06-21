@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import '../styles/listaespera.css';
 
 // COMPONENTS
@@ -16,15 +16,89 @@ const ListaEspera = () => {
   const [selectedSpecialty, setSelectedSpecialty] = useState(
     localStorage.getItem('selectedSpecialty') || 1,
   );
+  const [filtros, setFiltros] = useState({
+    nome: '',
+    prioridade: '',
+    status: ''
+  });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize] = useState(6);
+  const [totalCount, setTotalCount] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const atualizarRegistros = async () => {
-    try {
-      const items = await GetListaEntries({
-        filter: 'especialidade=' + selectedSpecialty,
-      });
-      setRegistros(items);
-    } catch (error) {
-      console.error('Erro ao buscar registros:', error);
+  const totalPages = Math.ceil(totalCount / pageSize);
+
+  const atualizarRegistros = useCallback(
+    async (pageToLoad = currentPage, filtrosAtuais = filtros) => {
+      setIsLoading(true);
+      try {
+        const options = { page: pageToLoad, pageSize };
+        let filters = [`especialidade=${selectedSpecialty}`];
+        
+        if (filtrosAtuais.nome && filtrosAtuais.nome.trim()) {
+          filters.push(`PacienteNome^${filtrosAtuais.nome}`);
+        }
+        
+        if (filtrosAtuais.prioridade && filtrosAtuais.prioridade.trim()) {
+          filters.push(`prioridade=${filtrosAtuais.prioridade}`);
+        }
+        
+        if (filtrosAtuais.status && filtrosAtuais.status.trim()) {
+          filters.push(`status=${filtrosAtuais.status}`);
+        }
+        
+        if (filters.length > 0) {
+          options.filter = filters.join(',');
+        }
+        
+        const response = await GetListaEntries(options);
+        
+        // Verifica se a resposta tem a estrutura esperada
+        let registrosData = [];
+        let totalCountData = 0;
+        
+        if (response && response.data && response.data.items) {
+          registrosData = response.data.items;
+          totalCountData = response.data.totalCount || 0;
+        } else if (response && response.items) {
+          registrosData = response.items;
+          totalCountData = response.totalCount || 0;
+        } else if (response && response.data && Array.isArray(response.data)) {
+          registrosData = response.data;
+          totalCountData = response.data.length;
+        } else if (response && Array.isArray(response)) {
+          registrosData = response;
+          totalCountData = response.length;
+        } else {
+          registrosData = [];
+          totalCountData = 0;
+        }
+        
+        setRegistros(registrosData);
+        setTotalCount(totalCountData);
+      } catch (error) {
+        console.error('Erro ao buscar registros:', error);
+        setRegistros([]);
+        setTotalCount(0);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [selectedSpecialty, pageSize, currentPage, filtros],
+  );
+
+  const handlePesquisar = useCallback((novosFiltros) => {
+    setFiltros(novosFiltros);
+    setCurrentPage(1);
+  }, []);
+
+  const handleMudarPagina = (novaPagina) => {
+    if (
+      novaPagina >= 1 &&
+      novaPagina <= Math.max(1, totalPages) &&
+      novaPagina !== currentPage
+    ) {
+      setCurrentPage(novaPagina);
     }
   };
 
@@ -40,17 +114,23 @@ const ListaEspera = () => {
     if (confirmDelete) {
       try {
         await DeleteRegistro(id);
-        atualizarRegistros();
+        
+        // Recalcula se precisa voltar uma página
+        const novaPagina = registros.length === 1 && currentPage > 1 
+          ? currentPage - 1 
+          : currentPage;
+        
+        setCurrentPage(novaPagina);
+        // A atualização será feita pelo useEffect quando currentPage mudar
       } catch (error) {
         console.error('Erro ao deletar registro:', error);
       }
-    } else {
     }
   };
 
   useEffect(() => {
     atualizarRegistros();
-  }, [selectedSpecialty]);
+  }, [currentPage, selectedSpecialty, filtros]);
 
   return (
     <div className="listaespera container">
@@ -90,14 +170,14 @@ const ListaEspera = () => {
       <div className="listaespera-content-wrapper">
         <div className="listaespera-form-card">
           {selectedComponent === 'Pesquisar' && (
-            <PesquisarRegistros
-              setRegistros={setRegistros}
+            <PesquisarRegistros 
+              onPesquisar={handlePesquisar}
               especialidade={selectedSpecialty}
             />
           )}
           {selectedComponent === 'Adicionar' && (
             <AdicionarRegistro
-              atualizarRegistros={atualizarRegistros}
+              atualizarRegistros={() => atualizarRegistros()}
               especialidade={selectedSpecialty}
             />
           )}
@@ -105,7 +185,7 @@ const ListaEspera = () => {
             <AtualizarRegistro
               registroId={registroSelecionado.id}
               registroInicial={registroSelecionado}
-              atualizarRegistros={atualizarRegistros}
+              atualizarRegistros={() => atualizarRegistros()}
             />
           )}
         </div>
@@ -123,39 +203,72 @@ const ListaEspera = () => {
               </tr>
             </thead>
             <tbody className="body-lista">
-              {registros.map((registro) => (
-                <tr
-                  key={registro.id}
-                  className={
-                    registroSelecionado.id === registro.id ? 'selected' : ''
-                  }
-                  onClick={() => handleRegistroClick(registro)}
-                  style={{ cursor: 'pointer' }}
-                >
-                  <td>{registro.nome}</td>
-                  <td>{new Date(registro.dataEntrada).toLocaleString()}</td>
-                  <td>
-                    {registro.dataSaida
-                      ? new Date(registro.dataSaida).toLocaleString()
-                      : 'N/A'}
-                  </td>
-                  <td>{registro.status}</td>
-                  <td>{registro.prioridade}</td>
-                  <td>{registro.especialidade}</td>
-                  <td>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleDeleteRegistro(registro.id);
-                      }}
-                    >
-                      Deletar
-                    </button>
+              {isLoading ? (
+                <tr>
+                  <td colSpan="7">Carregando...</td>
+                </tr>
+              ) : registros.length === 0 ? (
+                <tr>
+                  <td colSpan="7" style={{ textAlign: 'center', color: 'var(--cinza)' }}>
+                    {filtros.nome || filtros.prioridade || filtros.status ? 'Nenhum registro encontrado com os filtros aplicados.' : 'Nenhum registro encontrado.'}
                   </td>
                 </tr>
-              ))}
+              ) : (
+                registros.map((registro) => (
+                  <tr
+                    key={registro.id}
+                    className={
+                      registroSelecionado.id === registro.id ? 'selected' : ''
+                    }
+                    onClick={() => handleRegistroClick(registro)}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    <td>{registro.nome}</td>
+                    <td>{new Date(registro.dataEntrada).toLocaleString()}</td>
+                    <td>
+                      {registro.dataSaida
+                        ? new Date(registro.dataSaida).toLocaleString()
+                        : 'N/A'}
+                    </td>
+                    <td>{registro.status}</td>
+                    <td>{registro.prioridade}</td>
+                    <td>{registro.especialidade}</td>
+                    <td>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteRegistro(registro.id);
+                        }}
+                      >
+                        Deletar
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
+          {totalPages > 1 && (
+            <div className="pagination-controls">
+              <button
+                className="btn-secondary"
+                onClick={() => handleMudarPagina(currentPage - 1)}
+                disabled={currentPage === 1 || isLoading}
+              >
+                Anterior
+              </button>
+              <span>
+                Página {currentPage} de {totalPages}
+              </span>
+              <button
+                className="btn-secondary"
+                onClick={() => handleMudarPagina(currentPage + 1)}
+                disabled={currentPage >= totalPages || isLoading}
+              >
+                Próxima
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -1,114 +1,85 @@
 import React, { useState, useEffect } from 'react';
-import './PesquisarRegistros.css';
 
-// COMPONENTS
-import GetListaEntries from '../../functions/ListaEspera/GetListaEntries';
-
-const PesquisarRegistros = ({ setRegistros, especialidade }) => {
-  const [page, setPage] = useState(1);
-  const [pageSize] = useState(5);
-  const [orderBy, setOrderBy] = useState('dataEntrada');
+const PesquisarRegistros = ({ onPesquisar, especialidade }) => {
   const [nome, setNome] = useState('');
+  const [debouncedNome, setDebouncedNome] = useState('');
+  const [prioridade, setPrioridade] = useState('');
+  const [status, setStatus] = useState('');
 
-  const [prioridade, setPrioridade] = useState(null);
-  const [status, setStatus] = useState(1);
-
+  // Debounce para evitar muitas requisições
   useEffect(() => {
-    if (nome === '') {
-      getRegistrosListaEspera();
-    }
+    const timer = setTimeout(() => {
+      setDebouncedNome(nome);
+    }, 300);
+
+    return () => clearTimeout(timer);
   }, [nome]);
 
+  // Chama onPesquisar sempre que qualquer filtro mudar
   useEffect(() => {
-    getRegistrosListaEspera();
-  }, [especialidade, prioridade, status]);
-
-  const getRegistrosListaEspera = async () => {
-    try {
-      const options = {};
-
-      let filters = [`especialidade=${especialidade}`];
-      if (nome !== '') filters.push(`PacienteNome^${nome}`);
-      if (prioridade) filters.push(`prioridade=${prioridade}`);
-      if (status) filters.push(`status=${status}`);
-
-      if (filters.length > 0) options.filter = filters.join(',');
-
-      if (page) options.page = page;
-      if (pageSize) options.pageSize = pageSize;
-      if (orderBy) options.orderBy = orderBy;
-
-      const response = await GetListaEntries(options);
-      setRegistros(response);
-    } catch (error) {
-      console.error('Erro ao buscar registros:', error);
+    if (onPesquisar) {
+      onPesquisar({
+        nome: debouncedNome,
+        prioridade,
+        status
+      });
     }
+  }, [debouncedNome, prioridade, status, onPesquisar]);
+
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    setNome(value);
   };
 
-  const handleNomeChange = (e) => {
-    setNome(e.target.value);
+  const handlePrioridadeChange = (e) => {
+    setPrioridade(e.target.value);
   };
 
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter') {
-      getRegistrosListaEspera();
-    }
-  };
-
-  const clearFilter = () => {
-    setNome('');
+  const handleStatusChange = (e) => {
+    setStatus(e.target.value);
   };
 
   return (
     <div>
       <div>
-        <div>
-          <label>Nome:</label>
-          <input
-            type="text"
-            value={nome}
-            onChange={handleNomeChange}
-            onKeyDown={handleKeyDown}
-          />
-          {nome && (
-            <button
-              onClick={() => {
-                clearFilter();
-                setRegistros([]);
-              }}
-            >
-              Limpar
-            </button>
-          )}
-          <label>
-            Prioridade:
-            <select
-              value={prioridade || ''}
-              onChange={(e) => setPrioridade(e.target.value)}
-            >
-              <option value="">Todas</option>
-              <option value={1}>Baixa</option>
-              <option value={2}>Média</option>
-              <option value={3}>Alta</option>
-            </select>
-          </label>
-
-          <label>
-            Status:
-            <select
-              value={status || ''}
-              onChange={(e) => setStatus(e.target.value)}
-            >
-              <option value="">Todas</option>
-              <option value={1}>Aguardando</option>
-              <option value={2}>Atendido</option>
-              <option value={3}>Cancelado</option>
-            </select>
-          </label>
-        </div>
+        <label htmlFor="nome-pesquisa">Nome do Paciente</label>
+        <input
+          id="nome-pesquisa"
+          type="text"
+          value={nome}
+          onChange={handleInputChange}
+          placeholder="Digite o nome para buscar..."
+          autoComplete="off"
+        />
       </div>
 
-      <button onClick={getRegistrosListaEspera}>Pesquisar</button>
+      <div>
+        <label htmlFor="prioridade-filter">Prioridade</label>
+        <select
+          id="prioridade-filter"
+          value={prioridade}
+          onChange={handlePrioridadeChange}
+        >
+          <option value="">Todas</option>
+          <option value="1">Baixa</option>
+          <option value="2">Média</option>
+          <option value="3">Alta</option>
+        </select>
+      </div>
+
+      <div>
+        <label htmlFor="status-filter">Status</label>
+        <select
+          id="status-filter"
+          value={status}
+          onChange={handleStatusChange}
+        >
+          <option value="">Todos</option>
+          <option value="1">Aguardando</option>
+          <option value="2">Atendido</option>
+          <option value="3">Cancelado</option>
+        </select>
+      </div>
     </div>
   );
 };

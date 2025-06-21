@@ -21,9 +21,10 @@ const GetListaEntries = async (options = {}) => {
       },
     });
 
-    return response.data.items;
+    // Retorna a estrutura completa para paginação
+    return response.data;
   } catch (error) {
-    console.error('Erro ao buscar pacientes:', error);
+    console.error('Erro ao buscar registros da lista de espera:', error);
     throw error;
   }
 };
