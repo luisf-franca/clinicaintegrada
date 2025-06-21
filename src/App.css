@@ -2,11 +2,21 @@
 @import url('https://fonts.googleapis.com/css2?family=Sora:wght@100..800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
-/* GLOBAL */
-@import url('./styles/container.css');
-@import url('./styles/pages.css');
-@import url('./styles/colors.css');
+/* VARIÁVEIS DE COR E SOMBRA */
+:root {
+  --branco: #fff;
+  --preto: #212529;
+  --cinza: #636466;
+  --vermelho: #d71c23;
+  --vermelho-claro: #e82137;
+  --roxo: #7d1474;
+  --gelo: #f8f9fa;
+  --shadow1: 0 2px 20px rgba(0, 0, 0, 0.1);
+  --shadow-strong: 0 10px 30px rgba(0,0,0,0.2);
+}
 
+
+/* ESTILOS GLOBAIS E RESETS */
 *,
 button {
   margin: 0;
@@ -19,7 +29,7 @@ button {
   color: inherit;
   background: none;
 
-  font-family: Sora, Montserrat, Helvetica, sans-serif;
+  font-family: 'Sora', 'Montserrat', Helvetica, sans-serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -30,7 +40,7 @@ h1,
 h2,
 h1 > *,
 h2 > * {
-  font-family: Montserrat, Helvetica, sans-serif;
+  font-family: 'Montserrat', Helvetica, sans-serif;
 }
 
 input:focus,
@@ -42,4 +52,54 @@ textarea:focus {
 img {
   display: block;
   max-width: 100%;
+}
+
+/* ================================================= */
+/* ESTRUTURA DE LAYOUT DA APLICAÇÃO         */
+/* ================================================= */
+
+/* 1. O corpo da página agora usa Flexbox para centralizar o layout.
+   - Isso elimina a necessidade de 'padding' e 'calc()'.
+*/
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(to right, var(--roxo), var(--vermelho));
+}
+
+
+/* 2. O contêiner da aplicação tem um tamanho definido, criando o efeito de margem.
+   - Usamos 'vw' e 'vh' para torná-lo responsivo ao tamanho da tela.
+   - Você pode ajustar os valores de width e height para aumentar ou diminuir a margem.
+*/
+.app-layout {
+  display: flex;
+  width: 80vw;
+  height: 85vh;
+  background-color: var(--gelo);
+  border-radius: 12px;
+  box-shadow: var(--shadow-strong);
+  overflow: hidden;
+}
+
+/* 3. A área de conteúdo principal.
+   - A altura continua sendo 100% do seu contêiner pai (.app-layout).
+   - A rolagem acontece apenas aqui.
+*/
+.content-area {
+  flex-grow: 1;
+  height: 100%;
+  overflow-y: auto;
+  padding: 1.0rem;
+}
+
+/* 4. Estilos para a Sidebar. */
+.sidebar-container {
+  width: 260px;
+  flex-shrink: 0;
+  background-color: var(--branco);
+  border-right: 1px solid #eee;
+  z-index: 10;
 }

@@ -27,7 +27,7 @@ const GetPacientes = async (options = {}) => {
     });
 
     // console.log('response:', response);
-    return response.data.data.items;
+    return response.data.data;
     // return response.data;
   } catch (error) {
     console.error('Erro ao buscar pacientes:', error);
