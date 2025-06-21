@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import '../styles/home.css';
 
 // COMPONENTS
@@ -8,6 +8,9 @@ import AgendamentosResumo from '../components/Resumo/Agendamentos/AgendamentosRe
 import ConsultaResumo from '../components/Resumo/Consultas/ConsultaResumo';
 import SalasResumo from '../components/Resumo/Salas/SalasResumo';
 import PacientesResumo from '../components/Resumo/Pacientes/PacientesResumo';
+
+// FUNCTIONS
+import GetPacientes from '../functions/Pacientes/GetPacientes';
 
 const Home = () => {
   const [selectedSpecialty, setSelectedSpecialty] = useState(
@@ -25,8 +28,27 @@ const Home = () => {
     { label: 'Lista de Espera' },
     { label: 'Agendamentos' },
     { label: 'Consultas' },
-    // { label: 'Salas' },
   ];
+
+  // 2. Envolva a função com useCallback
+  const handlePesquisarPacientes = useCallback(async (filtroNome) => {
+    try {
+      const options = { page: 1, pageSize: 10 };
+      if (filtroNome && filtroNome.trim()) {
+        options.filter = `nome^${filtroNome}`;
+      }
+      const response = await GetPacientes(options);
+      setPacientes(response?.items || []);
+    } catch (error) {
+      console.error('Erro ao buscar pacientes:', error);
+      setPacientes([]);
+    }
+  }, []);
+
+  // Carregar pacientes iniciais
+  useEffect(() => {
+    handlePesquisarPacientes('');
+  }, [handlePesquisarPacientes]);
 
   useEffect(() => {
     if (activeTab === 0) {
@@ -86,7 +108,7 @@ const Home = () => {
                 pacientes={pacientes}
                 setPacienteEtapa={setPacienteEtapa}
                 setPacienteSelecionadoId={setPacienteSelecionadoId}
-                onPesquisar={setPacientes}
+                onPesquisar={handlePesquisarPacientes}
               />
             </div>
           )}
