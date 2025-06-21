@@ -17,18 +17,20 @@ const Pacientes = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize] = useState(7);
+  const [pageSize] = useState(6);
   const [totalCount, setTotalCount] = useState(0);
   const [filtroNome, setFiltroNome] = useState('');
 
   const totalPages = Math.ceil(totalCount / pageSize);
 
   const atualizarListaPacientes = useCallback(
-    async (pageToLoad) => {
+    async (pageToLoad, filtroAtual = filtroNome) => {
       setIsLoading(true);
       try {
         const options = { page: pageToLoad, pageSize };
-        if (filtroNome) options.filter = `nome^${filtroNome}`;
+        if (filtroAtual && filtroAtual.trim()) {
+          options.filter = `nome^${filtroAtual}`;
+        }
         const response = await GetPacientes(options);
         setPacientes(response?.items || []);
         setTotalCount(response?.totalCount || 0);
@@ -40,22 +42,22 @@ const Pacientes = () => {
         setIsLoading(false);
       }
     },
-    [pageSize, filtroNome],
+    [pageSize],
   );
 
   useEffect(() => {
-    atualizarListaPacientes(currentPage);
-  }, [currentPage, atualizarListaPacientes]);
+    atualizarListaPacientes(currentPage, filtroNome);
+  }, [currentPage, filtroNome, atualizarListaPacientes]);
 
-  const handlePesquisar = (novoFiltro) => {
+  const handlePesquisar = useCallback((novoFiltro) => {
     setFiltroNome(novoFiltro);
     setCurrentPage(1);
-  };
+  }, []); 
 
   const handleMudarPagina = (novaPagina) => {
     if (
       novaPagina >= 1 &&
-      novaPagina <= totalPages &&
+      novaPagina <= Math.max(1, totalPages) &&
       novaPagina !== currentPage
     ) {
       setCurrentPage(novaPagina);
@@ -79,11 +81,12 @@ const Pacientes = () => {
           setPacienteSelecionado(null);
         }
 
-        if (pacientes.length === 1 && currentPage > 1) {
-          setCurrentPage(currentPage - 1);
-        } else {
-          atualizarListaPacientes(currentPage);
-        }
+        // Recalcula se precisa voltar uma página
+        const novaPagina = pacientes.length === 1 && currentPage > 1 
+          ? currentPage - 1 
+          : currentPage;
+        
+        setCurrentPage(novaPagina);
       } catch (error) {
         console.error('Erro ao deletar paciente:', error);
       }
@@ -121,7 +124,7 @@ const Pacientes = () => {
             <AdicionarPaciente
               onSuccess={() => {
                 setView('list');
-                atualizarListaPacientes();
+                atualizarListaPacientes(currentPage, filtroNome);
               }}
             />
           )}
@@ -132,7 +135,7 @@ const Pacientes = () => {
                 onSuccess={() => {
                   setView('list');
                   setPacienteSelecionado(null);
-                  atualizarListaPacientes();
+                  atualizarListaPacientes(currentPage, filtroNome);
                 }}
               />
             ) : (
@@ -163,6 +166,12 @@ const Pacientes = () => {
                 <tr>
                   <td colSpan="5">Carregando...</td>
                 </tr>
+              ) : pacientes.length === 0 ? (
+                <tr>
+                  <td colSpan="5" style={{ textAlign: 'center', color: 'var(--cinza)' }}>
+                    {filtroNome ? 'Nenhum paciente encontrado com esse nome.' : 'Nenhum paciente cadastrado.'}
+                  </td>
+                </tr>
               ) : (
                 pacientes.map((paciente) => (
                   <tr
@@ -192,12 +201,12 @@ const Pacientes = () => {
               )}
             </tbody>
           </table>
-          {!isLoading && totalCount > 0 && (
+          {totalPages > 1 && (
             <div className="pagination-controls">
               <button
                 className="btn-secondary"
                 onClick={() => handleMudarPagina(currentPage - 1)}
-                disabled={currentPage === 1}
+                disabled={currentPage === 1 || isLoading}
               >
                 Anterior
               </button>
@@ -207,7 +216,7 @@ const Pacientes = () => {
               <button
                 className="btn-secondary"
                 onClick={() => handleMudarPagina(currentPage + 1)}
-                disabled={currentPage >= totalPages}
+                disabled={currentPage >= totalPages || isLoading}
               >
                 Próxima
               </button>
