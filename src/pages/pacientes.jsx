@@ -66,10 +66,28 @@ const Pacientes = () => {
     switch(view) {
         case 'add':
             return <AdicionarPaciente onSuccess={() => { setView('list'); atualizarListaPacientes(); }} />;
+        
         case 'update':
-            return <AtualizarPaciente pacienteInicial={pacienteSelecionado} onSuccess={() => { setView('list'); atualizarListaPacientes(); }} />;
-        default:
-            // Por padrão, pode mostrar o componente de pesquisa ou uma mensagem
+            // --- INÍCIO DA ALTERAÇÃO ---
+            // Se a view for 'update', mas nenhum paciente estiver selecionado,
+            // exiba uma mensagem em vez de renderizar o formulário.
+            if (!pacienteSelecionado) {
+              return (
+                <div style={{ textAlign: 'center', paddingTop: '2rem' }}>
+                  <p style={{ color: 'var(--cinza)', marginTop: '1rem' }}>
+                    Por favor, pesquise e selecione um paciente na lista ao lado para editar as informações.
+                  </p>
+                </div>
+              );
+            }
+            // Se houver um paciente selecionado, renderize o formulário de atualização.
+            return <AtualizarPaciente 
+                      pacienteInicial={pacienteSelecionado} 
+                      onSuccess={() => { setView('list'); setPacienteSelecionado(null); atualizarListaPacientes(); }} 
+                   />;
+            // --- FIM DA ALTERAÇÃO ---
+
+        default: // 'list'
             return <PesquisarPacientes setPacientes={setPacientes} />;
     }
   }
@@ -83,8 +101,20 @@ const Pacientes = () => {
         </button>
       </div>
 
+      {/* Aqui deve conter três botões colados no topo do form, um ao lado do outro */}
       <div className="pacientes-body">
         <div className="form-container">
+          <div className="pacientes-actions">
+            <button className={`btn-secondary ${view === 'list' ? 'active' : ''}`} onClick={() => setView('list')}>
+              Pesquisar 🔎
+            </button>
+            <button className={`btn-secondary ${view === 'add' ? 'active' : ''}`} onClick={() => setView('add')}>
+              Adicionar ➕
+            </button>
+            <button className={`btn-secondary ${view === 'update' ? 'active' : ''}`} onClick={() => setView('update')}>
+              Alterar 🖊
+            </button>
+          </div>
           {renderFormPanel()}
         </div>
 

@@ -58,16 +58,16 @@ const AdicionarPaciente = ({ onSuccess }) => {
       setStep((prev) => prev - 1);
     }
   };
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const pacienteData = { paciente };
-    
+
     if (desejaListaEspera && listaEspera.especialidade && listaEspera.prioridade) {
-        pacienteData.listaEspera = {
-            especialidade: parseInt(listaEspera.especialidade, 10),
-            prioridade: parseInt(listaEspera.prioridade, 10),
-        };
+      pacienteData.listaEspera = {
+        especialidade: parseInt(listaEspera.especialidade, 10),
+        prioridade: parseInt(listaEspera.prioridade, 10),
+      };
     }
 
     try {
@@ -85,7 +85,8 @@ const AdicionarPaciente = ({ onSuccess }) => {
       case 1:
         return (
           <>
-            <h4>Etapa 1 de 3: Dados Pessoais</h4>
+            <h4>Dados Pessoais</h4>
+            <br />
             <div className="form-group">
               <label htmlFor="nome">Nome Completo</label>
               <input id="nome" type="text" name="nome" value={paciente.nome} onChange={handleInputChange} required />
@@ -103,7 +104,8 @@ const AdicionarPaciente = ({ onSuccess }) => {
       case 2:
         return (
           <>
-            <h4>Etapa 2 de 3: Informações do Responsável</h4>
+            <h4>Informações do Responsável</h4>
+            <br />
             <div className="form-group">
               <label htmlFor="nomeResponsavel">Nome do Responsável</label>
               <input id="nomeResponsavel" type="text" name="nomeResponsavel" value={paciente.nomeResponsavel} onChange={handleInputChange} required />
@@ -117,37 +119,57 @@ const AdicionarPaciente = ({ onSuccess }) => {
       case 3:
         return (
           <>
-            <h4>Etapa 3 de 3: Detalhes Adicionais</h4>
+            <h4>Detalhes Adicionais</h4>
+            <br />
             <div className="form-group">
-              <label>Deseja incluir na lista de espera?</label>
-              <input type="checkbox" checked={desejaListaEspera} onChange={(e) => setDesejaListaEspera(e.target.checked)} />
+              <label className="custom-checkbox" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
+          <input
+            type="checkbox"
+            checked={desejaListaEspera}
+            onChange={(e) => setDesejaListaEspera(e.target.checked)}
+            style={{ display: 'none' }}
+          />
+          <span className="checkmark" style={{
+            width: '20px',
+            height: '20px',
+            border: '1px solid #aaa',
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '1rem',
+            background: desejaListaEspera ? '#e6f7e6' : '#fff'
+          }}>
+            {desejaListaEspera ? '✔' : ''}
+          </span>
+          Deseja incluir na lista de espera?
+              </label>
             </div>
             {desejaListaEspera && (
               <>
-                <div className="form-group">
-                  <label htmlFor="especialidade">Especialidade</label>
-                  <select id="especialidade" name="especialidade" value={listaEspera.especialidade} onChange={handleListaEsperaChange} required>
-                    <option value="" disabled>Selecione...</option>
-                    <option value="1">Psicologia</option>
-                    <option value="2">Odontologia</option>
-                    <option value="3">Fisioterapia</option>
-                    <option value="4">Nutrição</option>
-                  </select>
-                </div>
-                <div className="form-group">
-                  <label htmlFor="prioridade">Prioridade</label>
-                  <select id="prioridade" name="prioridade" value={listaEspera.prioridade} onChange={handleListaEsperaChange} required>
-                    <option value="" disabled>Selecione...</option>
-                    <option value="1">Baixa</option>
-                    <option value="2">Média</option>
-                    <option value="3">Alta</option>
-                  </select>
-                </div>
+          <div className="form-group">
+            <label htmlFor="especialidade">Especialidade</label>
+            <select id="especialidade" name="especialidade" value={listaEspera.especialidade} onChange={handleListaEsperaChange} required>
+              <option value="" disabled>Selecione...</option>
+              <option value="1">Psicologia</option>
+              <option value="2">Odontologia</option>
+              <option value="3">Fisioterapia</option>
+              <option value="4">Nutrição</option>
+            </select>
+          </div>
+          <div className="form-group">
+            <label htmlFor="prioridade">Prioridade</label>
+            <select id="prioridade" name="prioridade" value={listaEspera.prioridade} onChange={handleListaEsperaChange} required>
+              <option value="" disabled>Selecione...</option>
+              <option value="1">Baixa</option>
+              <option value="2">Média</option>
+              <option value="3">Alta</option>
+            </select>
+          </div>
               </>
             )}
-             <div className="form-group">
-                <label htmlFor="observacao">Observações</label>
-                <textarea id="observacao" name="observacao" value={paciente.observacao} onChange={handleInputChange} rows="3"></textarea>
+            <div className="form-group">
+              <label htmlFor="observacao">Observações</label>
+              <textarea id="observacao" name="observacao" value={paciente.observacao} onChange={handleInputChange} rows="3"></textarea>
             </div>
           </>
         );
@@ -158,7 +180,7 @@ const AdicionarPaciente = ({ onSuccess }) => {
 
   return (
     <div>
-      <h3>Adicionar Novo Paciente</h3>
+      <h3>Adicionar Paciente</h3>
       <form onSubmit={handleSubmit}>
         {renderStepContent()}
 
@@ -180,7 +202,7 @@ const AdicionarPaciente = ({ onSuccess }) => {
             className="btn-primary"
             onClick={handleNextStep}
             disabled={!paciente.nome || !paciente.idade}
-            style={{ 
+            style={{
               marginLeft: 'auto',
               display: step < 3 ? 'block' : 'none' // Mostra se a etapa for menor que 3
             }}
@@ -192,7 +214,7 @@ const AdicionarPaciente = ({ onSuccess }) => {
           <button
             type="submit"
             className="btn-primary"
-            style={{ 
+            style={{
               marginLeft: 'auto',
               display: step === 3 ? 'block' : 'none' // Mostra apenas na etapa 3
             }}

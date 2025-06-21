@@ -182,3 +182,43 @@
 .pacientes-table tbody tr:last-child td {
   border-bottom: none;
 }
+
+/* === ÁREA DOS BOTÕES DE AÇÃO DO FORMULÁRIO === */
+.pacientes-actions {
+  display: flex; /* Alinha os botões lado a lado */
+  margin-bottom: 2rem; /* Adiciona um espaço antes do conteúdo do formulário */
+  border-radius: 8px; /* Arredonda o conjunto de botões */
+  overflow: hidden;   /* Garante que o border-radius dos filhos não escape */
+  box-shadow: var(--shadow1); /* Sombra sutil para o grupo de botões */
+}
+
+/* Modificações na classe .btn-secondary QUANDO dentro de .pacientes-actions */
+.pacientes-actions .btn-secondary {
+  flex: 1; /* Faz cada botão ocupar o mesmo espaço */
+  border: none; /* Remove a borda individual */
+  border-radius: 0; /* Remove o arredondamento individual */
+  padding: 1px 0; /* Ajusta o padding vertical e remove o horizontal */
+  font-size: 0.8rem; /* Aumenta o tamanho dos ícones */
+  background-color: var(--gelo);
+  color: var(--cinza);
+  transition: background-color 0.2s ease, color 0.2s ease;
+  border-right: 1px solid #ddd; /* Adiciona uma linha divisória à direita */
+}
+
+/* Remove a borda do último botão para um acabamento limpo */
+.pacientes-actions .btn-secondary:last-child {
+  border-right: none;
+}
+
+/* Estilo do botão ativo/selecionado */
+.pacientes-actions .btn-secondary.active {
+  background: linear-gradient(to right, var(--roxo), var(--vermelho));
+  color: var(--branco);
+  font-weight: bold;
+}
+
+/* Efeito hover para os botões não ativos */
+.pacientes-actions .btn-secondary:not(.active):hover {
+  background-color: #e2e6ea;
+  color: var(--preto);
+}
