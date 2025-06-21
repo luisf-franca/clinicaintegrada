@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './PacientesResumo.css';
 import { useNavigate } from 'react-router-dom';
 
@@ -13,7 +13,13 @@ const PacientesResumo = ({
   onPesquisar,
 }) => {
   const [selectedPaciente, setSelectedPaciente] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+
+  // Resetar seleção quando a lista de pacientes mudar
+  useEffect(() => {
+    setSelectedPaciente(null);
+  }, [pacientes]);
 
   const handleSelectPaciente = (index) => {
     setSelectedPaciente(index);
@@ -21,11 +27,18 @@ const PacientesResumo = ({
 
   const handleNext = async () => {
     if (selectedPaciente !== null) {
-      const paciente = pacientes[selectedPaciente];
-
-      var etapa = await GetPacienteEtapa(paciente.id);
-      setPacienteSelecionadoId(paciente.id);
-      setPacienteEtapa(etapa.data);
+      setIsLoading(true);
+      try {
+        const paciente = pacientes[selectedPaciente];
+        const etapa = await GetPacienteEtapa(paciente.id);
+        setPacienteSelecionadoId(paciente.id);
+        setPacienteEtapa(etapa.data);
+      } catch (error) {
+        console.error('Erro ao buscar etapa do paciente:', error);
+        alert('Erro ao localizar paciente. Tente novamente.');
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -47,7 +60,7 @@ const PacientesResumo = ({
               className={`pacientes-relatorio__item ${
                 selectedPaciente === index ? 'selected' : ''
               }`}
-              key={index}
+              key={paciente.id || index}
               onClick={() => handleSelectPaciente(index)}
             >
               <div className="paciente-item__button">
@@ -75,8 +88,11 @@ const PacientesResumo = ({
         )}
       </div>
       <div className="pacientes-resumo__footer">
-        <button onClick={handleNext} disabled={selectedPaciente === null}>
-          Localizar Paciente
+        <button 
+          onClick={handleNext} 
+          disabled={selectedPaciente === null || isLoading}
+        >
+          {isLoading ? 'Localizando...' : 'Localizar Paciente'}
         </button>
       </div>
     </div>

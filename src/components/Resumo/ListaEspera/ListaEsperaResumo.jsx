@@ -9,14 +9,26 @@ import FormatarDateTimeToLocal from '../../../functions/FormatarDateTime/FormatD
 const ListaEsperaResumo = ({ pacienteId, especialidade }) => {
   const [listaEspera, setListaEspera] = useState([]);
   const [pacienteFilter, setPacienteFilter] = useState(pacienteId);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
+    setPacienteFilter(pacienteId);
+  }, [pacienteId]);
+
+  useEffect(() => {
     const fetchListaEspera = async () => {
+      setIsLoading(true);
+      setError(null);
       try {
         const filters = [];
-        if (especialidade) filters.push(`especialidade=${especialidade}`);
-        if (pacienteFilter) filters.push(`pacienteId=${pacienteFilter}`);
+        if (especialidade && especialidade !== '') {
+          filters.push(`especialidade=${especialidade}`);
+        }
+        if (pacienteFilter && pacienteFilter !== '') {
+          filters.push(`pacienteId=${pacienteFilter}`);
+        }
         filters.push('status=1');
         const filterString = filters.length > 0 ? filters.join(',') : null;
 
@@ -24,9 +36,13 @@ const ListaEsperaResumo = ({ pacienteId, especialidade }) => {
           filter: filterString,
           orderBy: 'dataEntrada',
         });
-        setListaEspera(response);
+        setListaEspera(response?.items || response || []);
       } catch (error) {
         console.error('Erro ao buscar lista de espera:', error);
+        setError('Erro ao carregar lista de espera');
+        setListaEspera([]);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -76,7 +92,19 @@ const ListaEsperaResumo = ({ pacienteId, especialidade }) => {
             </tr>
           </thead>
           <tbody>
-            {listaEspera.length > 0 ? (
+            {isLoading ? (
+              <tr>
+                <td colSpan="5" className="lista-espera-resumo__loading">
+                  Carregando...
+                </td>
+              </tr>
+            ) : error ? (
+              <tr>
+                <td colSpan="5" className="lista-espera-resumo__error">
+                  {error}
+                </td>
+              </tr>
+            ) : listaEspera.length > 0 ? (
               listaEspera.slice(0, 4).map((item) => (
                 <tr key={item.id}>
                   <td>{item.nome}</td>
@@ -92,7 +120,7 @@ const ListaEsperaResumo = ({ pacienteId, especialidade }) => {
               ))
             ) : (
               <tr>
-                <td colSpan="4" className="lista-espera-resumo__empty">
+                <td colSpan="5" className="lista-espera-resumo__empty">
                   {getEmptyMessage()}
                 </td>
               </tr>
