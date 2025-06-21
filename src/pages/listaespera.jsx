@@ -53,26 +53,9 @@ const ListaEspera = () => {
         
         const response = await GetListaEntries(options);
         
-        // Verifica se a resposta tem a estrutura esperada
-        let registrosData = [];
-        let totalCountData = 0;
-        
-        if (response && response.data && response.data.items) {
-          registrosData = response.data.items;
-          totalCountData = response.data.totalCount || 0;
-        } else if (response && response.items) {
-          registrosData = response.items;
-          totalCountData = response.totalCount || 0;
-        } else if (response && response.data && Array.isArray(response.data)) {
-          registrosData = response.data;
-          totalCountData = response.data.length;
-        } else if (response && Array.isArray(response)) {
-          registrosData = response;
-          totalCountData = response.length;
-        } else {
-          registrosData = [];
-          totalCountData = 0;
-        }
+        // Agora a resposta já vem com a estrutura correta
+        const registrosData = response?.items || [];
+        const totalCountData = response?.totalCount || 0;
         
         setRegistros(registrosData);
         setTotalCount(totalCountData);

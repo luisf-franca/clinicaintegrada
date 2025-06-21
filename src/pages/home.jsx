@@ -114,7 +114,7 @@ const Home = () => {
           )}
           {activeTab === 1 && (
             <div className="body-section">
-              <ListaEsperaResumo pacienteId={pacienteSelecionadoId} />
+              <ListaEsperaResumo pacienteId={pacienteSelecionadoId} especialidade={selectedSpecialty} />
             </div>
           )}
           {activeTab === 2 && (
