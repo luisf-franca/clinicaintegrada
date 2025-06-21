@@ -2,7 +2,6 @@
 
 .container {
   display: flex;
-
   max-width: 85%;
   width: 100vw;
   height: 85vh;

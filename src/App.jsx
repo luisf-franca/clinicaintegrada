@@ -1,27 +1,27 @@
 import React, { useEffect } from 'react';
-import Login from './functions/Authenticate/Login.jsx';
-import './App.css';
+import './App.css'; // Certifique-se que o App.css atualizado está sendo importado
 
 // COMPONENTS
 import Router from './router.jsx';
 import Sidebar from './components/SideBar/SideBar.jsx';
 
+// FUNCTIONS
+import Login from './functions/Authenticate/Login.jsx';
+
 function App() {
+  // Sua lógica de autenticação permanece a mesma, está ótima!
   const handleLogin = async () => {
     try {
       const response = await Login({
         email: 'atendente@user.com.br',
         senha: 'Teste1@',
       });
-      console.log('Usuário autenticado com sucesso:', response);
+      // console.log('Usuário autenticado com sucesso:', response);
 
       localStorage.setItem('token', response.token);
       localStorage.setItem('dataExpiracao', response.expiration);
     } catch (error) {
       console.error('Erro ao realizar login:', error);
-      // alert(
-      //   'Ocorreu um erro ao processar sua solicitação. Verifique os logs para mais informações.',
-      // );
     }
   };
 
@@ -33,13 +33,13 @@ function App() {
       const currentDate = new Date();
 
       if (expiracaoDate < currentDate) {
-        console.log('Token expirado, realizando novo login...');
+        // console.log('Token expirado, realizando novo login...');
         await handleLogin();
       } else {
-        console.log('Token ainda válido.');
+        // console.log('Token ainda válido.');
       }
     } else {
-      console.log('Nenhum token encontrado, realizando login inicial...');
+      // console.log('Nenhum token encontrado, realizando login inicial...');
       await handleLogin();
     }
   };
@@ -49,7 +49,7 @@ function App() {
 
     const intervalId = setInterval(() => {
       handleAuthentication();
-    }, 3600000);
+    }, 3600000); // 1 hora
 
     return () => {
       clearInterval(intervalId);
@@ -57,12 +57,14 @@ function App() {
   }, []);
 
   return (
-    <section className="pages">
-      <main className="container">
-        <Sidebar />
+    // Esta é a principal mudança: a classe agora define o layout flexível.
+    // A Sidebar e o <main> são irmãos diretos, facilitando o posicionamento.
+    <div className="app-layout">
+      <Sidebar />
+      <main className="content-area">
         <Router />
       </main>
-    </section>
+    </div>
   );
 }
 
