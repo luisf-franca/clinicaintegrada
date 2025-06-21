@@ -1,3 +1,37 @@
+.pesquisar-registro-form {
+  padding: 1rem;
+}
+
+.pesquisar-registro-form .form-group {
+  margin-bottom: 1rem;
+}
+
+.pesquisar-registro-form label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+.pesquisar-registro-form input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: border-color 0.2s ease;
+}
+
+.pesquisar-registro-form input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(var(--primary-color-rgb), 0.1);
+}
+
+.pesquisar-registro-form input::placeholder {
+  color: var(--placeholder-color);
+}
+
 .dropdown-sugestoes {
   list-style: none;
   margin: 0;

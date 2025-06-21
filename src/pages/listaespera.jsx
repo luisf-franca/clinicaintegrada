@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import '../styles/listaespera.css';
 
 // COMPONENTS
@@ -16,17 +16,47 @@ const ListaEspera = () => {
   const [selectedSpecialty, setSelectedSpecialty] = useState(
     localStorage.getItem('selectedSpecialty') || 1,
   );
+  const [filtros, setFiltros] = useState({
+    nome: '',
+    prioridade: '',
+    status: ''
+  });
 
-  const atualizarRegistros = async () => {
-    try {
-      const items = await GetListaEntries({
-        filter: 'especialidade=' + selectedSpecialty,
-      });
-      setRegistros(items);
-    } catch (error) {
-      console.error('Erro ao buscar registros:', error);
-    }
-  };
+  const atualizarRegistros = useCallback(
+    async (filtrosAtuais = filtros) => {
+      try {
+        const options = {};
+        let filters = [`especialidade=${selectedSpecialty}`];
+        
+        if (filtrosAtuais.nome && filtrosAtuais.nome.trim()) {
+          filters.push(`PacienteNome^${filtrosAtuais.nome}`);
+        }
+        
+        if (filtrosAtuais.prioridade && filtrosAtuais.prioridade.trim()) {
+          filters.push(`prioridade=${filtrosAtuais.prioridade}`);
+        }
+        
+        if (filtrosAtuais.status && filtrosAtuais.status.trim()) {
+          filters.push(`status=${filtrosAtuais.status}`);
+        }
+        
+        if (filters.length > 0) {
+          options.filter = filters.join(',');
+        }
+        
+        const items = await GetListaEntries(options);
+        setRegistros(items);
+      } catch (error) {
+        console.error('Erro ao buscar registros:', error);
+        setRegistros([]);
+      }
+    },
+    [selectedSpecialty],
+  );
+
+  const handlePesquisar = useCallback((novosFiltros) => {
+    setFiltros(novosFiltros);
+  }, []);
 
   const handleRegistroClick = (registro) => {
     setRegistroSelecionado(registro);
@@ -40,17 +70,16 @@ const ListaEspera = () => {
     if (confirmDelete) {
       try {
         await DeleteRegistro(id);
-        atualizarRegistros();
+        atualizarRegistros(filtros);
       } catch (error) {
         console.error('Erro ao deletar registro:', error);
       }
-    } else {
     }
   };
 
   useEffect(() => {
-    atualizarRegistros();
-  }, [selectedSpecialty]);
+    atualizarRegistros(filtros);
+  }, [selectedSpecialty, filtros, atualizarRegistros]);
 
   return (
     <div className="listaespera container">
@@ -90,14 +119,14 @@ const ListaEspera = () => {
       <div className="listaespera-content-wrapper">
         <div className="listaespera-form-card">
           {selectedComponent === 'Pesquisar' && (
-            <PesquisarRegistros
-              setRegistros={setRegistros}
+            <PesquisarRegistros 
+              onPesquisar={handlePesquisar}
               especialidade={selectedSpecialty}
             />
           )}
           {selectedComponent === 'Adicionar' && (
             <AdicionarRegistro
-              atualizarRegistros={atualizarRegistros}
+              atualizarRegistros={() => atualizarRegistros(filtros)}
               especialidade={selectedSpecialty}
             />
           )}
@@ -105,7 +134,7 @@ const ListaEspera = () => {
             <AtualizarRegistro
               registroId={registroSelecionado.id}
               registroInicial={registroSelecionado}
-              atualizarRegistros={atualizarRegistros}
+              atualizarRegistros={() => atualizarRegistros(filtros)}
             />
           )}
         </div>
@@ -123,37 +152,45 @@ const ListaEspera = () => {
               </tr>
             </thead>
             <tbody className="body-lista">
-              {registros.map((registro) => (
-                <tr
-                  key={registro.id}
-                  className={
-                    registroSelecionado.id === registro.id ? 'selected' : ''
-                  }
-                  onClick={() => handleRegistroClick(registro)}
-                  style={{ cursor: 'pointer' }}
-                >
-                  <td>{registro.nome}</td>
-                  <td>{new Date(registro.dataEntrada).toLocaleString()}</td>
-                  <td>
-                    {registro.dataSaida
-                      ? new Date(registro.dataSaida).toLocaleString()
-                      : 'N/A'}
-                  </td>
-                  <td>{registro.status}</td>
-                  <td>{registro.prioridade}</td>
-                  <td>{registro.especialidade}</td>
-                  <td>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleDeleteRegistro(registro.id);
-                      }}
-                    >
-                      Deletar
-                    </button>
+              {registros.length === 0 ? (
+                <tr>
+                  <td colSpan="7" style={{ textAlign: 'center', color: 'var(--cinza)' }}>
+                    {filtros.nome || filtros.prioridade || filtros.status ? 'Nenhum registro encontrado com os filtros aplicados.' : 'Nenhum registro encontrado.'}
                   </td>
                 </tr>
-              ))}
+              ) : (
+                registros.map((registro) => (
+                  <tr
+                    key={registro.id}
+                    className={
+                      registroSelecionado.id === registro.id ? 'selected' : ''
+                    }
+                    onClick={() => handleRegistroClick(registro)}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    <td>{registro.nome}</td>
+                    <td>{new Date(registro.dataEntrada).toLocaleString()}</td>
+                    <td>
+                      {registro.dataSaida
+                        ? new Date(registro.dataSaida).toLocaleString()
+                        : 'N/A'}
+                    </td>
+                    <td>{registro.status}</td>
+                    <td>{registro.prioridade}</td>
+                    <td>{registro.especialidade}</td>
+                    <td>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteRegistro(registro.id);
+                        }}
+                      >
+                        Deletar
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>

@@ -21,9 +21,16 @@ const GetListaEntries = async (options = {}) => {
       },
     });
 
-    return response.data.items;
+    // Verifica se a resposta tem a estrutura esperada
+    if (response.data && response.data.data) {
+      return response.data.data;
+    } else if (response.data && response.data.items) {
+      return response.data.items;
+    } else {
+      return response.data || [];
+    }
   } catch (error) {
-    console.error('Erro ao buscar pacientes:', error);
+    console.error('Erro ao buscar registros da lista de espera:', error);
     throw error;
   }
 };
