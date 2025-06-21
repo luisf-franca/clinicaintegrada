@@ -1,6 +1,6 @@
 .salas-resumo {
   width: 100%;
-  background: #fff;
+  background: var(--branco);
   border-radius: 10px;
   box-shadow: 0 2px 10px rgba(125, 20, 116, 0.07);
   overflow: hidden;
@@ -13,14 +13,14 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  background: #b0171b;
-  color: #fff;
+  background: var(--vermelho-escuro);
+  color: var(--branco);
   padding: 0.7rem 1rem;
   border-radius: 10px 10px 0 0;
 }
 
 .salas-resumo__header h4 {
-  color: #fff;
+  color: var(--branco);
   text-shadow: 0 2px 8px rgba(125, 20, 116, 0.08);
   font-size: 1.15rem;
   margin: 0;
@@ -28,15 +28,15 @@
 
 .salas-resumo__header button {
   background: rgba(255, 255, 255, 0.85);
-  border: 1px solid #e0e0e0;
-  color: #b0171b;
+  border: 1px solid var(--cinza-300);
+  color: var(--vermelho-escuro);
   font-weight: 600;
   font-size: 1rem;
 }
 
 .salas-resumo__header button:hover {
-  background: #b0171b;
-  color: #fff;
+  background: var(--vermelho-escuro);
+  color: var(--branco);
 }
 
 .salas-resumo__body {
@@ -45,7 +45,7 @@
 
 .salas-resumo__select label {
   font-size: 0.98rem;
-  color: #b0171b;
+  color: var(--vermelho-escuro);
   font-weight: 600;
   margin-bottom: 0.25rem;
 }
@@ -53,18 +53,18 @@
 .salas-resumo__select select {
   width: 100%;
   padding: 0.5rem 0.75rem;
-  border: 1px solid var(--cinza-borda);
+  border: 1px solid var(--cinza-400);
   border-radius: 6px;
   font-size: 1rem;
-  background: var(--cinza-claro);
-  color: var(--cinza-escuro);
+  background: var(--cinza-100);
+  color: var(--cinza-600);
   margin-bottom: 0.5rem;
   box-sizing: border-box;
   transition: border 0.2s, box-shadow 0.2s;
 }
 
 .salas-resumo__select select:focus {
-  border-color: #b0171b;
+  border-color: var(--vermelho-escuro);
   box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.12);
   outline: none;
 }
@@ -75,8 +75,8 @@
 }
 
 .salas-resumo__actions button {
-  background: var(--cinza-medio);
-  color: var(--cinza-escuro);
+  background: var(--cinza-300);
+  color: var(--cinza-600);
   border: none;
   border-radius: 6px;
   padding: 0.4rem 1rem;
@@ -87,13 +87,13 @@
 }
 
 .salas-resumo__actions button:disabled {
-  background: var(--cinza-hover);
+  background: var(--cinza-200);
   color: #aaa;
   cursor: not-allowed;
 }
 
 .salas-resumo__actions button:hover:not(:disabled) {
-  background: #b0171b;
+  background: var(--vermelho-escuro);
   color: var(--branco);
 }
 

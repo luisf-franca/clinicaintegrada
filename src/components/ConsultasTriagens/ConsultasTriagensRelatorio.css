@@ -7,7 +7,7 @@
 }
 
 .consultas-triagens-relatorio__header {
-  background-color: #b0171b;
+  background-color: var(--vermelho-escuro);
   color: var(--branco);
   padding: 10px;
   text-align: center;

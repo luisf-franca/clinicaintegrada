@@ -1,30 +1,3 @@
-/* Novo modelo baseado em agendamento.css */
-:root {
-  --vermelho: #d32f2f;
-  --cinza-claro: #fafbfc;
-  --cinza-medio: #e0e0e0;
-  --cinza-escuro: #333;
-  --cinza-borda: #d1d5db;
-  --cinza-hover: #f5f5f5;
-  --branco: #fff;
-}
-
-.home {
-  position: relative;
-  width: 100%;
-  min-height: 100vh;
-
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  padding: 2.5rem 2.5rem 2.5rem 2.5rem;
-
-  background: rgba(255, 255, 255, 0.92);
-  border-radius: 18px;
-  box-shadow: 0 4px 32px rgba(125, 20, 116, 0.1);
-  backdrop-filter: blur(2px);
-}
-
 .home-header {
   display: flex;
   align-items: center;
@@ -37,7 +10,7 @@
 }
 
 .home-header h1 {
-  color: #b0171b;
+  color: var(--vermelho-escuro);
   font-size: 2rem;
   font-weight: 700;
   margin: 0;
@@ -45,12 +18,12 @@
 }
 
 .home-header select {
-  color: var(--cinza-escuro);
-  border: 1px solid var(--cinza-borda);
+  color: var(--cinza-600);
+  border: 1px solid var(--cinza-400);
   border-radius: 6px;
   padding: 0.5rem 1rem;
   font-size: 1rem;
-  background: var(--cinza-claro);
+  background: var(--cinza-100);
 }
 
 .home-body {
@@ -86,39 +59,39 @@
   display: block;
   margin-bottom: 8px;
   font-weight: 600;
-  color: #b0171b;
+  color: var(--vermelho-escuro);
 }
 
 .component input {
   width: 100%;
   padding: 0.5rem 0.75rem;
   margin-bottom: 1rem;
-  border: 1px solid var(--cinza-borda);
+  border: 1px solid var(--cinza-400);
   border-radius: 6px;
   box-sizing: border-box;
   font-size: 1rem;
-  background: var(--cinza-claro);
+  background: var(--cinza-100);
 }
 
 .component input:focus {
-  border: 1.5px solid #b0171b;
+  border: 1.5px solid var(--vermelho-escuro);
   outline: none;
 }
 
 .component button {
   padding: 0.5rem 1.25rem;
-  background: var(--cinza-medio);
+  background: var(--cinza-300);
   border: none;
   border-radius: 6px;
   cursor: pointer;
   font-weight: 500;
   font-size: 1rem;
-  color: var(--cinza-escuro);
+  color: var(--cinza-600);
   transition: background 0.2s, color 0.2s;
 }
 
 .component button:hover {
-  background: #b0171b;
+  background: var(--vermelho-escuro);
   color: var(--branco);
 }
 
@@ -133,8 +106,8 @@
 }
 
 .react-tabs__tab {
-  background: var(--cinza-medio);
-  color: var(--cinza-escuro);
+  background: var(--cinza-300);
+  color: var(--cinza-600);
   border: none;
   border-radius: 8px 8px 0 0;
   padding: 0.7rem 2rem;
@@ -150,7 +123,7 @@
 }
 
 .react-tabs__tab--selected {
-  background: #b0171b;
+  background: var(--vermelho-escuro);
   color: var(--branco);
   font-weight: 700;
   z-index: 2;
@@ -158,12 +131,12 @@
 }
 
 .react-tabs__tab:not(.react-tabs__tab--selected):hover {
-  background: #b0171b;
+  background: var(--vermelho-escuro);
   color: var(--branco);
 }
 
 .react-tabs__tab:focus {
-  box-shadow: 0 0 0 2px #b0171b;
+  box-shadow: 0 0 0 2px var(--vermelho-escuro);
   outline: none;
 }
 
@@ -175,7 +148,7 @@
   right: 10%;
   bottom: -6px;
   height: 6px;
-  background: #b0171b;
+  background: var(--vermelho-escuro);
   border-radius: 0 0 8px 8px;
   z-index: 3;
 }
@@ -191,8 +164,8 @@
 }
 .tab-btn {
   background: rgba(255, 255, 255, 0.85);
-  color: #b0171b;
-  border: 1px solid #e0e0e0;
+  color: var(--vermelho-escuro);
+  border: 1px solid var(--cinza-300);
   border-radius: 6px;
   padding: 0.5rem 1.25rem;
   font-size: 1rem;
@@ -207,16 +180,16 @@
   border-bottom: none;
 }
 .tab-btn.active {
-  background: #b0171b;
-  color: #fff;
+  background: var(--vermelho-escuro);
+  color: var(--branco);
   font-weight: 700;
   z-index: 2;
   box-shadow: 0 4px 18px rgba(125, 20, 116, 0.1);
-  border: 1.5px solid #b0171b;
+  border: 1.5px solid var(--vermelho-escuro);
 }
 .tab-btn:not(.active):hover {
-  background: #b0171b;
-  color: #fff;
+  background: var(--vermelho-escuro);
+  color: var(--branco);
 }
 .tab-content {
   width: 100%;

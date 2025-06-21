@@ -34,7 +34,7 @@
 
 button {
   padding: 10px 15px;
-  background-color: #b0171b;
+  background-color: var(--vermelho-escuro);
   color: white;
   border: none;
   cursor: pointer;

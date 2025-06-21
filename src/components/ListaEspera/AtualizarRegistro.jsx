@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 // COMPONENTS
 import UpdateListaEsperaEntry from '../../functions/ListaEspera/UpdateListaEsperaEntry';
@@ -14,11 +14,10 @@ const AtualizarRegistro = ({
   });
 
   useEffect(() => {
-    // console.log('Registro inicial:', registroInicial);
     if (registroInicial) {
       const formatDate = (date) => {
-        if (!date) return ''; // Se a data for null, retorne string vazia
-        return date.split('T')[0]; // Pegue apenas a parte da data no formato YYYY-MM-DD
+        if (!date) return '';
+        return date.split('T')[0];
       };
 
       setPaciente({
@@ -46,12 +45,9 @@ const AtualizarRegistro = ({
 
   const handleSubmit = async () => {
     try {
-      // console.log('Registro a ser atualizado:', registroId);
       await UpdateListaEsperaEntry(registroId, listaEspera);
       atualizarRegistros();
-      // alert('Registro atualizado com sucesso!');
     } catch (error) {
-      // alert('Registro atualizado com sucesso!');
       atualizarRegistros();
       console.error('Erro ao atualizar registro:', error);
     }
@@ -66,8 +62,8 @@ const AtualizarRegistro = ({
           value={paciente.nome || 'Nome não disponível'}
           readOnly
           style={{
-            backgroundColor: '#f5f5f5',
-            color: '#333',
+            backgroundColor: 'var(--cinza-200)',
+            color: 'var(--cinza-600)',
             border: 'none',
             padding: '5px',
           }}

@@ -17,7 +17,6 @@ const ListaEspera = () => {
     localStorage.getItem('selectedSpecialty') || 1,
   );
 
-  // Função para atualizar os registros
   const atualizarRegistros = async () => {
     try {
       const items = await GetListaEntries({
@@ -30,7 +29,6 @@ const ListaEspera = () => {
   };
 
   const handleRegistroClick = (registro) => {
-    // console.log('Registro selecionado:', registro);
     setRegistroSelecionado(registro);
     setSelectedComponent('Atualizar');
   };
@@ -42,13 +40,11 @@ const ListaEspera = () => {
     if (confirmDelete) {
       try {
         await DeleteRegistro(id);
-        atualizarRegistros(); // Atualiza a lista após deletar
+        atualizarRegistros();
       } catch (error) {
         console.error('Erro ao deletar registro:', error);
-        // alert('Erro ao deletar registro.');
       }
     } else {
-      // alert('Ação cancelada.');
     }
   };
 
@@ -57,7 +53,7 @@ const ListaEspera = () => {
   }, [selectedSpecialty]);
 
   return (
-    <div className="listaespera">
+    <div className="listaespera container">
       <div className="listaespera-hgroup">
         <h1>Lista de Espera</h1>
         <Especialidade

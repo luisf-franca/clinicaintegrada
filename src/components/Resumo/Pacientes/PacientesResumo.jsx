@@ -13,7 +13,7 @@ const PacientesResumo = ({
   onPesquisar,
 }) => {
   const [selectedPaciente, setSelectedPaciente] = useState(null);
-  const navigate = useNavigate(); // Hook para navegação
+  const navigate = useNavigate();
 
   const handleSelectPaciente = (index) => {
     setSelectedPaciente(index);
@@ -22,7 +22,7 @@ const PacientesResumo = ({
   const handleNext = async () => {
     if (selectedPaciente !== null) {
       const paciente = pacientes[selectedPaciente];
-      // Lógica para identificar a etapa do paciente e redirecionar
+
       var etapa = await GetPacienteEtapa(paciente.id);
       setPacienteSelecionadoId(paciente.id);
       setPacienteEtapa(etapa.data);
@@ -30,7 +30,7 @@ const PacientesResumo = ({
   };
 
   const handleNavigatePacientes = () => {
-    navigate('/pacientes'); // Navegação sem query string
+    navigate('/pacientes');
   };
 
   return (

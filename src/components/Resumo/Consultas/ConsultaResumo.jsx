@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import './ConsultaResumo.css';
-import { useNavigate } from 'react-router-dom'; // Import necessário para navegação
+import { useNavigate } from 'react-router-dom';
 
 // FUNCTIONS
 import GetConsultas from '../../../functions/Consultas/GetConsultas';
@@ -14,28 +14,23 @@ const ConsultaResumo = ({ pacienteId, especialidade }) => {
   const [consultas, setConsultas] = useState([]);
   const [pacienteFilter, setPacienteFilter] = useState(pacienteId);
   const [atualizarRegistros, setAtualizarRegistros] = useState(false);
-  const navigate = useNavigate(); // Hook para navegação
+  const navigate = useNavigate();
 
-  // autaliza as consultas ao montar o componente, com os parâmetros opcionais pacienteId e especialidade
   useEffect(() => {
     const fetchConsultas = async () => {
       try {
-        // Monta o filtro no formato esperado
         const filters = [];
         if (especialidade) filters.push(`especialidade=${especialidade}`);
         if (pacienteFilter) filters.push(`pacienteId=${pacienteFilter}`);
         const filterString = filters.length > 0 ? filters.join(',') : null;
 
-        // Chama a função passando o filtro
         const response = await GetConsultas({ filter: filterString });
-        // console.log('Consultas:', response);
         setConsultas(response);
       } catch (error) {
         console.error('Erro ao buscar consultas:', error);
       }
     };
 
-    // Executa a função ao montar o componente ou alterar os parâmetros
     fetchConsultas();
   }, [especialidade, pacienteFilter, atualizarRegistros]);
 

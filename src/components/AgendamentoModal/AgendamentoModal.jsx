@@ -17,8 +17,7 @@ const AgendamentoModal = ({
   modalData,
   atualizarRegistros,
 }) => {
-  const [step, setStep] = useState(1); // Controle dos passos
-
+  const [step, setStep] = useState(1);
   const [pacientes, setPacientes] = useState([]);
   const [pacienteSelecionado, setPacienteSelecionado] = useState(null);
 
@@ -43,10 +42,7 @@ const AgendamentoModal = ({
     },
   });
 
-  // Monitorar mudanças em requestData
-  useEffect(() => {
-    // console.log(requestData);
-  }, [requestData]);
+  useEffect(() => {}, [requestData]);
 
   const handlePacienteChange = (pacienteId) => {
     setPacienteSelecionado(pacienteId);
@@ -83,11 +79,9 @@ const AgendamentoModal = ({
   const formatDateTimeToLocal = (dateTimeString) => {
     const dateObj = new Date(dateTimeString);
 
-    // Obtém as horas e minutos no formato 24 horas
     const hours = dateObj.getHours().toString().padStart(2, '0');
     const minutes = dateObj.getMinutes().toString().padStart(2, '0');
 
-    // Retorna no formato HH:mm
     return `${hours}:${minutes}`;
   };
 

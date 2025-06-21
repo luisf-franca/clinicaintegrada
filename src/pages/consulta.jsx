@@ -46,7 +46,7 @@ const Consulta = () => {
   const tabList = [{ label: 'Lista' }, { label: 'Detalhes' }];
 
   return (
-    <div className="consulta">
+    <div className="consulta container">
       <div className="consulta-hgroup">
         <h1>Consultas</h1>
         <Especialidade

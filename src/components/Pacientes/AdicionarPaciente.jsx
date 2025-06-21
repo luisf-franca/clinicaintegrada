@@ -34,12 +34,11 @@ const AdicionarPaciente = ({ onSuccess }) => {
   };
 
   const handleNextStep = () => {
-    // Lógica para pular a etapa do responsável se for maior de idade
     if (step === 1) {
       if (paciente.idade >= 18) {
-        setStep(3); // Pula direto para a lista de espera
+        setStep(3);
       } else {
-        setStep(2); // Vai para a etapa de cadastro do responsável
+        setStep(2);
       }
     } else {
       setStep((prev) => prev + 1);
@@ -47,12 +46,11 @@ const AdicionarPaciente = ({ onSuccess }) => {
   };
 
   const handlePrevStep = () => {
-    // Lógica para voltar, pulando a etapa 2 se necessário
     if (step === 3) {
       if (paciente.idade >= 18) {
-        setStep(1); // Volta para a etapa inicial
+        setStep(1);
       } else {
-        setStep(2); // Volta para a etapa do responsável
+        setStep(2);
       }
     } else {
       setStep((prev) => prev - 1);
@@ -76,11 +74,10 @@ const AdicionarPaciente = ({ onSuccess }) => {
 
     try {
       await CreatePaciente(pacienteData);
-      // alert('Paciente adicionado com sucesso!');
-      if (onSuccess) onSuccess(); // Chama a função do componente pai para fechar o form e atualizar a lista
+
+      if (onSuccess) onSuccess();
     } catch (error) {
       console.error('Erro ao adicionar paciente:', error);
-      // alert('Erro ao adicionar paciente. Verifique os dados e tente novamente.');
     }
   };
 
@@ -89,7 +86,6 @@ const AdicionarPaciente = ({ onSuccess }) => {
       case 1:
         return (
           <>
-            {/* <br /> */}
             <div className="form-group">
               <label htmlFor="nome">Nome Completo</label>
               <input
@@ -128,7 +124,7 @@ const AdicionarPaciente = ({ onSuccess }) => {
         return (
           <>
             <h3>Informações do Responsável</h3>
-            {/* <br /> */}
+
             <div className="form-group">
               <label htmlFor="nomeResponsavel">Nome do Responsável</label>
               <input
@@ -157,7 +153,7 @@ const AdicionarPaciente = ({ onSuccess }) => {
         return (
           <>
             <h3>Detalhes Adicionais</h3>
-            {/* <br /> */}
+
             <div className="form-group">
               <label
                 className="custom-checkbox"
@@ -184,7 +180,7 @@ const AdicionarPaciente = ({ onSuccess }) => {
                     alignItems: 'center',
                     justifyContent: 'center',
                     fontSize: '1rem',
-                    background: desejaListaEspera ? '#e6f7e6' : '#fff',
+                    background: desejaListaEspera ? '#e6f7e6' : 'var(--branco)',
                   }}
                 >
                   {desejaListaEspera ? '✔' : ''}
@@ -250,11 +246,9 @@ const AdicionarPaciente = ({ onSuccess }) => {
 
   return (
     <div>
-      {/* <h3>Adicionar Paciente</h3> */}
       <form onSubmit={handleSubmit}>
         {renderStepContent()}
 
-        {/* ======================= ÁREA DA CORREÇÃO ======================= */}
         <div
           style={{
             display: 'flex',
@@ -272,7 +266,6 @@ const AdicionarPaciente = ({ onSuccess }) => {
             </button>
           )}
 
-          {/* Botão Avançar - sempre no DOM, mas escondido se não for necessário */}
           <button
             type="button"
             className="btn-primary"
@@ -280,25 +273,23 @@ const AdicionarPaciente = ({ onSuccess }) => {
             disabled={!paciente.nome || !paciente.idade}
             style={{
               marginLeft: 'auto',
-              display: step < 3 ? 'block' : 'none', // Mostra se a etapa for menor que 3
+              display: step < 3 ? 'block' : 'none',
             }}
           >
             Avançar
           </button>
 
-          {/* Botão Concluir - sempre no DOM, mas escondido se não for necessário */}
           <button
             type="submit"
             className="btn-primary"
             style={{
               marginLeft: 'auto',
-              display: step === 3 ? 'block' : 'none', // Mostra apenas na etapa 3
+              display: step === 3 ? 'block' : 'none',
             }}
           >
             Concluir Cadastro
           </button>
         </div>
-        {/* ===================== FIM DA ÁREA DA CORREÇÃO ===================== */}
       </form>
     </div>
   );

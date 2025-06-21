@@ -114,7 +114,7 @@ const Agendamento = () => {
   const generateDaysForWeek = (weekOffset) => {
     const today = new Date();
     const startOfWeek = new Date(today);
-    startOfWeek.setDate(today.getDate() + weekOffset * 7); // Ajusta para a semana desejada
+    startOfWeek.setDate(today.getDate() + weekOffset * 7);
 
     const days = [];
     for (let i = 0; i < 7; i++) {
@@ -148,16 +148,12 @@ const Agendamento = () => {
     const startIndex = timeSlots.indexOf(startSlot);
     const endIndex = timeSlots.indexOf(time);
 
-    // Ensure valid indices
     if (startIndex === -1 || endIndex === -1) return;
 
-    // Update currentRange based on dragging direction
     const newRange = timeSlots.slice(
       Math.min(startIndex, endIndex),
-      Math.max(startIndex, endIndex) + 1, // include the end slot
+      Math.max(startIndex, endIndex) + 1,
     );
-
-    // console.log('New range:', newRange);
 
     setCurrentRange(newRange);
   };
@@ -171,17 +167,13 @@ const Agendamento = () => {
 
     const [day, month] = currentDay.split('/').map((v) => parseInt(v, 10));
 
-    // Get the first and last slots from the currentRange
     const firstSlot = currentRange[0];
     const lastSlot = currentRange[currentRange.length - 1];
 
-    // Parse the hours and minutes from the first and last slots
     const [startHour, startMinute] = firstSlot
       .split(':')
       .map((v) => parseInt(v, 10));
-    // Para o horário final, pegamos o próximo slot após o último selecionado
     let endSlotIndex = timeSlots.indexOf(lastSlot) + 1;
-    // Se passar do último slot do dia, mantemos o último slot
     if (endSlotIndex >= timeSlots.length) endSlotIndex = timeSlots.length - 1;
     const [endHour, endMinute] = timeSlots[endSlotIndex]
       .split(':')
@@ -189,13 +181,12 @@ const Agendamento = () => {
 
     const startDate = new Date();
     startDate.setDate(day);
-    startDate.setMonth(month - 1); // Meses em JavaScript são baseados em zero (Janeiro é 0, Dezembro é 11)
+    startDate.setMonth(month - 1);
     startDate.setHours(startHour);
     startDate.setMinutes(startMinute);
     startDate.setSeconds(0);
     startDate.setMilliseconds(0);
 
-    // Calculate endDate diretamente do slot seguinte ao último selecionado
     const endDate = new Date(startDate);
     endDate.setHours(endHour);
     endDate.setMinutes(endMinute);
@@ -251,32 +242,25 @@ const Agendamento = () => {
 
   const handleDeleteProcedure = async () => {
     if (!selectedSlotForDelete || selectedSlotForDelete.length === 0) {
-      // alert('Nenhum slot selecionado para exclusão.');
       return;
     }
 
-    // Obter o ID do agendamento do primeiro slot selecionado
     const agendamentoId =
       selectedSlots[selectedSlotForDelete[0].day][selectedSlotForDelete[0].time]
         .agendamentoId;
-    // console.log('Agendamento ID:', agendamentoId);
 
-    // Confirmar exclusão
     const confirmDelete = window.confirm(
       'Tem certeza que deseja excluir o agendamento?',
     );
     if (confirmDelete) {
       try {
         await DeleteAgendamento(agendamentoId);
-        // alert('Agendamento deletado com sucesso!');
         setSelectedSlotForDelete(null);
         handleReloadAgendamentos();
       } catch (error) {
         console.error('Erro ao deletar agendamento:', error);
-        // alert('Erro ao deletar agendamento.');
       }
     } else {
-      // alert('Ação cancelada.');
     }
   };
 
@@ -290,14 +274,11 @@ const Agendamento = () => {
     setCurrentWeek(currentWeek + 1);
   };
 
-  // const closeDetails = () => setIsDetailsOpen(false);
-
   const handleSlotClick = (day, time) => {
     if (isSelected(day, time)) {
       const agendamentoId = selectedSlots[day][time].agendamentoId;
 
       const slotsToDelete = [];
-      // Encontrar todos os slots relacionados ao agendamento
       Object.keys(selectedSlots).forEach((dayKey) => {
         Object.keys(selectedSlots[dayKey]).forEach((timeKey) => {
           if (selectedSlots[dayKey][timeKey].agendamentoId === agendamentoId) {
@@ -306,30 +287,22 @@ const Agendamento = () => {
         });
       });
 
-      // Atualizar o estado dos slots a serem deletados
-      // console.log('Slots a serem deletados:', slotsToDelete);
       setSelectedSlotForDelete(slotsToDelete);
     } else {
-      // Limpar seleção se clicar fora de um agendamento
       setSelectedSlotForDelete(null);
     }
   };
 
   const handleReloadAgendamentos = () => {
-    // console.log('Recarregando agendamentos...');
     setReloadAgendamentos((prev) => !prev);
   };
 
-  // Função para navegar para a página de consulta
   const handleNavigateConsulta = async () => {
     const agendamentoId =
       selectedSlots[selectedSlotForDelete[0].day][selectedSlotForDelete[0].time]
         .agendamentoId;
-    // consultar agendamento, obter consultaId e navegar para a página de consulta
     try {
       const agendamento = await GetAgendamentoById(agendamentoId);
-      // console.log('Agendamento:', agendamento);
-      // Navegar para a página de consulta
       navigate(`/consulta?consultaId=${agendamento.data.consultaId}`);
     } catch (error) {
       console.error('Erro ao buscar agendamento:', error);
@@ -338,7 +311,7 @@ const Agendamento = () => {
 
   return (
     <div
-      className="agendamento"
+      className="agendamento container"
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseUp}
     >

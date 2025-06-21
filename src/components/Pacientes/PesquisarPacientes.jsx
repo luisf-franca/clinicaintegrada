@@ -1,9 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 // FUNCTIONS
 import GetPacientes from '../../functions/Pacientes/GetPacientes';
 
-// Agora recebe "onPesquisar" como prop
 const PesquisarPacientes = ({ onPesquisar }) => {
   const [nome, setNome] = useState('');
   const [resultados, setResultados] = useState([]);
@@ -84,7 +83,7 @@ const PesquisarPacientes = ({ onPesquisar }) => {
             top: '100%',
             left: 0,
             right: 0,
-            background: '#fff',
+            background: 'var(--branco)',
             border: '1px solid #ccc',
             zIndex: 1000,
             maxHeight: 200,

@@ -1,17 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 // COMPONENTS
 import UpdatePaciente from '../../functions/Pacientes/UpdatePaciente';
 
 const AtualizarPaciente = ({ pacienteInicial, onSuccess }) => {
-  // Inicializa o estado do formulário com os dados do paciente selecionado
   const [paciente, setPaciente] = useState(pacienteInicial);
   const [step, setStep] = useState(1);
 
-  // Efeito para atualizar o formulário se o paciente selecionado mudar
   useEffect(() => {
     setPaciente(pacienteInicial);
-    setStep(1); // Reseta para a primeira etapa ao selecionar um novo paciente
+    setStep(1);
   }, [pacienteInicial]);
 
   const handleInputChange = (e) => {
@@ -26,26 +24,20 @@ const AtualizarPaciente = ({ pacienteInicial, onSuccess }) => {
     e.preventDefault();
     try {
       await UpdatePaciente(paciente.id, paciente);
-      // alert('Paciente atualizado com sucesso!');
+
       if (onSuccess) onSuccess();
     } catch (error) {
       console.error('Erro ao atualizar paciente:', error);
-      // alert('Erro ao atualizar paciente.');
     }
   };
 
-  // =================================================================
-  // A LÓGICA DE RENDERIZAÇÃO FOI ESTRUTURADA COMO EM AdicionarPaciente
-  // =================================================================
   const renderStep = () => {
     switch (step) {
       case 1:
         return (
           <>
-            {/* Título da etapa */}
             <h3>Dados Pessoais</h3>
-            {/* <br /> */}
-            {/* Usa a classe "form-group" para cada campo */}
+
             <div className="form-group">
               <label htmlFor="nome">Nome</label>
               <input
@@ -79,7 +71,6 @@ const AtualizarPaciente = ({ pacienteInicial, onSuccess }) => {
               />
             </div>
 
-            {/* Checkbox estilizado seguindo o padrão do AdicionarPaciente */}
             <div className="form-group">
               <label
                 className="custom-checkbox"
@@ -107,7 +98,9 @@ const AtualizarPaciente = ({ pacienteInicial, onSuccess }) => {
                     alignItems: 'center',
                     justifyContent: 'center',
                     fontSize: '1rem',
-                    background: paciente.recebeuAlta ? '#e6f7e6' : '#fff',
+                    background: paciente.recebeuAlta
+                      ? '#e6f7e6'
+                      : 'var(--branco)',
                   }}
                 >
                   {paciente.recebeuAlta ? '✔' : ''}
@@ -120,10 +113,8 @@ const AtualizarPaciente = ({ pacienteInicial, onSuccess }) => {
       case 2:
         return (
           <>
-            {/* Título da etapa */}
             <h3>Informações do Responsável</h3>
-            {/* <br /> */}
-            {/* Esta parte já estava quase correta, apenas ajustando */}
+
             <div className="form-group">
               <label htmlFor="nomeResponsavel">Nome do Responsável</label>
               <input
@@ -166,20 +157,15 @@ const AtualizarPaciente = ({ pacienteInicial, onSuccess }) => {
   };
 
   return (
-    // Um container principal para o formulário
     <div className="atualizar-paciente-form">
-      {/* <h3>Alterar Paciente</h3> */}
       <form onSubmit={handleSubmit}>
         {renderStep()}
 
-        {/* ======================================================== */}
-        {/* BOTÕES DE NAVEGAÇÃO COM AS CLASSES CSS CORRETAS */}
-        {/* ======================================================== */}
         <div className="form-navigation">
           {step > 1 && (
             <button
               type="button"
-              className="btn-secondary" // Classe para botão de voltar
+              className="btn-secondary"
               onClick={() => setStep((prevStep) => prevStep - 1)}
             >
               Voltar
@@ -189,9 +175,9 @@ const AtualizarPaciente = ({ pacienteInicial, onSuccess }) => {
           {step < 2 && (
             <button
               type="button"
-              className="btn-primary" // Classe para botão principal
+              className="btn-primary"
               onClick={() => setStep((prevStep) => prevStep + 1)}
-              style={{ marginLeft: 'auto' }} // Garante que o botão fique à direita
+              style={{ marginLeft: 'auto' }}
             >
               Avançar
             </button>
@@ -200,8 +186,8 @@ const AtualizarPaciente = ({ pacienteInicial, onSuccess }) => {
           {step === 2 && (
             <button
               type="submit"
-              className="btn-primary" // Classe para botão principal
-              style={{ marginLeft: 'auto' }} // Garante que o botão fique à direita
+              className="btn-primary"
+              style={{ marginLeft: 'auto' }}
             >
               Salvar Alterações
             </button>

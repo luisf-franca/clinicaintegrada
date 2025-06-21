@@ -18,7 +18,7 @@ const AdicionarRegistro = ({ atualizarRegistros }) => {
   const [selectedSpecialty, setSelectedSpecialty] = useState(
     localStorage.getItem('selectedSpecialty') || 1,
   );
-  const [step, setStep] = useState(1); // Controle do passo atual
+  const [step, setStep] = useState(1);
 
   useEffect(() => {
     setListaEspera((prevState) => ({
@@ -58,9 +58,7 @@ const AdicionarRegistro = ({ atualizarRegistros }) => {
         especialidade: localStorage.getItem('selectedSpecialty') || 1,
         prioridade: 1,
       });
-      // alert('Registro adicionado com sucesso!');
     } catch (error) {
-      // alert(`Erro ao adicionar registro: ${error.response.data}`);
       console.error('Erro ao adicionar registro:', error);
     }
   };
@@ -92,7 +90,6 @@ const AdicionarRegistro = ({ atualizarRegistros }) => {
                   ))}
                 </select>
 
-                {/* Botão para resetar o pacienteSelecionado */}
                 {pacienteSelecionado && (
                   <button
                     type="button"
@@ -176,10 +173,8 @@ const AdicionarRegistro = ({ atualizarRegistros }) => {
   return (
     <div className="adicionar-registro">
       <div>
-        {/* Renderiza o conteúdo do passo atual */}
         {renderStep()}
         <div className="step-buttons">
-          {/* Botão para voltar */}
           {step > 1 && (
             <button
               type="button"
@@ -188,7 +183,6 @@ const AdicionarRegistro = ({ atualizarRegistros }) => {
               Voltar
             </button>
           )}
-          {/* Botão para avançar */}
           {step < 2 && pacienteSelecionado && (
             <button
               type="button"
@@ -197,7 +191,6 @@ const AdicionarRegistro = ({ atualizarRegistros }) => {
               Avançar
             </button>
           )}
-          {/* Botão para submissão no último passo */}
           {step === 2 && (
             <button type="button" onClick={handleSubmit}>
               Adicionar Registro

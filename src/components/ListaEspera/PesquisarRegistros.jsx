@@ -6,7 +6,7 @@ import GetListaEntries from '../../functions/ListaEspera/GetListaEntries';
 
 const PesquisarRegistros = ({ setRegistros, especialidade }) => {
   const [page, setPage] = useState(1);
-  const [pageSize] = useState(5); // Limite para dropdown
+  const [pageSize] = useState(5);
   const [orderBy, setOrderBy] = useState('dataEntrada');
   const [nome, setNome] = useState('');
 
@@ -15,26 +15,23 @@ const PesquisarRegistros = ({ setRegistros, especialidade }) => {
 
   useEffect(() => {
     if (nome === '') {
-      getRegistrosListaEspera(); // Chama a função de busca sem filtro quando `nome` estiver vazio
+      getRegistrosListaEspera();
     }
   }, [nome]);
 
   useEffect(() => {
     getRegistrosListaEspera();
-  }
-    , [especialidade, prioridade, status]);
+  }, [especialidade, prioridade, status]);
 
   const getRegistrosListaEspera = async () => {
     try {
       const options = {};
 
-      // Constrói o filtro baseado nos valores preenchidos
       let filters = [`especialidade=${especialidade}`];
       if (nome !== '') filters.push(`PacienteNome^${nome}`);
       if (prioridade) filters.push(`prioridade=${prioridade}`);
       if (status) filters.push(`status=${status}`);
 
-      // Concatena os filtros com vírgulas
       if (filters.length > 0) options.filter = filters.join(',');
 
       if (page) options.page = page;
@@ -46,10 +43,10 @@ const PesquisarRegistros = ({ setRegistros, especialidade }) => {
     } catch (error) {
       console.error('Erro ao buscar registros:', error);
     }
-  }
+  };
 
   const handleNomeChange = (e) => {
-    setNome(e.target.value); // Atualiza o estado do nome
+    setNome(e.target.value);
   };
 
   const handleKeyDown = (e) => {
@@ -59,7 +56,7 @@ const PesquisarRegistros = ({ setRegistros, especialidade }) => {
   };
 
   const clearFilter = () => {
-    setNome(''); // Limpa o filtro
+    setNome('');
   };
 
   return (
@@ -83,8 +80,12 @@ const PesquisarRegistros = ({ setRegistros, especialidade }) => {
               Limpar
             </button>
           )}
-          <label>Prioridade:
-            <select value={prioridade || ''} onChange={(e) => setPrioridade(e.target.value)}>
+          <label>
+            Prioridade:
+            <select
+              value={prioridade || ''}
+              onChange={(e) => setPrioridade(e.target.value)}
+            >
               <option value="">Todas</option>
               <option value={1}>Baixa</option>
               <option value={2}>Média</option>
@@ -92,8 +93,12 @@ const PesquisarRegistros = ({ setRegistros, especialidade }) => {
             </select>
           </label>
 
-          <label>Status:
-            <select value={status || ''} onChange={(e) => setStatus(e.target.value)}>
+          <label>
+            Status:
+            <select
+              value={status || ''}
+              onChange={(e) => setStatus(e.target.value)}
+            >
               <option value="">Todas</option>
               <option value={1}>Aguardando</option>
               <option value={2}>Atendido</option>
@@ -105,7 +110,6 @@ const PesquisarRegistros = ({ setRegistros, especialidade }) => {
 
       <button onClick={getRegistrosListaEspera}>Pesquisar</button>
     </div>
-
   );
 };
 

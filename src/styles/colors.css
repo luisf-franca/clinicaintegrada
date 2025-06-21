@@ -1,14 +1,18 @@
 :root {
   --branco: #fff;
-  --preto: #212529;
+  --cinza-100: #fafbfc;
+  --cinza-200: #f5f5f5;
+  --cinza-300: #e0e0e0;
+  --cinza-400: #d1d5db;
   --cinza: #636466;
-  --vermelho: #d71c23;
-  --vermelho-claro: #e82137;
+  --cinza-600: #333;
+  --vermelho: #d32f2f;
+  --vermelho-escuro: #b0171b;
   --roxo: #7d1474;
-  --gelo: #f8f9fa;
 }
 
 /* SOMBRAS */
 :root {
   --shadow1: 0 2px 20px rgba(0, 0, 0, 0.1);
+  --shadow2: 0 10px 30px rgba(0, 0, 0, 0.2);
 }

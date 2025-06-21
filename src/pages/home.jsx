@@ -28,7 +28,6 @@ const Home = () => {
     // { label: 'Salas' },
   ];
 
-  //monitore activeTab, se for alterada para Pacientes, deve limpar o pacienteSelecionadoId e pacienteEtapa
   useEffect(() => {
     if (activeTab === 0) {
       setPacienteSelecionadoId(null);
@@ -36,7 +35,6 @@ const Home = () => {
     }
   }, [activeTab]);
 
-  //monitore pacienteEtapa, se for alterada, deve sugerir a funcionalidade de acordo com a etapa do paciente no sistema
   useEffect(() => {
     if (pacienteEtapa !== null) {
       switch (pacienteEtapa) {
@@ -54,14 +52,13 @@ const Home = () => {
           setActiveTab(1);
           break;
         default:
-          // console.log('Etapa desconhecida');
           break;
       }
     }
   }, [pacienteEtapa]);
 
   return (
-    <div className="home">
+    <div className="home container">
       <div className="home-header">
         <h1>Início</h1>
         <Especialidade

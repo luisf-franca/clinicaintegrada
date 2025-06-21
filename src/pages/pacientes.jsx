@@ -91,7 +91,7 @@ const Pacientes = () => {
   };
 
   return (
-    <div className="pacientes">
+    <div className="pacientes container">
       <div className="pacientes-hgroup">
         <h1>Pacientes</h1>
       </div>
