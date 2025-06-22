@@ -49,8 +49,8 @@ const PesquisarEquipes = ({
           pageSize: debouncedNome.trim() ? 10 : 3 // 3 registros se não há texto, 10 se há
         });
 
-        // Agora a resposta já vem com a estrutura correta
-        const equipesData = response?.data?.items || [];
+        // A resposta já vem com a estrutura correta (response.data.data)
+        const equipesData = response?.items || [];
         setEquipes(equipesData);
         setShowResults(true);
       } catch (error) {
