@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import GetListaEspera from '../../../functions/ListaEspera/GetListaEntries';
 import FormatarDateTimeToLocal from '../../../functions/FormatarDateTime/FormatDateTimeToLocal';
 
-const ListaEsperaResumo = ({ pacienteId, especialidade }) => {
+const ListaEsperaResumo = ({ pacienteId }) => {
   const [listaEspera, setListaEspera] = useState([]);
   const [pacienteFilter, setPacienteFilter] = useState(pacienteId);
   const [isLoading, setIsLoading] = useState(false);
@@ -23,9 +23,6 @@ const ListaEsperaResumo = ({ pacienteId, especialidade }) => {
       setError(null);
       try {
         const filters = [];
-        if (especialidade && especialidade !== '') {
-          filters.push(`especialidade=${especialidade}`);
-        }
         if (pacienteFilter && pacienteFilter !== '') {
           filters.push(`pacienteId=${pacienteFilter}`);
         }
@@ -47,7 +44,7 @@ const ListaEsperaResumo = ({ pacienteId, especialidade }) => {
     };
 
     fetchListaEspera();
-  }, [especialidade, pacienteFilter]);
+  }, [pacienteFilter]);
 
   const getEmptyMessage = () => {
     if (pacienteId && listaEspera.length === 0) {
@@ -74,7 +71,7 @@ const ListaEsperaResumo = ({ pacienteId, especialidade }) => {
   return (
     <div className="lista-espera-resumo">
       <div className="lista-espera-resumo__header">
-        <h4>Lista de Espera</h4>
+        <h4>Aguardando Atendimento</h4>
         <button onClick={handleCadastrarRegistroListaEspera}>
           Novo Registro
         </button>

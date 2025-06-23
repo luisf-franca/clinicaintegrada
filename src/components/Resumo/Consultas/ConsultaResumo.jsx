@@ -10,7 +10,7 @@ import FinalizarTriagem from '../../../functions/Consultas/FinalizarTriagem';
 import IniciarConsulta from '../../../functions/Consultas/IniciarConsulta';
 import FinalizarConsulta from '../../../functions/Consultas/FinalizarConsulta';
 
-const ConsultaResumo = ({ pacienteId, especialidade }) => {
+const ConsultaResumo = ({ pacienteId }) => {
   const [consultas, setConsultas] = useState([]);
   const [pacienteFilter, setPacienteFilter] = useState(pacienteId);
   const [atualizarRegistros, setAtualizarRegistros] = useState(false);
@@ -20,11 +20,11 @@ const ConsultaResumo = ({ pacienteId, especialidade }) => {
     const fetchConsultas = async () => {
       try {
         const filters = [];
-        if (especialidade) filters.push(`especialidade=${especialidade}`);
         if (pacienteFilter) filters.push(`pacienteId=${pacienteFilter}`);
         const filterString = filters.length > 0 ? filters.join(',') : null;
 
         const response = await GetConsultas({ filter: filterString });
+        console.log('response', response);  
         setConsultas(response);
       } catch (error) {
         console.error('Erro ao buscar consultas:', error);
@@ -32,7 +32,7 @@ const ConsultaResumo = ({ pacienteId, especialidade }) => {
     };
 
     fetchConsultas();
-  }, [especialidade, pacienteFilter, atualizarRegistros]);
+  }, [pacienteFilter, atualizarRegistros]);
 
   const getEmptyMessage = () => {
     if (pacienteId && consultas.length === 0) {
@@ -160,10 +160,10 @@ const ConsultaResumo = ({ pacienteId, especialidade }) => {
         <table className="consulta-resumo__table">
           <thead>
             <tr>
+              <th>Paciente</th>
               <th>Data Início</th>
               <th>Data Fim</th>
               <th>Status</th>
-              <th>Observação</th>
               <th>Especialidade</th>
               <th>Ações</th>
             </tr>
@@ -173,18 +173,18 @@ const ConsultaResumo = ({ pacienteId, especialidade }) => {
               consultas.map(
                 ({
                   id,
+                  nome,
                   dataHoraInicio,
                   dataHoraFim,
                   especialidade,
                   status,
-                  observacao,
                   tipo,
                 }) => (
                   <tr key={id}>
+                    <td>{nome}</td>
                     <td>{FormatarDateTimeToLocal(dataHoraInicio)}</td>
                     <td>{FormatarDateTimeToLocal(dataHoraFim)}</td>
                     <td>{status}</td>
-                    <td>{observacao}</td>
                     <td>{especialidade}</td>
                     <td>{renderButton({ status, tipo, id })}</td>
                   </tr>
