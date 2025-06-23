@@ -43,7 +43,7 @@ const PacientesResumo = ({
   };
 
   const handleNavigatePacientes = () => {
-    navigate('/pacientes');
+    navigate('/pacientes?view=add');
   };
 
   return (
