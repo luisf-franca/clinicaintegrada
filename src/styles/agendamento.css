@@ -13,6 +13,20 @@
       font-weight: 700;
       margin: 0;
     }
+
+    & .filtros-container {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+
+      & .filtros-secundarios {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+    }
   }
 
   & > nav {
@@ -100,6 +114,12 @@
           white-space: nowrap;
           font-size: 0.98rem;
 
+          /* Previne seleção de texto nas células */
+          user-select: none;
+          -webkit-user-select: none;
+          -moz-user-select: none;
+          -ms-user-select: none;
+
           &:not(:first-child) {
             width: calc(100% / 7);
           }
@@ -186,6 +206,10 @@
 
   .calendario-wrapper {
     padding: 0.5rem 0.25rem;
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none;    /* Firefox */
+    -ms-user-select: none;     /* IE10+/Edge */
+    user-select: none;         /* Padrão */
   }
 }
 

@@ -5,6 +5,7 @@ import GetSalas from '../../functions/Salas/GetSalas';
 
 const SelectSala = ({ especialidade, onSelectSala }) => {
   const [salas, setSalas] = useState([]);
+  const [selectedSalaId, setSelectedSalaId] = useState(null);
 
   const getEspecialidade = () => {
     switch (especialidade) {
@@ -27,24 +28,43 @@ const SelectSala = ({ especialidade, onSelectSala }) => {
         const data = await GetSalas({
           filter: `especialidade=${especialidade}`,
         });
-        onSelectSala(data[0]?.id ?? null);
         setSalas(data);
+        
+        // Seleciona a primeira sala automaticamente se houver salas disponíveis
+        if (data.length > 0) {
+          setSelectedSalaId(data[0].id);
+          onSelectSala(data[0].id);
+        } else {
+          setSelectedSalaId(null);
+          onSelectSala(null);
+        }
       } catch (error) {
         console.error('Erro ao buscar salas:', error);
+        setSalas([]);
+        setSelectedSalaId(null);
+        onSelectSala(null);
       }
     };
 
     fetchSalas();
-  }, [especialidade]);
+  }, [especialidade, onSelectSala]);
+
+  const handleSalaChange = (e) => {
+    const salaId = e.target.value;
+    setSelectedSalaId(salaId);
+    onSelectSala(salaId);
+  };
 
   return (
-    <div className="sala">
-      <select onChange={(e) => onSelectSala(e.target.value)}>
+    <div className="especialidade">
+      <select value={selectedSalaId || ''} onChange={handleSalaChange}>
         {salas.length === 0 ? (
-          <option value={null}>
+          <option value="">
             Nenhuma sala disponível para {getEspecialidade()}
           </option>
-        ) : null}
+        ) : (
+          <option value="">Selecione uma sala</option>
+        )}
         {salas.map((sala) => (
           <option key={sala.id} value={sala.id}>
             {sala.nome}
