@@ -5,10 +5,6 @@ import { useNavigate } from 'react-router-dom';
 // FUNCTIONS
 import GetConsultas from '../../../functions/Consultas/GetConsultas';
 import FormatarDateTimeToLocal from '../../../functions/FormatarDateTime/FormatDateTimeToLocal';
-import IniciarTriagem from '../../../functions/Consultas/IniciarTriagem';
-import FinalizarTriagem from '../../../functions/Consultas/FinalizarTriagem';
-import IniciarConsulta from '../../../functions/Consultas/IniciarConsulta';
-import FinalizarConsulta from '../../../functions/Consultas/FinalizarConsulta';
 
 const ConsultaResumo = ({ pacienteId }) => {
   const [consultas, setConsultas] = useState([]);
