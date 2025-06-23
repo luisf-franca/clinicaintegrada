@@ -49,95 +49,25 @@ const ConsultaResumo = ({ pacienteId }) => {
   };
 
   const handleNavigateConsulta = (consultaId) => {
-    navigate(`/consulta?${consultaId}`);
+    navigate(`/consulta?consultaId=${consultaId}&tab=1`);
   };
 
   const handleAtualizarRegistros = () => {
     setAtualizarRegistros(!atualizarRegistros);
   };
 
-  const renderButton = ({ status, tipo, id }) => {
-    if (status === 'Agendada' && tipo === 1) {
-      return (
-        <button onClick={() => handleAction('iniciar-triagem', id)}>
-          Iniciar Triagem
-        </button>
-      );
-    }
-
-    if (status === 'Triagem' && tipo === 1) {
-      return (
-        <button onClick={() => handleAction('finalizar-triagem', id)}>
-          Finalizar Triagem
-        </button>
-      );
-    }
-
-    if (
-      (status === 'AguardandoConsulta' && tipo === 1) ||
-      (status === 'Agendada' && tipo === 2)
-    ) {
-      return (
-        <button onClick={() => handleAction('iniciar-consulta', id)}>
-          Iniciar Consulta
-        </button>
-      );
-    }
-
-    if (
-      (status === 'EmAndamento' && tipo === 1) ||
-      (status === 'EmAndamento' && tipo === 2)
-    ) {
-      return (
-        <button onClick={() => handleAction('finalizar-consulta', id)}>
-          Finalizar Consulta
-        </button>
-      );
-    }
-
-    if (status === 'Concluida') {
-      return (
-        <button onClick={() => handleAction('visualizar-consulta', id)}>
-          Visualizar Consulta
-        </button>
-      );
-    }
-
-    return null; // Caso nenhuma condição seja atendida
+  const renderButton = ({ id }) => {
+    return (
+      <button onClick={() => handleAction('visualizar-consulta', id)}>
+        Visualizar Consulta
+      </button>
+    );
   };
 
   const handleAction = async (action, consultaId) => {
-    const confirmMessage = {
-      'iniciar-triagem': 'Tem certeza que deseja iniciar a triagem?',
-      'finalizar-triagem': 'Tem certeza que deseja finalizar a triagem?',
-      'iniciar-consulta': 'Tem certeza que deseja iniciar a consulta?',
-      'finalizar-consulta': 'Tem certeza que deseja finalizar a consulta?',
-    };
-
-    if (confirmMessage[action] && !window.confirm(confirmMessage[action])) {
-      return;
-    }
-
     switch (action) {
-      case 'iniciar-triagem':
-        await IniciarTriagem(consultaId);
-        handleAtualizarRegistros();
-        break;
-      case 'finalizar-triagem':
-        await FinalizarTriagem(consultaId);
-        handleAtualizarRegistros();
-        break;
-      case 'iniciar-consulta':
-        await IniciarConsulta(consultaId);
-        handleAtualizarRegistros();
-        break;
-      case 'finalizar-consulta':
-        await FinalizarConsulta(consultaId);
-        handleAtualizarRegistros();
-        break;
       case 'visualizar-consulta':
         handleNavigateConsulta(consultaId);
-        handleAtualizarRegistros();
         break;
       default:
         console.log(`Ação desconhecida: ${action}`);
@@ -186,7 +116,7 @@ const ConsultaResumo = ({ pacienteId }) => {
                     <td>{FormatarDateTimeToLocal(dataHoraFim)}</td>
                     <td>{status}</td>
                     <td>{especialidade}</td>
-                    <td>{renderButton({ status, tipo, id })}</td>
+                    <td>{renderButton({ id })}</td>
                   </tr>
                 ),
               )

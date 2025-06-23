@@ -208,6 +208,7 @@
 
 .table-container tr {
   transition: background 0.2s;
+  cursor: pointer;
 }
 
 .table-container tr:hover {
@@ -296,8 +297,8 @@
 
 .left-column p,
 .right-column p {
-  margin: 0.2rem 0;
-  font-size: 1rem;
+  margin: 0.5rem 0;
+  color: var(--cinza-600);
 }
 
 .especialidade select {
@@ -332,6 +333,81 @@
   text-align: center;
   min-height: 80px;
   gap: 0.5rem;
+}
+
+/* --- [NOVO] ESTILOS PARA A SEÇÃO DE AÇÕES --- */
+.acoes-section {
+  margin: 1.5rem 0;
+  padding: 1.5rem;
+  background: var(--cinza-100);
+  border-radius: 12px;
+  border: 1px solid var(--cinza-300);
+  box-shadow: 0 2px 8px rgba(211, 47, 47, 0.04);
+}
+
+.acoes-container {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn-action {
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  border: none;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  min-width: 160px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-iniciar-triagem {
+  background: var(--vermelho-escuro);
+  color: var(--branco);
+}
+
+.btn-iniciar-triagem:hover {
+  background: var(--vermelho);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(211, 47, 47, 0.3);
+}
+
+.btn-finalizar-triagem {
+  background: var(--vermelho-escuro);
+  color: var(--branco);
+}
+
+.btn-finalizar-triagem:hover {
+  background: var(--vermelho);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(211, 47, 47, 0.3);
+}
+
+.btn-iniciar-consulta {
+  background: var(--vermelho-escuro);
+  color: var(--branco);
+}
+
+.btn-iniciar-consulta:hover {
+  background: var(--vermelho);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(211, 47, 47, 0.3);
+}
+
+.btn-finalizar-consulta {
+  background: var(--vermelho-escuro);
+  color: var(--branco);
+}
+
+.btn-finalizar-consulta:hover {
+  background: var(--vermelho);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(211, 47, 47, 0.3);
 }
 
 @media (max-width: 900px) {
