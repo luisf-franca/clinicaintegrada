@@ -31,7 +31,11 @@
   border: 1px solid var(--cinza-300);
   color: var(--vermelho-escuro);
   font-weight: 600;
+  border-radius: 6px;
+  padding: 0.5rem 1.25rem;
   font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
 }
 
 .consulta-resumo__header button:hover {
