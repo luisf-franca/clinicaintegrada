@@ -1,0 +1,4 @@
+[[redirects]]
+  from = "/api/*"
+  to = "http://clinicaintegrada.com.br.thor.hostazul.com.br/api/:splat"
+  status = 200
