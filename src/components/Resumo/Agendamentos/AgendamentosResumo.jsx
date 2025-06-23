@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import GetAgendamentos from '../../../functions/Agendamentos/GetAgendamentos';
 import FormatarDateTimeToLocal from '../../../functions/FormatarDateTime/FormatDateTimeToLocal';
 
-const AgendamentosResumo = ({ pacienteId, especialidade }) => {
+const AgendamentosResumo = ({ pacienteId }) => {
   const [intervalo, setIntervalo] = useState('sempre');
   const [agendamentos, setAgendamentos] = useState([]);
   const [pacienteFilter, setPacienteFilter] = useState(pacienteId);
@@ -16,7 +16,6 @@ const AgendamentosResumo = ({ pacienteId, especialidade }) => {
     const fetchAgendamentos = async () => {
       try {
         const filters = [];
-        if (especialidade) filters.push(`especialidade=${especialidade}`);
         if (pacienteFilter) filters.push(`pacienteId=${pacienteFilter}`);
         filters.push('status=1');
 
@@ -58,7 +57,7 @@ const AgendamentosResumo = ({ pacienteId, especialidade }) => {
     };
 
     fetchAgendamentos();
-  }, [intervalo, especialidade, pacienteFilter]);
+  }, [intervalo, pacienteFilter]);
 
   const getEmptyMessage = () => {
     if (pacienteId && agendamentos.length === 0) {

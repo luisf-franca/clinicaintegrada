@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 import '../styles/home.css';
 
 // COMPONENTS
-import Especialidade from '../components/Especialidade/Especialidade';
 import ListaEsperaResumo from '../components/Resumo/ListaEspera/ListaEsperaResumo';
 import AgendamentosResumo from '../components/Resumo/Agendamentos/AgendamentosResumo';
 import ConsultaResumo from '../components/Resumo/Consultas/ConsultaResumo';
@@ -13,10 +12,6 @@ import PacientesResumo from '../components/Resumo/Pacientes/PacientesResumo';
 import GetPacientes from '../functions/Pacientes/GetPacientes';
 
 const Home = () => {
-  const [selectedSpecialty, setSelectedSpecialty] = useState(
-    localStorage.getItem('selectedSpecialty') || 1,
-  );
-
   const [pacientes, setPacientes] = useState([]);
   const [pacienteEtapa, setPacienteEtapa] = useState(null);
   const [pacienteSelecionadoId, setPacienteSelecionadoId] = useState(null);
@@ -59,19 +54,18 @@ const Home = () => {
 
   useEffect(() => {
     if (pacienteEtapa !== null) {
+      //console.log('pacienteEtapa', pacienteEtapa);
       switch (pacienteEtapa) {
-        case 1:
-          setActiveTab(1);
+        case 1: // Cadastrado
+        case 2: // ListaEspera
+        case 5: // ConsultaCancelada
+          setActiveTab(1); // Lista de Espera
           break;
-        case 2:
-          setActiveTab(2);
+        case 3: // TriagemConsulta
+          setActiveTab(2); // Agendamentos
           break;
-        case 3:
-        case 4:
-          setActiveTab(3);
-          break;
-        case 5:
-          setActiveTab(1);
+        case 4: // ConsultaConcluida
+          setActiveTab(3); // Consultas
           break;
         default:
           break;
@@ -83,10 +77,6 @@ const Home = () => {
     <div className="home container">
       <div className="home-header">
         <h1>Início</h1>
-        <Especialidade
-          selectedSpecialty={selectedSpecialty}
-          onSelectSpecialty={setSelectedSpecialty}
-        />
       </div>
       <div className="home-body">
         <div className="tab-bar">
@@ -114,7 +104,7 @@ const Home = () => {
           )}
           {activeTab === 1 && (
             <div className="body-section">
-              <ListaEsperaResumo pacienteId={pacienteSelecionadoId} especialidade={selectedSpecialty} />
+              <ListaEsperaResumo pacienteId={pacienteSelecionadoId} />
             </div>
           )}
           {activeTab === 2 && (
