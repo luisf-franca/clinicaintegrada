@@ -1,161 +1,127 @@
+/* Container do Modal */
 .agendar-modal {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-
-  background: var(--branco);
-  padding: 2rem 2.5rem;
-  border-radius: 16px;
-  width: 100%;
-  max-width: 480px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18), 0 1.5px 4px rgba(0, 0, 0, 0.08);
-  position: relative;
-  animation: modalPop 0.25s;
-
-  & hgroup {
-    margin-bottom: 0.5rem;
-  }
-
-  & h3 {
-    margin: 0 0 0.25rem 0;
-    font-size: 1.5rem;
-    color: var(--vermelho);
-    font-weight: 700;
-    letter-spacing: 0.5px;
-  }
-
-  & form {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-
-    & label {
-      font-weight: 500;
-      color: var(--cinza-600);
-      margin-bottom: 0.25rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.25rem;
-    }
-
-    & input,
-    & select,
-    & textarea {
-      border: 1px solid var(--cinza-400);
-      border-radius: 6px;
-      padding: 0.5rem 0.75rem;
-      font-size: 1rem;
-      background: var(--cinza-100);
-      transition: border 0.2s;
-      width: 100%;
-
-      &:focus {
-        border: 1.5px solid var(--vermelho);
-        outline: none;
-      }
-    }
-  }
-
-  & > div {
-    display: flex;
-    justify-content: space-between;
-    & button {
-      cursor: pointer;
-    }
-  }
+  gap: 1.5rem;
+  width: 500px;
+  max-width: 90vw;
+  padding: 2rem;
+  background: var(--cinza-100);
+  border-radius: 12px;
+  box-shadow: var(--shadow2);
+  border: 1px solid var(--cinza-300);
 }
 
-@keyframes modalPop {
-  from {
-    transform: scale(0.95);
-    opacity: 0;
-  }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-.time-range {
+/* Cabeçalho */
+.agendar-modal hgroup {
   display: flex;
-  gap: 1.25rem;
-  font-size: 1rem;
-  color: #444;
-  margin-bottom: 0.5rem;
+  flex-direction: column;
+  gap: 0.5rem;
+  border-bottom: 1px solid var(--cinza-300);
+  padding-bottom: 1rem;
 }
 
+.agendar-modal hgroup h3 {
+  font-size: 1.5rem;
+  color: var(--cinza-600);
+}
+
+.agendar-modal .time-range {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  font-size: 0.9rem;
+  color: var(--cinza);
+}
+
+/* Formulário */
+.agendar-modal form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--cinza-600);
+}
+
+/* Estilo para inputs, selects e textareas */
+.form-group select,
+.form-group textarea,
+.form-group input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--cinza-400);
+  border-radius: 6px;
+  background-color: var(--branco);
+  font-size: 1rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-group select:focus,
+.form-group textarea:focus,
+.form-group input:focus {
+  border-color: var(--roxo);
+  box-shadow: 0 0 0 2px rgba(125, 20, 116, 0.2);
+}
+
+.form-group textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+/* Checkbox customizado */
+.form-group.checkbox-group {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+}
+
+.form-group.checkbox-group input {
+  width: auto;
+  accent-color: var(--roxo);
+}
+
+/* Botões */
 .step-buttons {
   display: flex;
-  gap: 0.75rem;
   justify-content: flex-end;
-  margin-top: 1rem;
-
-  & button {
-    padding: 0.5rem 1.25rem;
-    border-radius: 6px;
-    border: none;
-    font-size: 1rem;
-    font-weight: 500;
-    cursor: pointer;
-    background: var(--cinza-300);
-    color: var(--cinza-600);
-    transition: background 0.2s, color 0.2s;
-
-    &:hover {
-      background: var(--vermelho);
-      color: var(--branco);
-    }
-
-    &:last-child {
-      background: var(--branco);
-      color: var(--vermelho);
-      border: 1px solid var(--vermelho);
-
-      &:hover {
-        background: var(--vermelho);
-        color: var(--branco);
-      }
-    }
-  }
+  gap: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--cinza-300);
 }
 
-.custom-checkbox {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-top: 0.5rem;
-
-  & input[type='checkbox'] {
-    appearance: none;
-    width: 20px;
-    height: 20px;
-    border: 1.5px solid var(--vermelho);
-    border-radius: 4px;
-    background-color: var(--branco);
-    cursor: pointer;
-    position: relative;
-    transition: background 0.2s, border 0.2s;
-  }
-
-  & input[type='checkbox']:checked {
-    background-color: var(--vermelho);
-    border-color: var(--vermelho);
-  }
-
-  & input[type='checkbox']:checked::after {
-    content: '\2713';
-    position: absolute;
-    top: 2px;
-    left: 5px;
-    color: var(--branco);
-    font-size: 1rem;
-  }
+.step-buttons button {
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s;
 }
 
-@media (max-width: 600px) {
-  .agendar-modal {
-    max-width: 98vw;
-    padding: 1rem 0.5rem;
-  }
+/* Botão primário (avançar/salvar) */
+.step-buttons button:last-child {
+  background-color: var(--roxo);
+  color: var(--branco);
+}
+.step-buttons button:last-child:hover {
+  background-color: var(--vermelho-escuro);
+}
+
+/* Botão secundário (voltar/cancelar) */
+.step-buttons button:first-child {
+  background-color: var(--cinza-300);
+  color: var(--cinza-600);
+}
+.step-buttons button:first-child:hover {
+  background-color: var(--cinza-400);
 }

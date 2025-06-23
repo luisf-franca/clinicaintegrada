@@ -3,75 +3,61 @@ import React, { useState, useEffect } from 'react';
 // FUNCTIONS
 import GetSalas from '../../functions/Salas/GetSalas';
 
-const SelectSala = ({ especialidade, onSelectSala }) => {
+// Este componente agora é totalmente controlado pelo pai.
+const SelectSala = ({ especialidade, onSelectSala, selectedSala }) => {
   const [salas, setSalas] = useState([]);
-  const [selectedSalaId, setSelectedSalaId] = useState(null);
-
-  const getEspecialidade = () => {
-    switch (especialidade) {
-      case 1:
-        return 'psicologia';
-      case 2:
-        return 'odontologia';
-      case 3:
-        return 'fisioterapia';
-      case 4:
-        return 'nutrição';
-      default:
-        return null;
-    }
-  };
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchSalas = async () => {
+      if (!especialidade) return;
+      setLoading(true);
       try {
         const data = await GetSalas({
           filter: `especialidade=${especialidade}`,
         });
         setSalas(data);
-        
-        // Seleciona a primeira sala automaticamente se houver salas disponíveis
-        if (data.length > 0) {
-          setSelectedSalaId(data[0].id);
+        // Se nenhuma sala estiver selecionada no pai E houver salas na resposta,
+        // sugere a primeira sala para o pai.
+        if (!selectedSala && data.length > 0) {
           onSelectSala(data[0].id);
-        } else {
-          setSelectedSalaId(null);
-          onSelectSala(null);
         }
       } catch (error) {
         console.error('Erro ao buscar salas:', error);
         setSalas([]);
-        setSelectedSalaId(null);
-        onSelectSala(null);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchSalas();
-  }, [especialidade, onSelectSala]);
+    // A dependência 'onSelectSala' foi removida para evitar re-renderizações desnecessárias.
+    // O 'selectedSala' foi adicionado para reavaliar a seleção se o pai mudar o valor.
+  }, [especialidade, selectedSala]); 
 
   const handleSalaChange = (e) => {
-    const salaId = e.target.value;
-    setSelectedSalaId(salaId);
-    onSelectSala(salaId);
+    // Apenas notifica o pai sobre a mudança. Não controla mais o estado aqui.
+    onSelectSala(e.target.value);
   };
 
   return (
-    <div className="especialidade">
-      <select value={selectedSalaId || ''} onChange={handleSalaChange}>
-        {salas.length === 0 ? (
-          <option value="">
-            Nenhuma sala disponível para {getEspecialidade()}
-          </option>
-        ) : (
+    // A div externa foi removida para dar mais flexibilidade de estilização ao componente pai.
+    <select value={selectedSala || ''} onChange={handleSalaChange} disabled={loading}>
+      {loading ? (
+        <option value="">Carregando salas...</option>
+      ) : salas.length === 0 ? (
+        <option value="">Nenhuma sala disponível</option>
+      ) : (
+        <>
           <option value="">Selecione uma sala</option>
-        )}
-        {salas.map((sala) => (
-          <option key={sala.id} value={sala.id}>
-            {sala.nome}
-          </option>
-        ))}
-      </select>
-    </div>
+          {salas.map((sala) => (
+            <option key={sala.id} value={sala.id}>
+              {sala.nome}
+            </option>
+          ))}
+        </>
+      )}
+    </select>
   );
 };
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
-import './AgendamentoModal.css';
+import './AgendamentoModal.css'; // Importa o novo CSS
 
 // COMPONENTS
 import PesquisarListaEspera from '../ListaEspera/PesquisarListaEspera';
@@ -10,8 +10,6 @@ import Especialidade from '../Especialidade/Especialidade';
 
 // FUNCTIONS
 import CreateAgendamento from '../../functions/Agendamentos/CreateAgendamento';
-// Função de listar lista de espera
-import GetListaEntries from '../../functions/ListaEspera/GetListaEntries';
 
 const AgendamentoModal = ({
   isModalOpen,
@@ -21,11 +19,7 @@ const AgendamentoModal = ({
 }) => {
   const [step, setStep] = useState(1);
   const [reservarSala, setReservarSala] = useState(false);
-
-  // Estados para lista de espera
   const [registroListaEspera, setRegistroListaEspera] = useState(null);
-
-  // Estados para equipes
   const [equipeSelecionada, setEquipeSelecionada] = useState(null);
 
   const [requestData, setRequestData] = useState({
@@ -34,7 +28,7 @@ const AgendamentoModal = ({
       dataHoraFim: modalData.endSlot,
       tipo: 1,
       status: 1,
-      pacienteId: modalData.pacienteId,
+      pacienteId: modalData.pacienteId || '',
       salaId: '',
     },
     consulta: {
@@ -44,90 +38,81 @@ const AgendamentoModal = ({
     },
   });
 
-  useEffect(() => {}, [requestData]);
+  const handleStateChange = (section, field, value) => {
+    setRequestData((prev) => ({
+      ...prev,
+      [section]: { ...prev[section], [field]: value },
+    }));
+  };
 
   const handleRegistroListaEsperaChange = (registro) => {
     setRegistroListaEspera(registro);
-    setRequestData((prev) => ({
-      ...prev,
-      agendamento: { ...prev.agendamento, pacienteId: registro.pacienteId },
-    }));
+    handleStateChange('agendamento', 'pacienteId', registro.pacienteId);
   };
 
   const handleLimparRegistroListaEspera = () => {
     setRegistroListaEspera(null);
-    setRequestData((prev) => ({
-      ...prev,
-      agendamento: { ...prev.agendamento, pacienteId: '' },
-    }));
+    handleStateChange('agendamento', 'pacienteId', '');
   };
 
   const handleEquipeChange = (equipe) => {
     setEquipeSelecionada(equipe);
-    setRequestData((prev) => ({
-      ...prev,
-      consulta: { ...prev.consulta, equipeId: equipe.id },
-    }));
+    handleStateChange('consulta', 'equipeId', equipe.id);
   };
 
   const handleLimparEquipe = () => {
     setEquipeSelecionada(null);
-    setRequestData((prev) => ({
-      ...prev,
-      consulta: { ...prev.consulta, equipeId: '' },
-    }));
+    handleStateChange('consulta', 'equipeId', '');
   };
 
   const handleReservarSalaChange = (event) => {
-    setReservarSala(event.target.checked);
-    if (!event.target.checked) {
-      setRequestData((prevState) => ({
-        ...prevState,
-        agendamento: {
-          ...prevState.agendamento,
-          salaId: null,
-        },
-      }));
+    const isChecked = event.target.checked;
+    setReservarSala(isChecked);
+    if (!isChecked) {
+      handleStateChange('agendamento', 'salaId', null);
     }
   };
 
   const getDiaStringFromDateTime = (dateTime) => {
+    if (!dateTime) return '';
     const dateObj = new Date(dateTime);
-    const options = {
+    return dateObj.toLocaleDateString('pt-BR', {
       weekday: 'long',
       year: 'numeric',
       month: 'long',
       day: 'numeric',
-    };
-    return dateObj.toLocaleDateString('pt-BR', options);
+    });
   };
 
   const formatDateTimeToLocal = (dateTimeString) => {
+    if (!dateTimeString) return '';
     const dateObj = new Date(dateTimeString);
-
     const hours = dateObj.getHours().toString().padStart(2, '0');
     const minutes = dateObj.getMinutes().toString().padStart(2, '0');
-
     return `${hours}:${minutes}`;
   };
 
   const handlePostAgendamento = async () => {
     try {
-      requestData.agendamento.status = parseInt(
-        requestData.agendamento.status,
-        10,
-      );
-      requestData.agendamento.tipo = parseInt(requestData.agendamento.tipo, 10);
-      requestData.consulta.especialidade = parseInt(
-        requestData.consulta.especialidade,
-        10,
-      );
-      const response = await CreateAgendamento(requestData);
+      // Cria um payload limpo para o request, convertendo os valores
+      const payload = {
+        ...requestData,
+        agendamento: {
+          ...requestData.agendamento,
+          tipo: parseInt(requestData.agendamento.tipo, 10),
+          status: parseInt(requestData.agendamento.status, 10),
+        },
+        consulta: {
+            ...requestData.consulta,
+            especialidade: parseInt(requestData.consulta.especialidade, 10),
+        }
+      };
+      await CreateAgendamento(payload);
       atualizarRegistros();
       setIsModalOpen(false);
     } catch (error) {
       console.error('Erro ao criar agendamento:', error);
-      // alert('Erro ao criar agendamento. Por favor, tente novamente.');
+      alert('Erro ao criar agendamento. Verifique o console para mais detalhes.');
     }
   };
 
@@ -136,174 +121,159 @@ const AgendamentoModal = ({
       case 1:
         return (
           <>
-            <label>
-              <div style={{ position: 'relative' }}>
-                <PesquisarListaEspera
-                  especialidade={requestData.consulta.especialidade}
-                  onSelectRegistro={handleRegistroListaEsperaChange}
-                  registroSelecionado={registroListaEspera}
-                  onLimparRegistro={handleLimparRegistroListaEspera}
-                />
-              </div>
-            </label>
-
-            <label>
-              Especialidade
-              <Especialidade
-                selectedSpecialty={requestData.consulta.especialidade || ''}
-                onSelectSpecialty={(especialidade) =>
-                  setRequestData((prev) => ({
-                    ...prev,
-                    consulta: { ...prev.consulta, especialidade },
-                  }))
-                }
+            <div className="form-group">
+              
+              <PesquisarListaEspera
+                especialidade={requestData.consulta.especialidade}
+                onSelectRegistro={handleRegistroListaEsperaChange}
+                registroSelecionado={registroListaEspera}
+                onLimparRegistro={handleLimparRegistroListaEspera}
               />
-            </label>
-            <label>
-              Tipo
-              <div>
-                <select
-                  name="tipo"
-                  value={requestData.agendamento.tipo || 0}
-                  onChange={(e) =>
-                    setRequestData({
-                      ...requestData,
-                      agendamento: {
-                        ...requestData.agendamento,
-                        tipo: e.target.value,
-                      },
-                    })
-                  }
-                >
-                  <option value={1}>Triagem</option>
-                  <option value={2}>Consulta</option>
-                </select>
-              </div>
-            </label>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="especialidade">Especialidade</label>
+              <Especialidade
+                id="especialidade"
+                selectedSpecialty={requestData.consulta.especialidade || ''}
+                onSelectSpecialty={(value) => handleStateChange('consulta', 'especialidade', value)}
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="tipoAgendamento">Tipo</label>
+              <select
+                id="tipoAgendamento"
+                name="tipo"
+                value={requestData.agendamento.tipo}
+                onChange={(e) => handleStateChange('agendamento', 'tipo', e.target.value)}
+              >
+                <option value={1}>Triagem</option>
+                <option value={2}>Consulta</option>
+              </select>
+            </div>
           </>
         );
 
       case 2:
         return (
           <>
-            <div>
-              <label>
-                <div style={{ position: 'relative' }}>
-                  <PesquisarEquipes
+            <div className="form-group">
+
+                <PesquisarEquipes
                     especialidade={requestData.consulta.especialidade}
                     onSelectEquipe={handleEquipeChange}
                     equipeSelecionada={equipeSelecionada}
                     onLimparEquipe={handleLimparEquipe}
-                  />
-                </div>
-              </label>
-
-              <label class="custom-checkbox">
-                Reservar sala?
-                <input
-                  type="checkbox"
-                  checked={reservarSala}
-                  onChange={handleReservarSalaChange}
                 />
-              </label>
-              {reservarSala && (
-                <label>
-                  <SelectSala
-                    especialidade={requestData.consulta.especialidade}
-                    onSelectSala={(salaId) => {
-                      setRequestData((prevState) => ({
-                        ...prevState,
-                        agendamento: {
-                          ...prevState.agendamento,
-                          salaId,
-                        },
-                      }));
+            </div>
+
+            <div className="form-group checkbox-group">
+                <label
+                  htmlFor="reservarSala"
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    cursor: 'pointer',
+                    userSelect: 'none',
+                  }}
+                >
+                  <input
+                    type="checkbox"
+                    id="reservarSala"
+                    checked={reservarSala}
+                    onChange={handleReservarSalaChange}
+                    style={{ display: 'none' }}
+                  />
+                  <span
+                    className="checkmark"
+                    style={{
+                      width: '20px',
+                      height: '20px',
+                      border: '1px solid #aaa',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '1rem',
+                      background: reservarSala ? '#e6f7e6' : 'var(--branco)',
                     }}
-                  />
+                  >
+                    {reservarSala ? '✔' : ''}
+                  </span>
+                  Reservar sala?
                 </label>
-              )}
-
-              <label>
-                Observações
-                <textarea
-                  placeholder="Observações"
-                  value={requestData.consulta.observacao || ''}
-                  onChange={(e) =>
-                    setRequestData({
-                      ...requestData,
-                      consulta: {
-                        ...requestData.consulta,
-                        observacao: e.target.value,
-                      },
-                    })
-                  }
+            </div>
+            
+            {reservarSala && (
+              <div className="form-group">
+                <label htmlFor="sala">Sala</label>
+                <SelectSala
+                    id="sala"
+                    especialidade={requestData.consulta.especialidade}
+                    onSelectSala={(value) => handleStateChange('agendamento', 'salaId', value)}
+                    selectedSala={requestData.agendamento.salaId}
                 />
-              </label>
+              </div>
+            )}
+
+            <div className="form-group">
+                <label htmlFor="observacoes">Observações</label>
+                <textarea
+                    id="observacoes"
+                    placeholder="Adicione observações relevantes..."
+                    value={requestData.consulta.observacao || ''}
+                    onChange={(e) => handleStateChange('consulta', 'observacao', e.target.value)}
+                />
             </div>
           </>
         );
-
       default:
         return null;
     }
   };
 
-  return (
-    isModalOpen &&
-    ReactDOM.createPortal(
-      <div className="overlay fade-in" onClick={() => setIsModalOpen(false)}>
-        <div className="agendar-modal" onClick={(e) => e.stopPropagation()}>
-          <hgroup>
-            <h3>Agendar</h3>
-            <div className="time-range">
-              <span>
-                {getDiaStringFromDateTime(
-                  requestData.agendamento.dataHoraInicio,
-                )}
-              </span>
-              <span>
-                Início:{' '}
-                {formatDateTimeToLocal(requestData.agendamento.dataHoraInicio)}
-              </span>
-              <span>
-                Término:{' '}
-                {formatDateTimeToLocal(requestData.agendamento.dataHoraFim)}
-              </span>
-            </div>
-          </hgroup>
+  if (!isModalOpen) return null;
 
-          <form>{renderStep()}</form>
-
-          <div className="step-buttons">
-            {/* Botão para voltar */}
-            {step > 1 && (
-              <button
-                type="button"
-                onClick={() => setStep((prevStep) => prevStep - 1)}
-              >
-                Voltar
-              </button>
-            )}
-            {/* Botão para avançar */}
-            {step < 2 && registroListaEspera && (
-              <button
-                type="button"
-                onClick={() => setStep((prevStep) => prevStep + 1)}
-              >
-                Avançar
-              </button>
-            )}
-            {/* Botão para salvar no último passo */}
-            {step === 2 && (
-              <button onClick={handlePostAgendamento}>Salvar</button>
-            )}
-            {/* Botão para cancelar */}
-            <button onClick={() => setIsModalOpen(false)}>Cancelar</button>
+  return ReactDOM.createPortal(
+    <div className="overlay" onClick={() => setIsModalOpen(false)}>
+      <div className="agendar-modal" onClick={(e) => e.stopPropagation()}>
+        <hgroup>
+          <h3>Agendar Horário</h3>
+          <div className="time-range">
+            <span>{getDiaStringFromDateTime(requestData.agendamento.dataHoraInicio)}</span>
+            <span>Início: {formatDateTimeToLocal(requestData.agendamento.dataHoraInicio)}</span>
+            <span>Término: {formatDateTimeToLocal(requestData.agendamento.dataHoraFim)}</span>
           </div>
+        </hgroup>
+
+        <form onSubmit={(e) => e.preventDefault()}>
+            {renderStep()}
+        </form>
+
+        <div className="step-buttons">
+          {step > 1 && (
+            <button type="button" onClick={() => setStep((prevStep) => prevStep - 1)}>
+              Voltar
+            </button>
+          )}
+          {step === 2 && (
+             <button type="button" onClick={() => setIsModalOpen(false)}>Cancelar</button>
+          )}
+
+          {step < 2 && registroListaEspera && (
+            <button type="button" onClick={() => setStep((prevStep) => prevStep + 1)}>
+              Avançar
+            </button>
+          )}
+          
+          {step === 2 && (
+            <button onClick={handlePostAgendamento}>Salvar Agendamento</button>
+          )}
         </div>
-      </div>,
-      document.body,
-    )
+      </div>
+    </div>,
+    document.body,
   );
 };
 

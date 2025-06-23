@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 // COMPONENTS
 import Especialidade from '../components/Especialidade/Especialidade';
 import AgendamentoModal from '../components/AgendamentoModal/AgendamentoModal';
-import AgendamentoDetails from '../components/AgendamentoDetails/AgendamentoDetails';
 import SelectSala from '../components/Salas/SelectSala';
 
 // FUNCTIONS
@@ -67,7 +66,7 @@ const Agendamento = () => {
         const agendamentos = await GetAgendamentos({
           filter: filters.join(','),
         });
-        console.log('agendamentos', agendamentos);
+        //console.log('agendamentos', agendamentos);
         const processedSlots = {};
 
         agendamentos.forEach((agendamento) => {
@@ -165,12 +164,12 @@ const Agendamento = () => {
       Math.min(startIndex, endIndex),
       Math.max(startIndex, endIndex) + 1,
     );
-    
+
     // Verifica se algum slot no novo intervalo já está ocupado
     for (const slot of newRange) {
-        if (isSelected(currentDay.label, slot)) {
-            return; // Impede a seleção sobreposta
-        }
+      if (isSelected(currentDay.label, slot)) {
+        return; // Impede a seleção sobreposta
+      }
     }
 
     setCurrentRange(newRange);
@@ -181,10 +180,16 @@ const Agendamento = () => {
       // MODIFICAÇÃO: Apenas abre o modal se 2 ou mais slots forem selecionados.
       if (currentRange.length >= 2) {
         handleOpenModal();
-      } 
-      
+      }
+
     }
     setIsDragging(false);
+  };
+
+  const handleSpecialtyChange = (specialtyId) => {
+    setSelectedSpecialty(specialtyId);
+    // Limpa a sala selecionada para forçar a auto-seleção no componente SelectSala
+    setSelectedSala(null); 
   };
 
   const handleOpenModal = () => {
@@ -196,10 +201,10 @@ const Agendamento = () => {
     const [startHour, startMinute] = firstSlot
       .split(':')
       .map((v) => parseInt(v, 10));
-      
+
     let endSlotIndex = timeSlots.indexOf(lastSlot) + 1;
     // Garante que o índice não ultrapasse o final da lista
-    if (endSlotIndex >= timeSlots.length) endSlotIndex = timeSlots.length - 1; 
+    if (endSlotIndex >= timeSlots.length) endSlotIndex = timeSlots.length - 1;
 
     const [endHour, endMinute] = timeSlots[endSlotIndex]
       .split(':')
@@ -317,33 +322,36 @@ const Agendamento = () => {
       <hgroup>
         <h1>Agendamentos</h1>
         <div className="filtros-container">
-            <div className="filtros-secundarios">
-                <div className="especialidade">
-                    <select
-                        value={status || ''}
-                        onChange={(e) => setStatus(e.target.value)}
-                    >
-                        <option value="">Todos</option>
-                        <option value={1}>Reservados</option>
-                        <option value={2}>Concluídos</option>
-                    </select>
-                </div>
-                <div className="especialidade">
-                    <select value={tipo || ''} onChange={(e) => setTipo(e.target.value)}>
-                        <option value="">Todos</option>
-                        <option value={1}>Triagens</option>
-                        <option value={2}>Consultas</option>
-                    </select>
-                </div>
-                <SelectSala
-                    especialidade={selectedSpecialty}
-                    onSelectSala={setSelectedSala}
-                />
+          <div className="filtros-secundarios">
+            <div className="especialidade">
+              <select
+                value={status || ''}
+                onChange={(e) => setStatus(e.target.value)}
+              >
+                <option value="">Todos</option>
+                <option value={1}>Reservados</option>
+                <option value={2}>Concluídos</option>
+              </select>
             </div>
-            <Especialidade
-                selectedSpecialty={selectedSpecialty}
-                onSelectSpecialty={setSelectedSpecialty}
+            <div className="especialidade">
+              <select value={tipo || ''} onChange={(e) => setTipo(e.target.value)}>
+                <option value="">Todos</option>
+                <option value={1}>Triagens</option>
+                <option value={2}>Consultas</option>
+              </select>
+            </div>
+            <div className="especialidade">
+            <SelectSala
+              especialidade={selectedSpecialty}
+              onSelectSala={setSelectedSala}
+              selectedSala={selectedSala}
             />
+            </div>
+          </div>
+          <Especialidade
+    selectedSpecialty={selectedSpecialty}
+    onSelectSpecialty={handleSpecialtyChange} // Use a nova função aqui
+/>
         </div>
       </hgroup>
 
@@ -382,40 +390,37 @@ const Agendamento = () => {
             {timeSlots.map((time, index) =>
               // Não renderiza a linha para as 22:00, que é apenas um delimitador
               time === '22:00' ? null : (
-              <tr key={index}>
-                <td>{time}</td>
-                {daysForWeek.map((day, dayIndex) => (
-                  <td
-                    key={dayIndex}
-                    className={`${
-                      isSelected(day.label, time) ? 'selected' : ''
-                    } ${
-                      currentRange.includes(time) &&
-                      currentDay?.label === day.label
-                        ? 'dragging'
-                        : ''
-                    } ${
-                      selectedSlotForDelete?.some(
-                        (slot) =>
-                          slot.day === day.label &&
-                          slot.time === time,
-                      )
-                        ? 'dragging' // Reutiliza a classe 'dragging' para destacar a seleção
-                        : ''
-                    }`}
-                    onMouseDown={() => handleMouseDown(day, time)} // Passa o objeto 'day' completo
-                    onMouseEnter={() => handleMouseEnter(time)}
-                    onClick={() => handleSlotClick(day.label, time)}
-                  >
-                    {isSelected(day.label, time) && (
-                      <div className="procedure">
-                        {selectedSlots[day.label][time].nome}
-                      </div>
-                    )}
-                  </td>
-                ))}
-              </tr>
-            ))}
+                <tr key={index}>
+                  <td>{time}</td>
+                  {daysForWeek.map((day, dayIndex) => (
+                    <td
+                      key={dayIndex}
+                      className={`${isSelected(day.label, time) ? 'selected' : ''
+                        } ${currentRange.includes(time) &&
+                          currentDay?.label === day.label
+                          ? 'dragging'
+                          : ''
+                        } ${selectedSlotForDelete?.some(
+                          (slot) =>
+                            slot.day === day.label &&
+                            slot.time === time,
+                        )
+                          ? 'dragging' // Reutiliza a classe 'dragging' para destacar a seleção
+                          : ''
+                        }`}
+                      onMouseDown={() => handleMouseDown(day, time)} // Passa o objeto 'day' completo
+                      onMouseEnter={() => handleMouseEnter(time)}
+                      onClick={() => handleSlotClick(day.label, time)}
+                    >
+                      {isSelected(day.label, time) && (
+                        <div className="procedure">
+                          {selectedSlots[day.label][time].nome}
+                        </div>
+                      )}
+                    </td>
+                  ))}
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>

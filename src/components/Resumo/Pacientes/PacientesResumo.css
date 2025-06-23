@@ -31,7 +31,11 @@
   border: 1px solid var(--cinza-300);
   color: var(--vermelho-escuro);
   font-weight: 600;
+  border-radius: 6px;
+  padding: 0.5rem 1.25rem;
   font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
 }
 
 .pacientes-resumo__header button:hover {
@@ -141,4 +145,9 @@
     font-size: 0.92rem;
     padding: 6px 4px;
   }
+}
+
+.pacientes-resumo__body .pesquisar-paciente-form label {
+  font-size: 1.15rem;
+  font-weight: 600;
 }
