@@ -58,14 +58,26 @@ const ListaEsperaResumo = ({ pacienteId }) => {
 
   const handleCadastrarRegistroListaEspera = () => {
     if (pacienteId && listaEspera.length === 0) {
-      navigate(`/listaespera?pacienteId=${pacienteId}`);
+      navigate(`/listaespera?pacienteId=${pacienteId}&view=add`);
     } else {
-      navigate('/listaespera');
+      navigate('/listaespera?view=add');
     }
   };
 
   const handleAgendarConsulta = (registroId) => {
-    navigate(`/agendamento?agendamentoId=${registroId}`);
+    // Encontra o registro correspondente para obter a especialidade
+    const registro = listaEspera.find(item => item.id === registroId);
+    if (registro) {
+      // Tenta usar especialidadeInt primeiro, depois especialidade como fallback
+      const especialidadeId = registro.especialidadeInt || registro.especialidade;
+      if (especialidadeId) {
+        navigate(`/agendamento?agendamentoId=${registroId}&especialidade=${especialidadeId}`);
+      } else {
+        navigate(`/agendamento?agendamentoId=${registroId}`);
+      }
+    } else {
+      navigate(`/agendamento?agendamentoId=${registroId}`);
+    }
   };
 
   return (

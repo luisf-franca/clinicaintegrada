@@ -22,6 +22,7 @@ const AdicionarRegistro = ({ atualizarRegistros, especialidade }) => {
   const [nomePesquisa, setNomePesquisa] = useState('');
   const [debouncedNome, setDebouncedNome] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [showResults, setShowResults] = useState(false);
 
   // Debounce para pesquisa de pacientes
   useEffect(() => {
@@ -32,17 +33,47 @@ const AdicionarRegistro = ({ atualizarRegistros, especialidade }) => {
     return () => clearTimeout(timer);
   }, [nomePesquisa]);
 
+  // Carregar pacientes iniciais quando o componente for montado
+  useEffect(() => {
+    const carregarPacientesIniciais = async () => {
+      setIsLoading(true);
+      try {
+        const response = await GetPacientes({ pageSize: 3 });
+        
+        let pacientesData = [];
+        if (response && response.items) {
+          pacientesData = response.items;
+        } else if (response && Array.isArray(response)) {
+          pacientesData = response;
+        } else if (response && response.data) {
+          pacientesData = response.data;
+        }
+        
+        setPacientes(pacientesData);
+        setShowResults(true);
+      } catch (error) {
+        console.error('Erro ao carregar pacientes iniciais:', error);
+        setPacientes([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    carregarPacientesIniciais();
+  }, []);
+
   // Buscar pacientes quando o nome debounced mudar
   useEffect(() => {
     const buscarPacientes = async () => {
-      if (!debouncedNome.trim()) {
-        setPacientes([]);
-        return;
-      }
-
       setIsLoading(true);
       try {
-        const options = { filter: `nome^${debouncedNome}` };
+        const options = { pageSize: 3 }; // Sempre busca 3 resultados
+        
+        // Se há texto digitado, adiciona filtro de nome
+        if (debouncedNome.trim()) {
+          options.filter = `nome^${debouncedNome}`;
+        }
+        
         const response = await GetPacientes(options);
         
         // Verifica se a resposta tem a estrutura esperada
@@ -56,6 +87,10 @@ const AdicionarRegistro = ({ atualizarRegistros, especialidade }) => {
         }
         
         setPacientes(pacientesData);
+        // Sempre mostra resultados quando há pacientes ou quando não há texto digitado
+        if (pacientesData.length > 0 || !debouncedNome.trim()) {
+          setShowResults(true);
+        }
       } catch (error) {
         console.error('Erro ao buscar pacientes:', error);
         setPacientes([]);
@@ -135,21 +170,27 @@ const AdicionarRegistro = ({ atualizarRegistros, especialidade }) => {
               />
               {isLoading && <div style={{ color: 'var(--cinza)', fontStyle: 'italic', marginTop: '0.5rem' }}>Carregando...</div>}
               
-              {pacientes.length > 0 && !pacienteSelecionado && (
+              {showResults && !isLoading && (
                 <div style={{ marginTop: '0.5rem' }}>
-                  <ul style={{ listStyle: 'none', margin: 0, padding: 0, border: '1px solid var(--border-color)', borderRadius: '4px', maxHeight: '200px', overflowY: 'auto', backgroundColor: 'var(--branco)', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)' }}>
-                    {pacientes.map((paciente) => (
-                      <li
-                        key={paciente.id}
-                        onClick={() => handlePacienteSelect(paciente)}
-                        style={{ padding: '0.75rem', cursor: 'pointer', borderBottom: '1px solid var(--border-color)', transition: 'background-color 0.2s ease' }}
-                        onMouseEnter={(e) => e.target.style.backgroundColor = 'var(--background-hover)'}
-                        onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
-                      >
-                        {paciente.nome} - {paciente.telefone}
-                      </li>
-                    ))}
-                  </ul>
+                  {pacientes.length > 0 && !pacienteSelecionado ? (
+                    <ul style={{ listStyle: 'none', margin: 0, padding: 0, border: '1px solid var(--border-color)', borderRadius: '4px', maxHeight: '200px', overflowY: 'auto', backgroundColor: 'var(--branco)', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)' }}>
+                      {pacientes.map((paciente) => (
+                        <li
+                          key={paciente.id}
+                          onClick={() => handlePacienteSelect(paciente)}
+                          style={{ padding: '0.75rem', cursor: 'pointer', borderBottom: '1px solid var(--border-color)', transition: 'background-color 0.2s ease' }}
+                          onMouseEnter={(e) => e.target.style.backgroundColor = 'var(--background-hover)'}
+                          onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
+                        >
+                          {paciente.nome} - {paciente.telefone}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <div style={{ padding: '0.75rem', textAlign: 'center', color: 'var(--cinza)', fontStyle: 'italic' }}>
+                      {nomePesquisa.trim() ? 'Nenhum paciente encontrado com esse nome.' : 'Nenhum paciente cadastrado.'}
+                    </div>
+                  )}
                 </div>
               )}
             </div>

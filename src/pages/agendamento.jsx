@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react'; // Adicionado useMemo
 import '../styles/agendamento.css';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 // COMPONENTS
 import Especialidade from '../components/Especialidade/Especialidade';
@@ -35,6 +35,7 @@ const Agendamento = () => {
   const [currentWeek, setCurrentWeek] = useState(0);
   const [selectedSlotForDelete, setSelectedSlotForDelete] = useState(null);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const generateTimeSlots = () => {
     const slots = [];
@@ -52,6 +53,21 @@ const Agendamento = () => {
   };
 
   const [timeSlots] = useState(generateTimeSlots());
+
+  // Lê parâmetros da URL para definir especialidade automaticamente
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const especialidadeParam = searchParams.get('especialidade');
+    
+    if (especialidadeParam) {
+      const especialidadeId = parseInt(especialidadeParam, 10);
+      if (!isNaN(especialidadeId)) {
+        setSelectedSpecialty(especialidadeId);
+        // Salva no localStorage para manter a seleção
+        localStorage.setItem('selectedSpecialty', especialidadeId.toString());
+      }
+    }
+  }, [location.search]);
 
   useEffect(() => {
     const fetchAgendamentos = async () => {

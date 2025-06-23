@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import '../styles/pacientes.css';
+import { useLocation } from 'react-router-dom';
 
 // COMPONENTS
 import PesquisarPacientes from '../components/Pacientes/PesquisarPacientes';
@@ -11,6 +12,7 @@ import GetPacientes from '../functions/Pacientes/GetPacientes';
 import DeletePaciente from '../functions/Pacientes/DeletePaciente';
 
 const Pacientes = () => {
+  const location = useLocation();
   const [view, setView] = useState('list');
   const [pacientes, setPacientes] = useState([]);
   const [pacienteSelecionado, setPacienteSelecionado] = useState(null);
@@ -22,6 +24,16 @@ const Pacientes = () => {
   const [filtroNome, setFiltroNome] = useState('');
 
   const totalPages = Math.ceil(totalCount / pageSize);
+
+  // Lê parâmetros da URL para definir a view automaticamente
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const viewParam = searchParams.get('view');
+    
+    if (viewParam === 'add') {
+      setView('add');
+    }
+  }, [location.search]);
 
   const atualizarListaPacientes = useCallback(
     async (pageToLoad, filtroAtual = filtroNome) => {

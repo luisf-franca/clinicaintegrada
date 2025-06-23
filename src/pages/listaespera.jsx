@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import '../styles/listaespera.css';
+import { useLocation } from 'react-router-dom';
 
 // COMPONENTS
 import Especialidade from '../components/Especialidade/Especialidade';
@@ -10,6 +11,7 @@ import GetListaEntries from '../functions/ListaEspera/GetListaEntries';
 import DeleteRegistro from '../functions/ListaEspera/DeleteListaEsperaEntry';
 
 const ListaEspera = () => {
+  const location = useLocation();
   const [selectedComponent, setSelectedComponent] = useState('Pesquisar');
   const [registros, setRegistros] = useState([]);
   const [registroSelecionado, setRegistroSelecionado] = useState({});
@@ -27,6 +29,16 @@ const ListaEspera = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const totalPages = Math.ceil(totalCount / pageSize);
+
+  // Lê parâmetros da URL para definir o componente automaticamente
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const viewParam = searchParams.get('view');
+    
+    if (viewParam === 'add') {
+      setSelectedComponent('Adicionar');
+    }
+  }, [location.search]);
 
   const atualizarRegistros = useCallback(
     async (pageToLoad = currentPage, filtrosAtuais = filtros) => {
