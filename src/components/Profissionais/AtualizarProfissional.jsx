@@ -13,6 +13,27 @@ const AtualizarProfissional = ({ profissional, onVoltar }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
+  // Função para converter string da especialidade para número do ENUM
+  const getEspecialidadeEnum = (especialidadeString) => {
+    const especialidadeMap = {
+      'Psicologia': 1,
+      'Odontologia': 2, 
+      'Fisioterapia': 3,
+      'Nutricao': 4,
+      'Nutrição': 4
+    };
+    return especialidadeMap[especialidadeString] || 1;
+  };
+
+  // Função para converter string do tipo para número do ENUM
+  const getTipoEnum = (tipoString) => {
+    const tipoMap = {
+      'Estagiario': 1,
+      'Professor': 2
+    };
+    return tipoMap[tipoString] || 1;
+  };
+
   useEffect(() => {
     if (profissional) {
       setFormData({
@@ -20,8 +41,12 @@ const AtualizarProfissional = ({ profissional, onVoltar }) => {
         ra: profissional.ra || '',
         telefone: profissional.telefone || '',
         email: profissional.email || '',
-        tipo: String(profissional.tipo) || '1',
-        especialidade: String(profissional.especialidade) || '1'
+        tipo: typeof profissional.tipo === 'string' 
+          ? String(getTipoEnum(profissional.tipo))
+          : String(profissional.tipo) || '1',
+        especialidade: typeof profissional.especialidade === 'string' 
+          ? String(getEspecialidadeEnum(profissional.especialidade))
+          : String(profissional.especialidade) || '1'
       });
     }
   }, [profissional]);
@@ -79,7 +104,7 @@ const AtualizarProfissional = ({ profissional, onVoltar }) => {
         </div>
 
         <div className="form-group">
-          <label>RA *</label>
+          <label>RA</label>
           <input
             type="text"
             name="ra"
@@ -91,7 +116,7 @@ const AtualizarProfissional = ({ profissional, onVoltar }) => {
         </div>
 
         <div className="form-group">
-          <label>Telefone</label>
+          <label>Telefone *</label>
           <input
             type="tel"
             name="telefone"
@@ -135,10 +160,9 @@ const AtualizarProfissional = ({ profissional, onVoltar }) => {
             required
           >
             <option value="1">Psicologia</option>
-            <option value="2">Fisioterapia</option>
-            <option value="3">Nutrição</option>
-            <option value="4">Fonoaudiologia</option>
-            <option value="5">Terapia Ocupacional</option>
+            <option value="2">Odontologia</option>
+            <option value="3">Fisioterapia</option>
+            <option value="4">Nutrição</option>
           </select>
         </div>
 

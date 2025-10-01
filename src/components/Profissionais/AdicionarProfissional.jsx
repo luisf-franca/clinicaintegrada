@@ -36,7 +36,7 @@ const AdicionarProfissional = ({ onVoltar }) => {
       };
       
       await CreateProfissional(profissionalData);
-      alert('Profissional cadastrado com sucesso!');
+      // alert('Profissional cadastrado com sucesso!');
       onVoltar();
     } catch (err) {
       console.error('Erro ao cadastrar profissional:', err);
@@ -66,7 +66,7 @@ const AdicionarProfissional = ({ onVoltar }) => {
         </div>
 
         <div className="form-group">
-          <label>RA *</label>
+          <label>RA</label>
           <input
             type="text"
             name="ra"
@@ -78,7 +78,7 @@ const AdicionarProfissional = ({ onVoltar }) => {
         </div>
 
         <div className="form-group">
-          <label>Telefone</label>
+          <label>Telefone *</label>
           <input
             type="tel"
             name="telefone"
@@ -122,10 +122,9 @@ const AdicionarProfissional = ({ onVoltar }) => {
             required
           >
             <option value="1">Psicologia</option>
-            <option value="2">Fisioterapia</option>
-            <option value="3">Nutrição</option>
-            <option value="4">Fonoaudiologia</option>
-            <option value="5">Terapia Ocupacional</option>
+            <option value="2">Odontologia</option>
+            <option value="3">Fisioterapia</option>
+            <option value="4">Nutrição</option>
           </select>
         </div>
 

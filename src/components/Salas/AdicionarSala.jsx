@@ -1,20 +1,19 @@
 import React, { useState } from 'react';
 import CreateSala from '../../functions/Salas/CreateSala';
 
-const AdicionarSala = ({ especialidade, onVoltar }) => {
+const AdicionarSala = ({ onVoltar }) => {
   const [formData, setFormData] = useState({
     nome: '',
-    especialidade: especialidade || '1',
-    disponibilidade: true
+    especialidade: 1
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
   const handleInputChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: value
     }));
     setError('');
   };
@@ -31,11 +30,11 @@ const AdicionarSala = ({ especialidade, onVoltar }) => {
     try {
       const salaData = {
         ...formData,
-        especialidade: parseInt(formData.especialidade)
+        especialidade: parseInt(formData.especialidade),
       };
       
       await CreateSala(salaData);
-      alert('Sala cadastrada com sucesso!');
+      // alert('Sala cadastrada com sucesso!');
       onVoltar();
     } catch (err) {
       console.error('Erro ao cadastrar sala:', err);
@@ -72,24 +71,11 @@ const AdicionarSala = ({ especialidade, onVoltar }) => {
             onChange={handleInputChange}
             required
           >
-            <option value="1">Psicologia</option>
-            <option value="2">Fisioterapia</option>
-            <option value="3">Nutrição</option>
-            <option value="4">Fonoaudiologia</option>
-            <option value="5">Terapia Ocupacional</option>
+            <option value={1}>Psicologia</option>
+            <option value={2}>Odontologia</option>
+            <option value={3}>Fisioterapia</option>
+            <option value={4}>Nutrição</option>
           </select>
-        </div>
-
-        <div className="form-group checkbox-group">
-          <label>
-            <input
-              type="checkbox"
-              name="disponibilidade"
-              checked={formData.disponibilidade}
-              onChange={handleInputChange}
-            />
-            <span>Disponível</span>
-          </label>
         </div>
 
         <div className="form-actions">

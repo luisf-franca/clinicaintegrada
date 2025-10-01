@@ -17,7 +17,7 @@ const Profissionais = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize] = useState(6);
+  const [pageSize] = useState(4);
   const [totalCount, setTotalCount] = useState(0);
   const [filtros, setFiltros] = useState({
     nome: '',

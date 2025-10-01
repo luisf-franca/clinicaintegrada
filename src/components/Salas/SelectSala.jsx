@@ -16,11 +16,12 @@ const SelectSala = ({ especialidade, onSelectSala, selectedSala }) => {
         const data = await GetSalas({
           filter: `especialidade=${especialidade}`,
         });
-        setSalas(data);
+        console.log('Data from GetSalas in SelectSala:', data);
+        setSalas(data.items || []);
         // Se nenhuma sala estiver selecionada no pai E houver salas na resposta,
         // sugere a primeira sala para o pai.
-        if (!selectedSala && data.length > 0) {
-          onSelectSala(data[0].id);
+        if (!selectedSala && data.items && data.items.length > 0) {
+          onSelectSala(data.items[0].id);
         }
       } catch (error) {
         console.error('Erro ao buscar salas:', error);
@@ -49,7 +50,6 @@ const SelectSala = ({ especialidade, onSelectSala, selectedSala }) => {
         <option value="">Nenhuma sala disponível</option>
       ) : (
         <>
-          <option value="">Selecione uma sala</option>
           {salas.map((sala) => (
             <option key={sala.id} value={sala.id}>
               {sala.nome}

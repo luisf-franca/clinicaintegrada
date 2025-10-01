@@ -2,8 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import '../styles/equipes.css';
 
 // COMPONENTS
-import Especialidade from '../components/Especialidade/Especialidade';
-import PesquisarEquipes from '../components/Equipes/PesquisarEquipes';
+import ListarEquipes from '../components/Equipes/ListarEquipes';
 import AdicionarEquipe from '../components/Equipes/AdicionarEquipe';
 import GerenciarEquipe from '../components/Equipes/GerenciarEquipe';
 
@@ -16,25 +15,36 @@ const Equipe = () => {
   const [equipes, setEquipes] = useState([]);
   const [equipeSelecionada, setEquipeSelecionada] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedSpecialty, setSelectedSpecialty] = useState(
-    localStorage.getItem('selectedSpecialty') || 1,
-  );
+  const [filtros, setFiltros] = useState({ nome: '', especialidade: '' });
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize] = useState(6);
+  const [pageSize] = useState(4);
   const [totalCount, setTotalCount] = useState(0);
 
   const totalPages = Math.ceil(totalCount / pageSize);
 
   const atualizarListaEquipes = useCallback(
-    async (pageToLoad) => {
+    async (pageToLoad, filtrosAtuais = filtros) => {
       setIsLoading(true);
       try {
         const options = { 
           page: pageToLoad, 
-          pageSize,
-          filter: `especialidade=${selectedSpecialty}`
+          pageSize
         };
+        
+        let filters = [];
+        
+        if (filtrosAtuais.nome && filtrosAtuais.nome.trim()) {
+          filters.push(`nome^${filtrosAtuais.nome}`);
+        }
+        
+        if (filtrosAtuais.especialidade && filtrosAtuais.especialidade.trim()) {
+          filters.push(`especialidade=${filtrosAtuais.especialidade}`);
+        }
+        
+        if (filters.length > 0) {
+          options.filter = filters.join(',');
+        }
         
         const response = await GetEquipes(options);
         setEquipes(response?.items || []);
@@ -47,12 +57,18 @@ const Equipe = () => {
         setIsLoading(false);
       }
     },
-    [pageSize, selectedSpecialty],
+    [pageSize],
   );
 
   useEffect(() => {
-    atualizarListaEquipes(currentPage);
-  }, [currentPage, selectedSpecialty, atualizarListaEquipes]);
+    atualizarListaEquipes(currentPage, filtros);
+  }, [currentPage, atualizarListaEquipes]);
+
+  const handlePesquisar = useCallback((novosFiltros) => {
+    setFiltros(novosFiltros);
+    setCurrentPage(1);
+    atualizarListaEquipes(1, novosFiltros);
+  }, [atualizarListaEquipes]);
 
   const handleMudarPagina = (novaPagina) => {
     if (
@@ -78,7 +94,7 @@ const Equipe = () => {
     if (window.confirm('Tem certeza que deseja excluir esta equipe?')) {
       try {
         await DeleteEquipe(equipeId);
-        atualizarListaEquipes(currentPage);
+        atualizarListaEquipes(currentPage, filtros);
       } catch (error) {
         console.error('Erro ao deletar equipe:', error);
         alert('Erro ao deletar equipe');
@@ -86,21 +102,22 @@ const Equipe = () => {
     }
   };
 
-  const handleVoltar = () => {
+  const handleVoltarParaLista = () => {
     setView('list');
     setEquipeSelecionada(null);
     setCurrentPage(1);
-    atualizarListaEquipes(1);
+    atualizarListaEquipes(1, filtros);
+  };
+
+    const handleEquipeCriada = (novaEquipe) => {
+    setEquipeSelecionada(novaEquipe);
+    setView('manage'); 
   };
 
   return (
     <div className="equipes container">
       <div className="equipes-hgroup">
         <h1>Equipes</h1>
-        <Especialidade
-          selectedSpecialty={selectedSpecialty}
-          setSelectedSpecialty={setSelectedSpecialty}
-        />
       </div>
 
       <nav className="equipes-nav">
@@ -121,8 +138,9 @@ const Equipe = () => {
       <div className="equipes-content-wrapper">
         {view === 'list' && (
           <div className="equipes-list-card">
-            <PesquisarEquipes
+            <ListarEquipes
               equipes={equipes}
+              onPesquisar={handlePesquisar}
               onGerenciar={handleGerenciar}
               onDeletar={handleDeletar}
               currentPage={currentPage}
@@ -136,8 +154,8 @@ const Equipe = () => {
         {view === 'add' && (
           <div className="equipes-form-card">
             <AdicionarEquipe 
-              especialidade={selectedSpecialty}
-              onVoltar={handleVoltar} 
+              onVoltar={handleVoltarParaLista} 
+              onEquipeCriada={handleEquipeCriada}
             />
           </div>
         )}
@@ -146,7 +164,7 @@ const Equipe = () => {
           <div className="equipes-form-card">
             <GerenciarEquipe
               equipe={equipeSelecionada}
-              onVoltar={handleVoltar}
+              onVoltar={handleVoltarParaLista}
             />
           </div>
         )}

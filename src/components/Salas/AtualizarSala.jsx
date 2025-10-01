@@ -4,27 +4,39 @@ import UpdateSala from '../../functions/Salas/UpdateSala';
 const AtualizarSala = ({ sala, onVoltar }) => {
   const [formData, setFormData] = useState({
     nome: '',
-    especialidade: '1',
-    disponibilidade: true
+    especialidade: 1
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+
+  // Função para converter string da especialidade para número do ENUM
+  const getEspecialidadeEnum = (especialidadeString) => {
+    const especialidadeMap = {
+      'Psicologia': 1,
+      'Odontologia': 2, 
+      'Fisioterapia': 3,
+      'Nutricao': 4,
+      'Nutrição': 4
+    };
+    return especialidadeMap[especialidadeString] || 1;
+  };
 
   useEffect(() => {
     if (sala) {
       setFormData({
         nome: sala.nome || '',
-        especialidade: String(sala.especialidade) || '1',
-        disponibilidade: sala.disponibilidade ?? true
+        especialidade: typeof sala.especialidade === 'string' 
+          ? getEspecialidadeEnum(sala.especialidade) 
+          : Number(sala.especialidade) || 1
       });
     }
   }, [sala]);
 
   const handleInputChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: value
     }));
     setError('');
   };
@@ -45,7 +57,7 @@ const AtualizarSala = ({ sala, onVoltar }) => {
       };
       
       await UpdateSala(sala.id, salaData);
-      alert('Sala atualizada com sucesso!');
+      // alert('Sala atualizada com sucesso!');
       onVoltar();
     } catch (err) {
       console.error('Erro ao atualizar sala:', err);
@@ -82,24 +94,11 @@ const AtualizarSala = ({ sala, onVoltar }) => {
             onChange={handleInputChange}
             required
           >
-            <option value="1">Psicologia</option>
-            <option value="2">Fisioterapia</option>
-            <option value="3">Nutrição</option>
-            <option value="4">Fonoaudiologia</option>
-            <option value="5">Terapia Ocupacional</option>
+            <option value={1}>Psicologia</option>
+            <option value={2}>Odontologia</option>
+            <option value={3}>Fisioterapia</option>
+            <option value={4}>Nutrição</option>
           </select>
-        </div>
-
-        <div className="form-group checkbox-group">
-          <label>
-            <input
-              type="checkbox"
-              name="disponibilidade"
-              checked={formData.disponibilidade}
-              onChange={handleInputChange}
-            />
-            <span>Disponível</span>
-          </label>
         </div>
 
         <div className="form-actions">

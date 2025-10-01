@@ -1,14 +1,13 @@
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const API_URL = import.meta.env.VITE_API_BASE_URL;
 
 const AdicionarProfissionalEquipe = async ({ equipeId, profissionalId }) => {
   try {
-    const response = await fetch(`${API_URL}/equipes/${equipeId}/profissionais`, {
-      method: 'POST',
+    const response = await fetch(`${API_URL}/equipes/${equipeId}/inserir-profissional/${profissionalId}`, {
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
-      },
-      body: JSON.stringify({ profissionalId }),
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      }
     });
 
     if (!response.ok) {

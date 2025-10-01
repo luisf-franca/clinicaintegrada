@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import './App.css'; // Certifique-se que o App.css atualizado está sendo importado
 
 // COMPONENTS
@@ -9,6 +10,9 @@ import Sidebar from './components/SideBar/SideBar.jsx';
 import Login from './functions/Authenticate/Login.jsx';
 
 function App() {
+  const location = useLocation();
+  const isLoginPage = location.pathname === '/login';
+
   // Sua lógica de autenticação permanece a mesma, está ótima!
   const handleLogin = async () => {
     try {
@@ -60,7 +64,7 @@ function App() {
     // Esta é a principal mudança: a classe agora define o layout flexível.
     // A Sidebar e o <main> são irmãos diretos, facilitando o posicionamento.
     <div className="app-layout">
-      <Sidebar />
+      {!isLoginPage && <Sidebar />}
       <main className="content-area">
         <Router />
       </main>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const PesquisarProfissionais = ({
   profissionais,
@@ -16,35 +16,75 @@ const PesquisarProfissionais = ({
     especialidade: ''
   });
 
+  // Efeito para filtrar automaticamente quando tipo ou especialidade mudarem
+  useEffect(() => {
+    const filtrosComEspecialidade = { ...filtros };
+    if (filtros.especialidade === '' || filtros.especialidade === '0') {
+      delete filtrosComEspecialidade.especialidade;
+    }
+    onPesquisar(filtrosComEspecialidade);
+  }, [filtros.tipo, filtros.especialidade]);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFiltros(prev => ({ ...prev, [name]: value }));
   };
 
+  const handleTipoChange = (e) => {
+    setFiltros(prev => ({ ...prev, tipo: e.target.value }));
+  };
+
+  const handleEspecialidadeChange = (e) => {
+    setFiltros(prev => ({ ...prev, especialidade: e.target.value }));
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    onPesquisar(filtros);
+    const filtrosComEspecialidade = { ...filtros };
+    if (filtros.especialidade === '' || filtros.especialidade === '0') {
+      delete filtrosComEspecialidade.especialidade;
+    }
+    onPesquisar(filtrosComEspecialidade);
   };
 
-  const getTipoNome = (tipo) => {
-    return tipo === 1 ? 'Estagiário' : tipo === 2 ? 'Professor' : 'Desconhecido';
-  };
-
-  const getEspecialidadeNome = (especialidade) => {
-    const especialidades = {
-      1: 'Psicologia',
-      2: 'Fisioterapia',
-      3: 'Nutrição',
-      4: 'Fonoaudiologia',
-      5: 'Terapia Ocupacional'
-    };
-    return especialidades[especialidade] || 'N/A';
+  // Função para converter string da API para nome legível
+  const getEspecialidadeNomeFromString = (especialidadeString) => {
+    return especialidadeString === 'Nutricao' ? 'Nutrição' : especialidadeString;
   };
 
   return (
     <div className="pesquisar-profissionais">
       <form className="filtros-form" onSubmit={handleSubmit}>
         <div className="filtros-row">
+
+          <div className="form-group">
+            <label>Tipo</label>
+            <select
+              name="tipo"
+              value={filtros.tipo}
+              onChange={handleTipoChange}
+            >
+              <option value="">Todos</option>
+              <option value="Estagiario">Estagiário</option>
+              <option value="Professor">Professor</option>
+            </select>
+          </div>
+
+          <div className="form-group">
+            <label>Especialidade</label>
+            <select
+              name="especialidade"
+              value={filtros.especialidade}
+              onChange={handleEspecialidadeChange}
+            >
+              <option value="">Todas</option>
+              <option value="Psicologia">Psicologia</option>
+              <option value="Odontologia">Odontologia</option>
+              <option value="Fisioterapia">Fisioterapia</option>
+              <option value="Nutricao">Nutrição</option>
+            </select>
+          </div>
+
           <div className="form-group">
             <label>Nome</label>
             <input
@@ -56,37 +96,8 @@ const PesquisarProfissionais = ({
             />
           </div>
 
-          <div className="form-group">
-            <label>Tipo</label>
-            <select
-              name="tipo"
-              value={filtros.tipo}
-              onChange={handleInputChange}
-            >
-              <option value="">Todos</option>
-              <option value="1">Estagiário</option>
-              <option value="2">Professor</option>
-            </select>
-          </div>
-
-          <div className="form-group">
-            <label>Especialidade</label>
-            <select
-              name="especialidade"
-              value={filtros.especialidade}
-              onChange={handleInputChange}
-            >
-              <option value="">Todas</option>
-              <option value="1">Psicologia</option>
-              <option value="2">Fisioterapia</option>
-              <option value="3">Nutrição</option>
-              <option value="4">Fonoaudiologia</option>
-              <option value="5">Terapia Ocupacional</option>
-            </select>
-          </div>
-
           <button type="submit" className="btn-primary">
-            Pesquisar
+            Buscar
           </button>
         </div>
       </form>
@@ -119,9 +130,9 @@ const PesquisarProfissionais = ({
                   profissionais.map((prof) => (
                     <tr key={prof.id}>
                       <td>{prof.nome}</td>
-                      <td>{prof.ra}</td>
-                      <td>{getTipoNome(prof.tipo)}</td>
-                      <td>{getEspecialidadeNome(prof.especialidade)}</td>
+                      <td>{prof.ra || 'N/A'}</td>
+                      <td>{prof.tipo === 'Estagiario' ? 'Estagiário' : prof.tipo}</td>
+                      <td>{getEspecialidadeNomeFromString(prof.especialidade)}</td>
                       <td>{prof.telefone}</td>
                       <td>{prof.email}</td>
                       <td>

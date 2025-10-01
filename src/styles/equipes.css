@@ -44,15 +44,16 @@
   gap: 2rem;
   width: 100%;
   align-items: flex-start;
+  justify-content: center;
 }
 
 .equipes-form-card {
   width: 100%;
-  max-width: 700px;
+  max-width: 900px;
   background: var(--branco);
   border-radius: 16px;
   box-shadow: 0 6px 32px rgba(125, 20, 116, 0.1);
-  padding: 1.5rem 1rem;
+  padding: 2rem 2.5rem;
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -60,10 +61,11 @@
 
 .equipes-list-card {
   width: 100%;
+  max-width: 1400px;
   background: var(--branco);
   border-radius: 16px;
   box-shadow: 0 6px 32px rgba(125, 20, 116, 0.1);
-  padding: 1.5rem 1rem;
+  padding: 2rem 2.5rem;
   overflow-x: auto;
 }
 

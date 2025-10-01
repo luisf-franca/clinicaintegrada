@@ -59,15 +59,7 @@ const SideBar = () => {
       >
         <ConsultaIcon />
       </NavLink>
-      <NavLink
-        to="/equipe"
-        className={({ isActive }) =>
-          `sidebar-item ${isActive ? 'selected' : ''}`
-        }
-        title="Equipe"
-      >
-        <EquipeIcon />
-      </NavLink>
+      {/* ícone de sala */}
       <NavLink
         to="/sala"
         className={({ isActive }) =>
@@ -86,6 +78,16 @@ const SideBar = () => {
         title="Profissionais"
       >
         <ProfissionalIcon />
+      </NavLink>
+      {/* ícone de equipe */}
+      <NavLink
+        to="/equipe"
+        className={({ isActive }) =>
+          `sidebar-item ${isActive ? 'selected' : ''}`
+        }
+        title="Equipe"
+      >
+        <EquipeIcon />
       </NavLink>
     </div>
   );

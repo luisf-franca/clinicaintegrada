@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 import '../styles/salas.css';
 
 // COMPONENTS
-import Especialidade from '../components/Especialidade/Especialidade';
 import PesquisarSalas from '../components/Salas/PesquisarSalas';
 import AdicionarSala from '../components/Salas/AdicionarSala';
 import AtualizarSala from '../components/Salas/AtualizarSala';
@@ -16,26 +15,41 @@ const Sala = () => {
   const [salas, setSalas] = useState([]);
   const [salaSelecionada, setSalaSelecionada] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedSpecialty, setSelectedSpecialty] = useState(
-    localStorage.getItem('selectedSpecialty') || 1,
-  );
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize] = useState(6);
+  const [pageSize] = useState(4);
   const [totalCount, setTotalCount] = useState(0);
-  const [filtroDisponibilidade, setFiltroDisponibilidade] = useState('');
+  const [filtros, setFiltros] = useState({ disponibilidade: '', especialidade: '' });
 
   const totalPages = Math.ceil(totalCount / pageSize);
 
+  // Função para converter número do ENUM para string da API
+  const getEspecialidadeString = (especialidadeEnum) => {
+    const especialidadeMap = {
+      '1': 'Psicologia',
+      '2': 'Odontologia', 
+      '3': 'Fisioterapia',
+      '4': 'Nutricao'
+    };
+    return especialidadeMap[especialidadeEnum] || '';
+  };
+
   const atualizarListaSalas = useCallback(
-    async (pageToLoad, disponibilidadeAtual = filtroDisponibilidade) => {
+    async (pageToLoad, filtrosAtuais = filtros) => {
       setIsLoading(true);
       try {
         const options = { page: pageToLoad, pageSize };
-        let filters = [`especialidade=${selectedSpecialty}`];
+        let filters = [];
         
-        if (disponibilidadeAtual && disponibilidadeAtual.trim()) {
-          filters.push(`disponibilidade=${disponibilidadeAtual}`);
+        if (filtrosAtuais.especialidade && filtrosAtuais.especialidade.trim()) {
+          const especialidadeString = getEspecialidadeString(filtrosAtuais.especialidade);
+          if (especialidadeString) {
+            filters.push(`especialidade=${especialidadeString}`);
+          }
+        }
+        
+        if (filtrosAtuais.disponibilidade && filtrosAtuais.disponibilidade.trim()) {
+          filters.push(`isDisponivel=${filtrosAtuais.disponibilidade}`);
         }
         
         if (filters.length > 0) {
@@ -53,17 +67,17 @@ const Sala = () => {
         setIsLoading(false);
       }
     },
-    [pageSize, selectedSpecialty],
+    [pageSize],
   );
 
   useEffect(() => {
-    atualizarListaSalas(currentPage, filtroDisponibilidade);
-  }, [currentPage, selectedSpecialty, atualizarListaSalas]);
+    atualizarListaSalas(currentPage, filtros);
+  }, [currentPage, atualizarListaSalas]);
 
-  const handlePesquisar = useCallback((novaDisponibilidade) => {
-    setFiltroDisponibilidade(novaDisponibilidade);
+  const handlePesquisar = useCallback((novosFiltros) => {
+    setFiltros(novosFiltros);
     setCurrentPage(1);
-    atualizarListaSalas(1, novaDisponibilidade);
+    atualizarListaSalas(1, novosFiltros);
   }, [atualizarListaSalas]);
 
   const handleMudarPagina = (novaPagina) => {
@@ -90,7 +104,7 @@ const Sala = () => {
     if (window.confirm('Tem certeza que deseja excluir esta sala?')) {
       try {
         await DeleteSala(salaId);
-        atualizarListaSalas(currentPage, filtroDisponibilidade);
+        atualizarListaSalas(currentPage, filtros);
       } catch (error) {
         console.error('Erro ao deletar sala:', error);
         alert('Erro ao deletar sala');
@@ -101,17 +115,13 @@ const Sala = () => {
   const handleVoltar = () => {
     setView('list');
     setSalaSelecionada(null);
-    atualizarListaSalas(currentPage, filtroDisponibilidade);
+    atualizarListaSalas(currentPage, filtros);
   };
 
   return (
     <div className="salas container">
       <div className="salas-hgroup">
         <h1>Salas</h1>
-        <Especialidade
-          selectedSpecialty={selectedSpecialty}
-          setSelectedSpecialty={setSelectedSpecialty}
-        />
       </div>
 
       <nav className="salas-nav">
@@ -148,7 +158,6 @@ const Sala = () => {
         {view === 'add' && (
           <div className="salas-form-card">
             <AdicionarSala 
-              especialidade={selectedSpecialty}
               onVoltar={handleVoltar} 
             />
           </div>

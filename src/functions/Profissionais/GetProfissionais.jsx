@@ -1,4 +1,4 @@
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const API_URL = import.meta.env.VITE_API_BASE_URL;
 
 const GetProfissionais = async (options = {}) => {
   try {
@@ -6,6 +6,8 @@ const GetProfissionais = async (options = {}) => {
     
     let url = `${API_URL}/profissionais?page=${page}&pageSize=${pageSize}`;
     
+    console.log('Fetching professionals with options:', options);
+
     if (filter) {
       url += `&filter=${encodeURIComponent(filter)}`;
     }
@@ -14,7 +16,7 @@ const GetProfissionais = async (options = {}) => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
       },
     });
 
@@ -22,7 +24,9 @@ const GetProfissionais = async (options = {}) => {
       throw new Error('Erro ao buscar profissionais');
     }
 
-    return await response.json();
+    const data = await response.json();
+    // console.log('Data from GetProfissionais:', data);
+    return data.data;
   } catch (error) {
     console.error('Erro ao buscar profissionais:', error);
     throw error;

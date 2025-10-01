@@ -35,7 +35,7 @@ const LoginPage = () => {
       const response = await Login(formData.email, formData.password);
       
       if (response.success) {
-        localStorage.setItem('authToken', response.token);
+        localStorage.setItem('token', response.token);
         localStorage.setItem('userData', JSON.stringify(response.user));
         navigate('/');
       } else {

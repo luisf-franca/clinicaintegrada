@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import BloquearDesbloquearSala from '../../functions/Salas/BloquearDesbloquearSala';
 
 const PesquisarSalas = ({
@@ -11,45 +11,70 @@ const PesquisarSalas = ({
   onMudarPagina,
   isLoading,
 }) => {
-  const [filtroDisponibilidade, setFiltroDisponibilidade] = useState('');
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onPesquisar(filtroDisponibilidade);
+  const [filtroDisponibilidade, setFiltroDisponibilidade] = useState('');
+  const [filtroEspecialidade, setFiltroEspecialidade] = useState("");
+
+  // Efeito para filtrar automaticamente quando os filtros mudarem
+  useEffect(() => {
+    onPesquisar({ disponibilidade: filtroDisponibilidade, especialidade: filtroEspecialidade });
+  }, [filtroDisponibilidade, filtroEspecialidade]);
+
+  const handleDisponibilidadeChange = (e) => {
+    setFiltroDisponibilidade(e.target.value);
+  };
+
+  const handleEspecialidadeChange = (e) => {
+    setFiltroEspecialidade(e.target.value);
   };
 
   const handleToggleDisponibilidade = async (sala) => {
     try {
-      await BloquearDesbloquearSala(sala.id, !sala.disponibilidade);
+      await BloquearDesbloquearSala(sala.id, !sala.isDisponivel);
       // Atualizar lista após alteração
-      onPesquisar(filtroDisponibilidade);
+      onPesquisar({ disponibilidade: filtroDisponibilidade, especialidade: filtroEspecialidade });
     } catch (error) {
       console.error('Erro ao alterar disponibilidade da sala:', error);
       alert('Erro ao alterar disponibilidade da sala');
     }
   };
 
+  // Função para formatar nome da especialidade
+  const getEspecialidadeNome = (especialidade) => {
+    return especialidade === 'Nutricao' ? 'Nutrição' : especialidade;
+  };
+
   return (
     <div className="pesquisar-salas">
-      <form className="filtros-form" onSubmit={handleSubmit}>
+      <div className="filtros-form">
         <div className="filtros-row">
           <div className="form-group">
             <label>Disponibilidade</label>
             <select
               value={filtroDisponibilidade}
-              onChange={(e) => setFiltroDisponibilidade(e.target.value)}
+              onChange={handleDisponibilidadeChange}
             >
               <option value="">Todas</option>
-              <option value="true">Disponível</option>
-              <option value="false">Indisponível</option>
+              <option value={true}>Disponível</option>
+              <option value={false}>Indisponível</option>
             </select>
           </div>
 
-          <button type="submit" className="btn-primary">
-            Filtrar
-          </button>
+          <div className="form-group">
+            <label>Especialidade</label>
+            <select
+              value={filtroEspecialidade}
+              onChange={handleEspecialidadeChange}
+            >
+              <option value="">Todas</option>
+              <option value="1">Psicologia</option>
+              <option value="2">Odontologia</option>
+              <option value="3">Fisioterapia</option>
+              <option value="4">Nutrição</option>
+            </select>
+          </div>
         </div>
-      </form>
+      </div>
 
       {isLoading ? (
         <div className="loading">Carregando...</div>
@@ -76,10 +101,10 @@ const PesquisarSalas = ({
                   salas.map((sala) => (
                     <tr key={sala.id}>
                       <td>{sala.nome}</td>
-                      <td>{sala.especialidadeNome || 'N/A'}</td>
+                      <td>{getEspecialidadeNome(sala.especialidade)}</td>
                       <td>
-                        <span className={`status-badge ${sala.disponibilidade ? 'disponivel' : 'indisponivel'}`}>
-                          {sala.disponibilidade ? 'Disponível' : 'Indisponível'}
+                        <span className={`status-badge ${sala.isDisponivel ? 'disponivel' : 'indisponivel'}`}>
+                          {sala.isDisponivel ? 'Disponível' : 'Indisponível'}
                         </span>
                       </td>
                       <td>
@@ -88,7 +113,7 @@ const PesquisarSalas = ({
                             className="btn-toggle"
                             onClick={() => handleToggleDisponibilidade(sala)}
                           >
-                            {sala.disponibilidade ? 'Bloquear' : 'Desbloquear'}
+                            {sala.isDisponivel ? 'Bloquear' : 'Desbloquear'}
                           </button>
                           <button
                             className="btn-edit"

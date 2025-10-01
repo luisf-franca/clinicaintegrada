@@ -20,7 +20,7 @@ const GetSalas = async (options = {}) => {
       },
     });
 
-    return response.data.data.items;
+    return response.data.data;
   } catch (error) {
     console.error('Erro ao buscar salas:', error);
     throw error;
