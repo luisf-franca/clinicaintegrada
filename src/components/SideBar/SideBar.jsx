@@ -7,9 +7,9 @@ import ListaEsperaIcon from '../../icons/ListaEsperaIcon';
 import PacienteIcon from '../../icons/PacienteIcon';
 import AgendamentoIcon from '../../icons/AgendamentoIcon';
 import ConsultaIcon from '../../icons/ConsultaIcon';
-import RelatorioIcon from '../../icons/RelatorioIcon';
 import EquipeIcon from '../../icons/EquipeIcon';
 import SalaIcon from '../../icons/SalaIcon';
+import ProfissionalIcon from '../../icons/ProfissionalIcon';
 
 const SideBar = () => {
   return (
@@ -60,15 +60,6 @@ const SideBar = () => {
         <ConsultaIcon />
       </NavLink>
       <NavLink
-        to="/relatorio"
-        className={({ isActive }) =>
-          `sidebar-item ${isActive ? 'selected' : ''}`
-        }
-        title="Relatório"
-      >
-        <RelatorioIcon />
-      </NavLink>
-      <NavLink
         to="/equipe"
         className={({ isActive }) =>
           `sidebar-item ${isActive ? 'selected' : ''}`
@@ -85,6 +76,16 @@ const SideBar = () => {
         title="Sala"
       >
         <SalaIcon />
+      </NavLink>
+      {/* ícone de profissionais */}
+      <NavLink
+        to="/profissionais"
+        className={({ isActive }) =>
+          `sidebar-item ${isActive ? 'selected' : ''}`
+        }
+        title="Profissionais"
+      >
+        <ProfissionalIcon />
       </NavLink>
     </div>
   );

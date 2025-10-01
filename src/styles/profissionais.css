@@ -1,0 +1,79 @@
+.profissionais-hgroup {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.profissionais-hgroup h1 {
+  font-size: 2rem;
+  color: var(--vermelho-escuro);
+  text-shadow: 0 2px 8px rgba(125, 20, 116, 0.08);
+  font-weight: 700;
+  margin: 0;
+}
+
+.profissionais-nav {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.5rem;
+}
+
+.profissionais-nav .btn-secondary {
+  padding: 0.5rem 1.25rem;
+  border-radius: 6px;
+  border: 1px solid var(--cinza-300);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.85);
+  color: var(--vermelho-escuro);
+  transition: background 0.2s, color 0.2s;
+}
+
+.profissionais-nav .btn-secondary.active,
+.profissionais-nav .btn-secondary:hover {
+  background: var(--vermelho-escuro);
+  color: var(--branco);
+}
+
+.profissionais-content-wrapper {
+  display: flex;
+  gap: 2rem;
+  width: 100%;
+  align-items: flex-start;
+}
+
+.profissionais-form-card {
+  width: 100%;
+  max-width: 600px;
+  background: var(--branco);
+  border-radius: 16px;
+  box-shadow: 0 6px 32px rgba(125, 20, 116, 0.1);
+  padding: 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.profissionais-list-card {
+  width: 100%;
+  background: var(--branco);
+  border-radius: 16px;
+  box-shadow: 0 6px 32px rgba(125, 20, 116, 0.1);
+  padding: 1.5rem 1rem;
+  overflow-x: auto;
+}
+
+@media (max-width: 1024px) {
+  .profissionais-content-wrapper {
+    flex-direction: column;
+  }
+
+  .profissionais-form-card,
+  .profissionais-list-card {
+    width: 100%;
+  }
+}

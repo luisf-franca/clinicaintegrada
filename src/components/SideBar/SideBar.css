@@ -86,10 +86,7 @@
   box-shadow: none;
 }
 
-/* Oculta os 3 últimos NavLink (Relatório, Equipe, Sala) */
-.sidebar .sidebar-item:nth-last-child(-n + 3) {
-  display: none !important;
-}
+
 
 @media (max-width: 700px) {
   .sidebar {
