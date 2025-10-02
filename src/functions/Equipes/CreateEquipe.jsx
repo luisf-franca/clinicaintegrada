@@ -1,21 +1,9 @@
-const API_URL = import.meta.env.VITE_API_BASE_URL;
+import { api } from '../../contexts/AuthContext';
 
 const CreateEquipe = async (equipeData) => {
   try {
-    const response = await fetch(`${API_URL}/equipes`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
-      },
-      body: JSON.stringify(equipeData),
-    });
-
-    if (!response.ok) {
-      throw new Error('Erro ao criar equipe');
-    }
-
-    return await response.json();
+    const response = await api.post('/equipes', equipeData);
+    return response.data;
   } catch (error) {
     console.error('Erro ao criar equipe:', error);
     throw error;

@@ -1,18 +1,8 @@
-import axios from 'axios';
+import { api } from '../../contexts/AuthContext';
 
 const DeletePaciente = async (pacienteId) => {
   try {
-    const url = import.meta.env.VITE_API_BASE_URL;
-    const fullUrl = `${url}/pacientes/${pacienteId}`;
-
-    const token = localStorage.getItem('token');
-
-    const response = await axios.delete(fullUrl, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
+    const response = await api.delete(`/pacientes/${pacienteId}`);
     return response.data;
   } catch (error) {
     console.error('Erro ao deletar paciente:', error);

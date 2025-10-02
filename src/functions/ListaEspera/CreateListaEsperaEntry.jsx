@@ -1,18 +1,8 @@
-import axios from 'axios';
+import { api } from '../../contexts/AuthContext';
 
 const CreateListaEsperaEntry = async (pacienteId, listaEsperaData) => {
   try {
-    const url = import.meta.env.VITE_API_BASE_URL;
-    const fullUrl = `${url}/lista-espera/${pacienteId}`;
-
-    const token = localStorage.getItem('token');
-
-    const response = await axios.post(fullUrl, listaEsperaData, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
+    const response = await api.post(`/lista-espera/${pacienteId}`, listaEsperaData);
     return response.data;
   } catch (error) {
     console.error('Erro ao criar entrada na lista de espera:', error);

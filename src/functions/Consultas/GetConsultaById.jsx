@@ -1,18 +1,8 @@
-import axios from 'axios';
+import { api } from '../../contexts/AuthContext';
 
 const GetConsultaById = async (consultaId) => {
   try {
-    const url = import.meta.env.VITE_API_BASE_URL;
-    const fullUrl = `${url}/consultas/${consultaId}`;
-
-    const token = localStorage.getItem('token');
-
-    const response = await axios.get(fullUrl, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
+    const response = await api.get(`/consultas/${consultaId}`);
     return response.data;
   } catch (error) {
     console.error('Erro ao buscar consulta:', error);

@@ -1,21 +1,9 @@
-const API_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
+import { api } from '../../contexts/AuthContext';
 
 const UpdateSala = async (salaId, salaData) => {
   try {
-    const response = await fetch(`${API_URL}/salas/${salaId}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
-      },
-      body: JSON.stringify(salaData),
-    });
-
-    if (!response.ok) {
-      throw new Error('Erro ao atualizar sala');
-    }
-
-    return await response.json();
+    const response = await api.put(`/salas/${salaId}`, salaData);
+    return response.data;
   } catch (error) {
     console.error('Erro ao atualizar sala:', error);
     throw error;

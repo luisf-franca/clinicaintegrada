@@ -1,30 +1,21 @@
-const API_URL = import.meta.env.VITE_API_BASE_URL;
+import { api } from '../../contexts/AuthContext';
 
 const GetProfissionais = async (options = {}) => {
   try {
     const { page = 1, pageSize = 10, filter } = options;
     
-    let url = `${API_URL}/profissionais?page=${page}&pageSize=${pageSize}`;
-    
+    const params = new URLSearchParams();
+    params.append('page', page);
+    params.append('pageSize', pageSize);
+    if (filter) {
+      params.append('filter', filter);
+    }
+
     console.log('Fetching professionals with options:', options);
 
-    if (filter) {
-      url += `&filter=${encodeURIComponent(filter)}`;
-    }
+    const response = await api.get('/profissionais', { params });
 
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error('Erro ao buscar profissionais');
-    }
-
-    const data = await response.json();
+    const data = response.data;
     // console.log('Data from GetProfissionais:', data);
     return data.data;
   } catch (error) {

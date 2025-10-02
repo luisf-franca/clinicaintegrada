@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { api } from '../../contexts/AuthContext';
 
 const GetConsultas = async (options = {}) => {
   try {
@@ -10,16 +10,7 @@ const GetConsultas = async (options = {}) => {
     if (filter) params.append('filter', filter);
     if (orderBy) params.append('orderBy', orderBy);
 
-    const url = import.meta.env.VITE_API_BASE_URL;
-    const fullUrl = `${url}/consultas?${params.toString()}`;
-
-    const token = localStorage.getItem('token');
-
-    const response = await axios.get(fullUrl, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await api.get('/consultas', { params });
 
     return response.data.data.items;
   } catch (error) {

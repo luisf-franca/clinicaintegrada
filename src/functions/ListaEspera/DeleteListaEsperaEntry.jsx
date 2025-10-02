@@ -1,18 +1,8 @@
-import axios from 'axios';
+import { api } from '../../contexts/AuthContext';
 
 const DeleteListaEsperaEntry = async (entryId) => {
   try {
-    const url = import.meta.env.VITE_API_BASE_URL;
-    const fullUrl = `${url}/lista-espera/${entryId}`;
-
-    const token = localStorage.getItem('token');
-
-    const response = await axios.delete(fullUrl, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
+    const response = await api.delete(`/lista-espera/${entryId}`);
     return response.data;
   } catch (error) {
     console.error('Erro ao deletar entrada da lista de espera:', error);

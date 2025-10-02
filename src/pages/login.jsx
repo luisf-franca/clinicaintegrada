@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import '../styles/login.css';
-import Login from '../functions/Authenticate/Login';
+import { useAuth } from '../contexts/AuthContext'; // Ajuste o caminho se necessário
 
 const LoginPage = () => {
-  const navigate = useNavigate();
+  // Consumindo o contexto de autenticação!
+  const { login, isLoading, error } = useAuth();
+
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
+    email: 'atendente@user.com.br',
+    senha: 'Teste1@',
   });
-  const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -18,35 +17,15 @@ const LoginPage = () => {
       ...prev,
       [name]: value
     }));
-    setError('');
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
-
-    if (!formData.email || !formData.password) {
-      setError('Por favor, preencha todos os campos');
-      return;
+    if (!formData.email || !formData.senha) {
+      return; // A validação de required do HTML já cuida disso
     }
-
-    setIsLoading(true);
-    try {
-      const response = await Login(formData.email, formData.password);
-      
-      if (response.success) {
-        localStorage.setItem('token', response.token);
-        localStorage.setItem('userData', JSON.stringify(response.user));
-        navigate('/');
-      } else {
-        setError(response.message || 'Credenciais inválidas');
-      }
-    } catch (err) {
-      setError('Erro ao fazer login. Tente novamente.');
-      console.error('Erro no login:', err);
-    } finally {
-      setIsLoading(false);
-    }
+    // A única responsabilidade do componente é chamar a função de login do contexto
+    await login(formData);
   };
 
   return (
@@ -79,12 +58,12 @@ const LoginPage = () => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="password">Senha</label>
+            <label htmlFor="senha">Senha</label>
             <input
               type="password"
-              id="password"
-              name="password"
-              value={formData.password}
+              id="senha"
+              name="senha"
+              value={formData.senha}
               onChange={handleChange}
               placeholder="••••••••"
               disabled={isLoading}
@@ -92,8 +71,8 @@ const LoginPage = () => {
             />
           </div>
 
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             className="btn-login"
             disabled={isLoading}
           >

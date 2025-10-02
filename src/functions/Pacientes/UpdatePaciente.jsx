@@ -1,18 +1,8 @@
-import axios from 'axios';
+import { api } from '../../contexts/AuthContext';
 
 const UpdatePaciente = async (pacienteId, pacienteData) => {
   try {
-    const url = import.meta.env.VITE_API_BASE_URL;
-    const fullUrl = `${url}/pacientes/${pacienteId}`;
-
-    const token = localStorage.getItem('token');
-
-    const response = await axios.put(fullUrl, pacienteData, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
+    const response = await api.put(`/pacientes/${pacienteId}`, pacienteData);
     return response.data;
   } catch (error) {
     console.error('Erro ao atualizar paciente:', error);

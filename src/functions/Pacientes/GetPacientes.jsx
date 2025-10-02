@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { api } from '../../contexts/AuthContext';
 
 const GetPacientes = async (options = {}) => {
   try {
@@ -10,21 +10,14 @@ const GetPacientes = async (options = {}) => {
     if (filter) params.append('filter', filter);
     if (orderBy) params.append('orderBy', orderBy);
 
-    const url = import.meta.env.VITE_API_BASE_URL;
-    const fullUrl = `${url}/pacientes?${params.toString()}`;
-
-    const token = localStorage.getItem('token');
-
-    const response = await axios.get(fullUrl, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await api.get(`/pacientes`, { params });
     //console.log(response.data.data);
     return response.data.data;
     
   } catch (error) {
     console.error('Erro ao buscar pacientes:', error);
+    // O ideal aqui é ter um interceptor no Axios para tratar erros 401 (não autorizado)
+    // e deslogar o usuário automaticamente.
     throw error;
   }
 };

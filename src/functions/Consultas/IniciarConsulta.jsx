@@ -1,22 +1,8 @@
-import axios from 'axios';
+import { api } from '../../contexts/AuthContext';
 
 const IniciarConsulta = async (consultaId) => {
   try {
-    const url = import.meta.env.VITE_API_BASE_URL;
-    const fullUrl = `${url}/consultas/${consultaId}/iniciar`;
-
-    const token = localStorage.getItem('token');
-
-    const response = await axios.put(
-      fullUrl,
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      },
-    );
-
+    const response = await api.put(`/consultas/${consultaId}/iniciar`, {});
     return response.data;
   } catch (error) {
     console.error('Erro ao iniciar consulta:', error);

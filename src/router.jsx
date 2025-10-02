@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import './styles/home.css';
+
+// COMPONENTES DE ROTA
+import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute.jsx';
 
 // PAGES
 import NotFound from './pages/NotFound';
@@ -19,17 +21,20 @@ const Router = () => {
   return (
     <Routes>
       <Route path="/login" element={<LoginPage />} />
-      <Route path="/" element={<Home />} />
-      <Route path="/agendamento" element={<Agendamento />} />
-      <Route path="/listaespera" element={<ListaEspera />} />
-      <Route path="/pacientes" element={<Pacientes />} />
-      <Route path="/relatorio" element={<Relatorio />} />
-      <Route path="/consulta" element={<Consulta />} />
-      <Route path="/profissionais" element={<Profissionais />} />
-      <Route path="/equipe" element={<Equipe />} />
-      <Route path="/sala" element={<Sala />} />
-      <Route path="*" element={<NotFound />} />
-
+      <Route element={<ProtectedRoute />}>
+        <Route path="/" element={<Home />} />
+        <Route path="/agendamento" element={<Agendamento />} />
+        <Route path="/listaespera" element={<ListaEspera />} />
+        <Route path="/pacientes" element={<Pacientes />} />
+        <Route path="/relatorio" element={<Relatorio />} />
+        <Route path="/consulta" element={<Consulta />} />
+        <Route path="/profissionais" element={<Profissionais />} />
+        <Route path="/equipe" element={<Equipe />} />
+        <Route path="/sala" element={<Sala />} />
+        
+        <Route path="*" element={<NotFound />} />
+      </Route>
+      
     </Routes>
   );
 };

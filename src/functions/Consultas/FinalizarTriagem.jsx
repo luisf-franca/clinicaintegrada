@@ -1,22 +1,8 @@
-import axios from 'axios';
+import { api } from '../../contexts/AuthContext';
 
 const FinalizarTriagem = async (consultaId) => {
   try {
-    const url = import.meta.env.VITE_API_BASE_URL;
-    const fullUrl = `${url}/consultas/${consultaId}/triagem/finalizar`;
-
-    const token = localStorage.getItem('token');
-
-    const response = await axios.put(
-      fullUrl,
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      },
-    );
-
+    const response = await api.put(`/consultas/${consultaId}/triagem/finalizar`, {});
     return response.data;
   } catch (error) {
     console.error('Erro ao iniciar triagem:', error);

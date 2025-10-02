@@ -1,20 +1,9 @@
-const API_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
+import { api } from '../../contexts/AuthContext';
 
 const DeleteSala = async (salaId) => {
   try {
-    const response = await fetch(`${API_URL}/salas/${salaId}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error('Erro ao deletar sala');
-    }
-
-    return await response.json();
+    const response = await api.delete(`/salas/${salaId}`);
+    return response.data;
   } catch (error) {
     console.error('Erro ao deletar sala:', error);
     throw error;

@@ -1,18 +1,8 @@
-import axios from 'axios';
+import { api } from '../../contexts/AuthContext';
 
 const CreateAgendamento = async (agendamentoData) => {
   try {
-    const url = import.meta.env.VITE_API_BASE_URL;
-    const fullUrl = `${url}/agendamentos/consulta-triagem`;
-
-    const token = localStorage.getItem('token');
-
-    const response = await axios.post(fullUrl, agendamentoData, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
+    const response = await api.post('/agendamentos/consulta-triagem', agendamentoData);
     return response.data;
   } catch (error) {
     console.error('Erro ao criar agendamento:', error);
