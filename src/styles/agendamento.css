@@ -95,6 +95,16 @@
           padding: 10px 0;
           font-size: 1.05rem;
           font-weight: 600;
+
+          &::before {
+            position: absolute;
+            top: -25px;
+            left: 0;
+            width: 100%;
+            height: 1.5rem;
+            content: '';
+            background: var(--branco);
+          }
         }
       }
 
@@ -207,9 +217,9 @@
   .calendario-wrapper {
     padding: 0.5rem 0.25rem;
     -webkit-user-select: none; /* Safari */
-    -moz-user-select: none;    /* Firefox */
-    -ms-user-select: none;     /* IE10+/Edge */
-    user-select: none;         /* Padrão */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+/Edge */
+    user-select: none; /* Padrão */
   }
 }
 

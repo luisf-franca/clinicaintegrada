@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import '../../styles/forms.css';
 import CreateProfissional from '../../functions/Profissionais/CreateProfissional';
 
 const AdicionarProfissional = ({ onVoltar }) => {
@@ -8,20 +9,20 @@ const AdicionarProfissional = ({ onVoltar }) => {
     telefone: '',
     email: '',
     tipo: '1',
-    especialidade: '1'
+    especialidade: '1',
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
     setError('');
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!formData.nome || !formData.ra || !formData.email) {
       setError('Por favor, preencha todos os campos obrigatórios');
       return;
@@ -32,9 +33,9 @@ const AdicionarProfissional = ({ onVoltar }) => {
       const profissionalData = {
         ...formData,
         tipo: parseInt(formData.tipo),
-        especialidade: parseInt(formData.especialidade)
+        especialidade: parseInt(formData.especialidade),
       };
-      
+
       await CreateProfissional(profissionalData);
       // alert('Profissional cadastrado com sucesso!');
       onVoltar();
@@ -47,11 +48,11 @@ const AdicionarProfissional = ({ onVoltar }) => {
   };
 
   return (
-    <div className="form-container">
+    <div className="form-container flat">
       <h2>Adicionar Profissional</h2>
-      
+
       {error && <div className="error-message">{error}</div>}
-      
+
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label>Nome *</label>

@@ -9,8 +9,8 @@
   color: var(--vermelho-escuro);
   display: flex;
   flex-direction: column;
-  align-items: center; /* Centraliza horizontalmente */
-  justify-content: space-between; /* <-- MUDANÇA PRINCIPAL */
+  align-items: center;
+  justify-content: space-between;
   border-radius: 0 18px 18px 0;
   box-shadow: 2px 0 24px rgba(125, 20, 116, 0.1);
   padding: 1.5rem 0.5rem 1rem 0.5rem;
@@ -41,6 +41,7 @@
 }
 
 .sidebar-item {
+  aspect-ratio: 1 / 1;
   width: 48px;
   height: 48px;
   display: flex;
@@ -74,7 +75,7 @@
   transition: background 0.2s, filter 0.2s, fill 0.2s, color 0.2s;
   width: 36px;
   height: 36px;
-  display: block;
+  aspect-ratio: 1 / 1;
   fill: none !important;
   color: var(--vermelho-escuro);
 }
@@ -97,8 +98,6 @@
   color: var(--vermelho-escuro);
   box-shadow: none;
 }
-
-
 
 @media (max-width: 700px) {
   .sidebar {

@@ -1,0 +1,130 @@
+/* Shared form styles to match Adicionar Paciente look */
+
+/* Buttons */
+.btn-primary {
+  background: var(--vermelho-escuro);
+  color: var(--branco);
+  border: none;
+  padding: 0.5rem 1.25rem;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  box-shadow: none;
+}
+
+.btn-primary:hover {
+  background: var(--vermelho-escuro);
+  color: var(--branco);
+}
+
+.btn-secondary {
+  background: var(--cinza-300);
+  color: var(--cinza-600);
+  border: none;
+  padding: 0.5rem 1.25rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  font-size: 1rem;
+}
+
+.btn-secondary:hover {
+  background: var(--vermelho-escuro);
+  color: var(--branco);
+}
+
+/* Container */
+.form-container {
+  background: var(--branco);
+  padding: 1.5rem 1rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  min-width: 260px;
+}
+
+/* Variante sem fundo / sombra para evitar cartão aninhado dentro de outro */
+.form-container.flat {
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+  width: 100%;
+}
+
+.form-content {
+  padding: 1.5rem 1rem;
+  overflow-y: auto;
+}
+
+.form-container h3,
+.form-container h2 {
+  color: var(--roxo);
+  margin-bottom: 1.5rem;
+}
+
+/* Fields */
+.form-group {
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  /* margin-bottom: 5px; */
+  font-weight: 600;
+  color: var(--vermelho-escuro);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  border: 1px solid var(--cinza-400);
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 1rem;
+  background: var(--cinza-100);
+  transition: border 0.2s, box-shadow 0.2s;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: var(--vermelho-escuro);
+  box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.12);
+  outline: none;
+}
+
+/* Actions (buttons row) */
+.form-actions {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.form-actions .btn-secondary {
+  border: 1px solid var(--cinza-300);
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  background: rgba(255, 255, 255, 0.85);
+  color: var(--vermelho-escuro);
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(125, 20, 116, 0.04);
+  transition: background 0.2s, color 0.2s, border 0.2s;
+}
+
+.form-actions .btn-secondary:hover {
+  background: var(--vermelho-escuro);
+  color: var(--branco);
+}

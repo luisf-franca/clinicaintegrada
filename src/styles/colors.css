@@ -38,7 +38,7 @@
   font-size: 0.95rem;
   font-weight: 600;
   color: var(--vermelho-escuro);
-  margin-bottom: 0.5rem;
+  /* margin-bottom: 0.5rem; */
 }
 
 .form-group input,
@@ -78,7 +78,7 @@
   font-weight: 500;
 }
 
-.checkbox-group input[type="checkbox"] {
+.checkbox-group input[type='checkbox'] {
   width: auto;
   cursor: pointer;
 }
@@ -106,7 +106,7 @@
   border-radius: 4px;
 }
 
-.checkbox-item input[type="checkbox"] {
+.checkbox-item input[type='checkbox'] {
   width: auto;
   cursor: pointer;
 }

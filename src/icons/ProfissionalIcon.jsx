@@ -10,28 +10,40 @@ const ProfissionalIcon = (props) => (
     {...props}
   >
     <circle cx="16" cy="16" r="16" fill="var(--branco)" fillOpacity="0.85" />
-    <path
-      d="M20 29v-3a6 6 0 0 0-6-6h-4a6 6 0 0 0-6 6v3"
-      stroke="var(--vermelho-escuro)"
-      strokeWidth="2"
-    />
     <circle
-      cx="10"
-      cy="11"
-      r="6"
+      cx="16"
+      cy="11.5"
+      r="4"
       stroke="var(--vermelho-escuro)"
       strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
     <path
-      d="M30 29v-3a6 6 0 0 0-4.5-5.81"
+      d="M8 22.5c0-4 4-7 8-7s8 3 8 7"
       stroke="var(--vermelho-escuro)"
       strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+
+    {/* Tubos do estetoscópio */}
+    <path
+      d="M14 15c-1.7 2.1-1.6 4.3 2 7"
+      stroke="var(--vermelho-escuro)"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
     <path
-      d="M20 5.19a6 6 0 0 1 0 11.62"
+      d="M18 15c1.7 2.1 1.6 4.3-2 7"
       stroke="var(--vermelho-escuro)"
       strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
+    {/* Diafragma do estetoscópio */}
+    <circle cx="16" cy="22" r="1.1" fill="var(--vermelho-escuro)" />
   </svg>
 );
 

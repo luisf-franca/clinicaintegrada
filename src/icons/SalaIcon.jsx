@@ -10,22 +10,24 @@ const SalaIcon = (props) => (
   >
     <circle cx="16" cy="16" r="16" fill="var(--branco)" fillOpacity="0.85" />
     <rect
-      x="10"
-      y="12"
-      width="12"
-      height="8"
+      x="7"
+      y="9"
+      width="18"
+      height="14"
       rx="2"
       stroke="var(--vermelho-escuro)"
       strokeWidth="2"
     />
     <rect
-      x="14"
-      y="16"
-      width="4"
-      height="4"
+      x="15"
+      y="12.5"
+      width="7"
+      height="10.5"
       rx="1"
-      fill="var(--vermelho-escuro)"
+      stroke="var(--vermelho-escuro)"
+      strokeWidth="2"
     />
+    <circle cx="20.5" cy="18" r="0.9" fill="var(--vermelho-escuro)" />
   </svg>
 );
 export default SalaIcon;

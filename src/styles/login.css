@@ -4,8 +4,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, var(--roxo) 0%, var(--vermelho-escuro) 100%);
   padding: 2rem;
+  background: linear-gradient(
+    135deg,
+    var(--roxo) 0%,
+    var(--vermelho-escuro) 100%
+  );
 }
 
 .login-card {
@@ -50,7 +54,7 @@
 .login-form {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 0.25rem;
 }
 
 .login-error {

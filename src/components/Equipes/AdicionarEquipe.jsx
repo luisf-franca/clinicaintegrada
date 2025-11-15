@@ -1,6 +1,7 @@
 // src/components/Equipes/AdicionarEquipe.jsx
 
 import React, { useState } from 'react';
+import '../../styles/forms.css';
 import CreateEquipe from '../../functions/Equipes/CreateEquipe';
 
 // onEquipeCriada é uma nova prop para notificar o pai e ir para a próxima etapa.
@@ -10,15 +11,15 @@ const AdicionarEquipe = ({ onVoltar, onEquipeCriada }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
-const getEspecialidadeNome = (valor) => {
-  const mapa = {
-    '1': 'Psicologia',
-    '2': 'Odontologia',
-    '3': 'Fisioterapia',
-    '4': 'Nutrição'
+  const getEspecialidadeNome = (valor) => {
+    const mapa = {
+      1: 'Psicologia',
+      2: 'Odontologia',
+      3: 'Fisioterapia',
+      4: 'Nutrição',
+    };
+    return mapa[valor] || '';
   };
-  return mapa[valor] || '';
-};
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -36,21 +37,20 @@ const getEspecialidadeNome = (valor) => {
         especialidade: parseInt(especialidade, 10),
         // Não enviamos mais estagiários ou professores na criação.
       };
-      
+
       const response = await CreateEquipe(equipeData);
-      
+
       if (response.succeeded && response.data) {
         const novaEquipe = {
           id: response.data,
-          nome: nome,        
-          especialidade: getEspecialidadeNome(especialidade) 
+          nome: nome,
+          especialidade: getEspecialidadeNome(especialidade),
         };
-        
+
         onEquipeCriada(novaEquipe);
       } else {
         throw new Error(response.error || 'Falha ao obter ID da nova equipe.');
       }
-
     } catch (err) {
       console.error('Erro ao criar equipe:', err);
       setError('Erro ao criar equipe. Verifique o nome e tente novamente.');
@@ -60,11 +60,11 @@ const getEspecialidadeNome = (valor) => {
   };
 
   return (
-    <div className="form-container">
+    <div className="form-container flat">
       <h2>Etapa 1: Criar Nova Equipe</h2>
-      
+
       {error && <div className="error-message">{error}</div>}
-      
+
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="nome">Nome da Equipe *</label>

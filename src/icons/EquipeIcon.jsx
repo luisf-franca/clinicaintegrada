@@ -9,31 +9,38 @@ const EquipeIcon = (props) => (
     {...props}
   >
     <circle cx="16" cy="16" r="16" fill="var(--branco)" fillOpacity="0.85" />
+    {/* Cabeça central */}
     <circle
       cx="16"
-      cy="13"
+      cy="11.5"
       r="4"
       stroke="var(--vermelho-escuro)"
       strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
+    {/* Ombros base do grupo */}
     <path
-      d="M8 23c0-3.3137 3.134-6 7-6s7 2.6863 7 6"
+      d="M7 22.5c0-4.2 4.477-7 9-7s9 2.8 9 7"
+      stroke="var(--vermelho-escuro)"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    {/* Cabeças laterais */}
+    <circle
+      cx="10"
+      cy="15"
+      r="2.2"
       stroke="var(--vermelho-escuro)"
       strokeWidth="2"
     />
     <circle
-      cx="10"
-      cy="17"
-      r="2"
-      stroke="var(--vermelho-escuro)"
-      strokeWidth="1.5"
-    />
-    <circle
       cx="22"
-      cy="17"
-      r="2"
+      cy="15"
+      r="2.2"
       stroke="var(--vermelho-escuro)"
-      strokeWidth="1.5"
+      strokeWidth="2"
     />
   </svg>
 );

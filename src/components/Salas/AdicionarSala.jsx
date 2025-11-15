@@ -1,26 +1,27 @@
 import React, { useState } from 'react';
+import '../../styles/forms.css';
 import CreateSala from '../../functions/Salas/CreateSala';
 
 const AdicionarSala = ({ onVoltar }) => {
   const [formData, setFormData] = useState({
     nome: '',
-    especialidade: 1
+    especialidade: 1,
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
     setError('');
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!formData.nome) {
       setError('Por favor, preencha o nome da sala');
       return;
@@ -32,7 +33,7 @@ const AdicionarSala = ({ onVoltar }) => {
         ...formData,
         especialidade: parseInt(formData.especialidade),
       };
-      
+
       await CreateSala(salaData);
       // alert('Sala cadastrada com sucesso!');
       onVoltar();
@@ -45,11 +46,11 @@ const AdicionarSala = ({ onVoltar }) => {
   };
 
   return (
-    <div className="form-container">
+    <div className="form-container flat">
       <h2>Adicionar Sala</h2>
-      
+
       {error && <div className="error-message">{error}</div>}
-      
+
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label>Nome *</label>

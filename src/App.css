@@ -67,6 +67,12 @@ body {
   overflow: hidden;
   gap: 2rem;
   padding-left: 90px;
+
+  &:has(.login-container) {
+    padding: 0;
+    box-shadow: none;
+    background: none;
+  }
 }
 
 .content-area {
@@ -74,6 +80,11 @@ body {
   height: 100vh;
   overflow-y: auto;
   padding: 1.5rem 2rem 1.5rem 0;
+
+  &:has(.login-container) {
+    padding: 0;
+    overflow: hidden;
+  }
 }
 
 .sidebar-container {
