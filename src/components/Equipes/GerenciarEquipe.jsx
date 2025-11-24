@@ -1,6 +1,7 @@
 // src/components/Equipes/GerenciarEquipe.jsx
 
 import React, { useState, useEffect, useCallback } from 'react';
+import '../../styles/forms.css';
 import GetEquipeById from '../../functions/Equipes/GetEquipeById';
 import GetProfissionais from '../../functions/Profissionais/GetProfissionais';
 import AdicionarProfissionalEquipe from '../../functions/Equipes/AdicionarProfissionalEquipe';
@@ -10,7 +11,7 @@ import useDebounce from '../../hooks/useDebounce'; // Hook customizado para debo
 const GerenciarEquipe = ({ equipe, onVoltar }) => {
   const [equipeAtual, setEquipeAtual] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  
+
   // --- Estados para a nova busca ---
   const [tipoBusca, setTipoBusca] = useState(''); // '' para todos, '1' para estagiário, '2' para professor
   const [termoBusca, setTermoBusca] = useState('');
@@ -48,28 +49,29 @@ const GerenciarEquipe = ({ equipe, onVoltar }) => {
       try {
         // A função GetProfissionais precisa suportar filtro por nome, ex: 'nome=João'
         const especialidadeString = equipeAtual?.especialidade; // Ex: 'Psicologia'
-        
+
         // Constrói os filtros dinamicamente
         let filtros = [];
-        if (tipoBusca) { // Só adiciona o filtro de tipo se não for "Todos" (valor vazio)
+        if (tipoBusca) {
+          // Só adiciona o filtro de tipo se não for "Todos" (valor vazio)
           filtros.push(`tipo=${tipoBusca}`);
         }
         filtros.push(`especialidade=${especialidadeString}`);
         filtros.push(`nome=*${debouncedTermoBusca}`);
-        
+
         const response = await GetProfissionais({
           filter: filtros.join(','),
           pageSize: 10,
         });
 
         const membrosAtuaisIds = [
-          ...(equipeAtual?.estagiarios?.map(e => e.id) || []),
-          ...(equipeAtual?.professores?.map(p => p.id) || []),
+          ...(equipeAtual?.estagiarios?.map((e) => e.id) || []),
+          ...(equipeAtual?.professores?.map((p) => p.id) || []),
         ];
 
         // Filtra os resultados para não mostrar quem já está na equipe
         const profissionaisFiltrados = (response?.items || []).filter(
-          prof => !membrosAtuaisIds.includes(prof.id)
+          (prof) => !membrosAtuaisIds.includes(prof.id),
         );
 
         setResultadosBusca(profissionaisFiltrados);
@@ -83,11 +85,13 @@ const GerenciarEquipe = ({ equipe, onVoltar }) => {
     buscarProfissionais();
   }, [debouncedTermoBusca, tipoBusca, equipeAtual]);
 
-
   const handleAdicionarProfissional = async (profissionalId) => {
     setIsLoading(true);
     try {
-      await AdicionarProfissionalEquipe({ equipeId: equipe.id, profissionalId });
+      await AdicionarProfissionalEquipe({
+        equipeId: equipe.id,
+        profissionalId,
+      });
       setTermoBusca(''); // Limpa a busca
       setResultadosBusca([]); // Limpa os resultados
       await carregarDadosEquipe(); // Recarrega os membros da equipe
@@ -116,10 +120,12 @@ const GerenciarEquipe = ({ equipe, onVoltar }) => {
   if (!equipeAtual) return <div className="loading">Carregando...</div>;
 
   return (
-    <div className="form-container">
+    <div className="form-container flat">
       {/* O Título pode ser dinâmico para indicar se é uma criação ou edição */}
       <h2>Gerenciar Membros da Equipe: {equipeAtual.nome}</h2>
-      <p><strong>Especialidade:</strong> {equipeAtual.especialidade}</p>
+      <p>
+        <strong>Especialidade:</strong> {equipeAtual.especialidade}
+      </p>
 
       {/* Seção para Adicionar Novos Membros */}
       <div className="adicionar-profissional">
@@ -127,7 +133,10 @@ const GerenciarEquipe = ({ equipe, onVoltar }) => {
         <div className="form-inline">
           <div className="form-group">
             <label>Tipo</label>
-            <select value={tipoBusca} onChange={(e) => setTipoBusca(e.target.value)}>
+            <select
+              value={tipoBusca}
+              onChange={(e) => setTipoBusca(e.target.value)}
+            >
               <option value="">Todos</option>
               <option value="1">Estagiário</option>
               <option value="2">Professor</option>
@@ -143,43 +152,70 @@ const GerenciarEquipe = ({ equipe, onVoltar }) => {
             />
           </div>
         </div>
-        
+
         {/* Lista de Resultados da Busca */}
         <div className="search-results">
           {isBuscando && <p>Buscando...</p>}
-          {!isBuscando && debouncedTermoBusca.length >= 3 && resultadosBusca.length === 0 && <p>Nenhum profissional encontrado.</p>}
-          {resultadosBusca.map(prof => (
+          {!isBuscando &&
+            debouncedTermoBusca.length >= 3 &&
+            resultadosBusca.length === 0 && (
+              <p>Nenhum profissional encontrado.</p>
+            )}
+          {resultadosBusca.map((prof) => (
             <div key={prof.id} className="result-item">
-              <span>{prof.nome} - {prof.ra}</span>
-              <button onClick={() => handleAdicionarProfissional(prof.id)} className="btn-add-small">
+              <span>
+                {prof.nome} - {prof.ra}
+              </span>
+              <button
+                onClick={() => handleAdicionarProfissional(prof.id)}
+                className="btn-add-small"
+              >
                 Adicionar
               </button>
             </div>
           ))}
         </div>
       </div>
-      
+
       {/* Listas de Membros Atuais */}
       <div className="equipe-membros">
         <h3>Estagiários na Equipe</h3>
         {equipeAtual.estagiarios?.length > 0 ? (
-          equipeAtual.estagiarios.map(est => (
-             <div key={est.id} className="membro-item">
-               <span>{est.nome} - {est.ra}</span>
-               <button onClick={() => handleRemoverProfissional(est.id)} className="btn-delete-small">Remover</button>
-             </div>
+          equipeAtual.estagiarios.map((est) => (
+            <div key={est.id} className="membro-item">
+              <span>
+                {est.nome} - {est.ra}
+              </span>
+              <button
+                onClick={() => handleRemoverProfissional(est.id)}
+                className="btn-delete-small"
+              >
+                Remover
+              </button>
+            </div>
           ))
-        ) : <p>Nenhum estagiário na equipe.</p>}
+        ) : (
+          <p>Nenhum estagiário na equipe.</p>
+        )}
 
         <h3>Professores na Equipe</h3>
         {equipeAtual.professores?.length > 0 ? (
-          equipeAtual.professores.map(prof => (
-             <div key={prof.id} className="membro-item">
-               <span>{prof.nome} - {prof.ra}</span>
-               <button onClick={() => handleRemoverProfissional(prof.id)} className="btn-delete-small">Remover</button>
-             </div>
+          equipeAtual.professores.map((prof) => (
+            <div key={prof.id} className="membro-item">
+              <span>
+                {prof.nome} - {prof.ra}
+              </span>
+              <button
+                onClick={() => handleRemoverProfissional(prof.id)}
+                className="btn-delete-small"
+              >
+                Remover
+              </button>
+            </div>
           ))
-        ) : <p>Nenhum professor na equipe.</p>}
+        ) : (
+          <p>Nenhum professor na equipe.</p>
+        )}
       </div>
 
       <div className="form-actions">
