@@ -1,120 +1,27 @@
+/* Lista Espera Resumo CSS - Simplified */
+
 .lista-espera-resumo {
   width: 100%;
-  background: var(--branco);
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(125, 20, 116, 0.07);
-  overflow: hidden;
-  margin-bottom: 1.2rem;
-  padding: 0.5rem 0.5rem 1rem 0.5rem;
-}
-
-.lista-espera-resumo__header {
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  background: var(--vermelho-escuro);
-  color: var(--branco);
-  padding: 0.7rem 1rem;
-  border-radius: 10px 10px 0 0;
+  flex-direction: column;
 }
 
-.lista-espera-resumo__header h4 {
-  color: var(--branco);
-  text-shadow: 0 2px 8px rgba(125, 20, 116, 0.08);
-  font-size: 1.15rem;
-  margin: 0;
-}
-
-.lista-espera-resumo__header button {
-  background: rgba(255, 255, 255, 0.85);
-  border: 1px solid var(--cinza-300);
-  color: var(--vermelho-escuro);
-  font-weight: 600;
-  border-radius: 6px;
-  padding: 0.5rem 1.25rem;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background 0.2s, color 0.2s;
-}
-
-.lista-espera-resumo__header button:hover {
-  background: var(--vermelho-escuro);
-  color: var(--branco);
-}
+/* Header handled by .widget-header in home.css */
 
 .lista-espera-resumo__body {
-  padding: 0.5rem 0.5rem 0 0.5rem;
+  padding: 0;
+  width: 100%;
 }
 
 .lista-espera-resumo__table {
   width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  background: var(--branco);
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: none;
-  font-size: 0.98rem;
 }
 
-.lista-espera-resumo__table th,
-.lista-espera-resumo__table td {
-  padding: 10px 8px;
-  text-align: left;
-  border-bottom: 1px solid #eee;
-}
-
-.lista-espera-resumo__table th {
-  background: rgba(244, 244, 244, 0.95);
-  color: var(--vermelho-escuro);
-  font-weight: 600;
-  text-align: center;
-}
-
-.lista-espera-resumo__table tr:nth-child(even) {
-  background: #f9f9f9;
-}
-
-.lista-espera-resumo__table tr:hover {
-  background: #f1f1f1;
-}
-
-.lista-espera-resumo__table tr:last-child td {
-  border-bottom: none;
-}
-
-.lista-espera-resumo__table button {
-  background: var(--cinza-300);
-  color: var(--cinza-600);
-  border: none;
-  border-radius: 6px;
-  padding: 0.4rem 1rem;
-  font-size: 0.95rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background 0.2s, color 0.2s;
-}
-
-.lista-espera-resumo__table button:hover {
-  background: var(--vermelho-escuro);
-  color: var(--branco);
-}
-
+.lista-espera-resumo__loading,
+.lista-espera-resumo__error,
 .lista-espera-resumo__empty {
   text-align: center;
-  color: #888;
-  padding: 1rem 0;
-}
-
-@media (max-width: 600px) {
-  .lista-espera-resumo__header,
-  .lista-espera-resumo__body {
-    padding: 0.5rem 0.25rem;
-  }
-  .lista-espera-resumo__table th,
-  .lista-espera-resumo__table td {
-    padding: 6px 4px;
-    font-size: 0.92rem;
-  }
+  padding: 1rem;
+  color: var(--cinza-600);
+  font-size: 0.9rem;
 }

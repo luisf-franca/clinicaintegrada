@@ -1,114 +1,224 @@
-.pacientes-resumo {
-  width: 100%;
-  background: var(--branco);
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(125, 20, 116, 0.07);
-  overflow: hidden;
-  margin-bottom: 1.2rem;
-  padding: 0.5rem 0.5rem 1rem 0.5rem;
+/* Tracker Card Style for Pacientes Widget */
+/* Inherits mostly from .widget-card but allows visible overflow for specific needs if any */
+
+.pacientes-resumo.tracker-card {
+  /* .widget-card handles background, border, radius, shadow */
+  overflow: visible;
+  /* Override if needed for certain popups, otherwise keep hidden like others */
+  border-left: 6px solid var(--vermelho-escuro);
+  /* Distinctive feature for this hero widget */
+  height: auto;
+  /* Allow growth */
+  max-height: none;
+  /* Hero widget might need more space */
 }
 
+/* Header handled primarily by .widget-header */
 .pacientes-resumo__header {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  background: var(--vermelho-escuro);
-  color: var(--branco);
-  padding: 0.7rem 1rem;
-  border-radius: 10px 10px 0 0;
+  /* Override specifics for this header if needed */
+  padding: 0.75rem 1rem;
 }
 
-.pacientes-resumo__header h4 {
-  color: var(--branco);
-  text-shadow: 0 2px 8px rgba(125, 20, 116, 0.08);
-  font-size: 1.15rem;
-  margin: 0;
-}
-
-.pacientes-resumo__header button {
+.pacientes-resumo__header button.btn-novo-paciente {
   background: rgba(255, 255, 255, 0.85);
   border: 1px solid var(--cinza-300);
   color: var(--vermelho-escuro);
   font-weight: 600;
   border-radius: 6px;
-  padding: 0.5rem 1.25rem;
-  font-size: 1rem;
+  padding: 0.4rem 1rem;
+  font-size: 0.9rem;
   cursor: pointer;
   transition: background 0.2s, color 0.2s;
 }
 
-.pacientes-resumo__header button:hover {
+.pacientes-resumo__header button.btn-novo-paciente:hover {
   background: var(--vermelho-escuro);
   color: var(--branco);
 }
 
 .pacientes-resumo__body {
-  padding: 0.5rem 0.5rem 0 0.5rem;
+  padding: 1rem 1.5rem;
 }
+
+/* STEPPER STYLES */
+.stepper-wrapper {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: var(--cinza-100);
+  border-radius: 8px;
+  border: 1px solid var(--cinza-300);
+}
+
+.stepper-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  padding: 1rem 0;
+}
+
+.step-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+  z-index: 2;
+  flex: 1;
+}
+
+.step-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--cinza-300);
+  color: var(--cinza-600);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.step-label {
+  font-size: 0.85rem;
+  color: var(--cinza-600);
+  font-weight: 500;
+}
+
+.step-line {
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  width: 100%;
+  height: 3px;
+  background: var(--cinza-300);
+  z-index: -1;
+  transform: translateX(50%);
+}
+
+.step-item:last-child .step-line {
+  display: none;
+}
+
+/* Active State */
+.step-item.active .step-circle {
+  background: var(--vermelho-escuro);
+  color: var(--branco);
+  box-shadow: 0 0 0 3px rgba(125, 20, 116, 0.2);
+}
+
+.step-item.active .step-label {
+  color: var(--vermelho-escuro);
+  font-weight: 700;
+}
+
+.step-item.active .step-line {
+  background: var(--vermelho-escuro);
+}
+
+.selected-patient-info {
+  margin-top: 1rem;
+  text-align: center;
+  color: var(--cinza-600);
+}
+
+.results-list {
+  margin-top: 1rem;
+}
+
+.pacientes-resumo__footer {
+  padding: 1rem 1.5rem;
+  background: none;
+  border-top: 1px solid #eee;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* REFACTORED LIST ITEMS - Discreet Look */
 
 .pacientes-relatorio__item {
   display: flex;
   align-items: center;
-  padding: 10px;
-  border: 1px solid #eee;
-  margin-bottom: 10px;
-  border-radius: 6px;
+  padding: 12px 16px;
+  border-bottom: 1px solid #f5f5f5;
   cursor: pointer;
-  transition: background-color 0.2s;
-  font-size: 0.98rem;
-  background: #f9f9f9;
+  transition: all 0.2s ease;
+  background: transparent;
+  gap: 12px;
+}
+
+.pacientes-relatorio__item:last-child {
+  border-bottom: none;
 }
 
 .pacientes-relatorio__item:hover {
-  background: var(--branco);
-  border: 1.5px solid var(--vermelho-escuro);
+  background: var(--cinza-100);
 }
 
 .pacientes-relatorio__item.selected {
-  background: var(--branco);
-  border: 1.5px solid var(--vermelho-escuro);
+  background: #fff5f8;
+  /* Very subtle reddish tint */
 }
 
-.paciente-item__button {
-  margin-right: 10px;
-}
-
-.round-button {
-  width: 20px;
-  height: 20px;
-  border: 2px solid #eee;
-  border-radius: 50%;
-  transition: background-color 0.2s, border-color 0.2s;
-}
-
-.round-button.marked {
-  background: var(--vermelho-escuro);
-  border-color: var(--vermelho-escuro);
-}
-
-.paciente-item__info {
+/* Radio Indicator Styles */
+.paciente-item__selection {
   display: flex;
-  flex-direction: row;
-  gap: 15px;
+  align-items: center;
+  justify-content: center;
 }
 
-.paciente-item__info p {
-  margin: 0;
-  padding: 0;
+.radio-indicator {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--cinza-300);
+  border-radius: 50%;
+  position: relative;
+  transition: all 0.2s ease;
 }
+
+.radio-indicator.active {
+  border-color: var(--vermelho-escuro);
+  background: var(--vermelho-escuro);
+}
+
+.radio-indicator.active::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 6px;
+  height: 6px;
+  background: white;
+  border-radius: 50%;
+}
+
+/* Content Typography */
+.paciente-item__content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.paciente-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--cinza-700);
+}
+
+.paciente-detail {
+  font-size: 0.8rem;
+  color: var(--cinza-500);
+}
+
+/* Remove old styles references if necessary or just overwrite */
 
 .no-pacientes {
   text-align: center;
   padding: 10px;
   color: #888;
-}
-
-.pacientes-resumo__footer {
-  display: flex;
-  justify-content: flex-end;
-  padding: 0.7rem 1rem;
-  border-top: 1px solid #eee;
 }
 
 .pacientes-resumo__footer button {
@@ -135,19 +245,10 @@
 }
 
 @media (max-width: 600px) {
+
   .pacientes-resumo__header,
   .pacientes-resumo__body,
   .pacientes-resumo__footer {
     padding: 0.5rem 0.25rem;
   }
-
-  .pacientes-relatorio__item {
-    font-size: 0.92rem;
-    padding: 6px 4px;
-  }
-}
-
-.pacientes-resumo__body .pesquisar-paciente-form label {
-  font-size: 1.15rem;
-  font-weight: 600;
 }

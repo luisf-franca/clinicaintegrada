@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 
 // COMPONENTS
 import UpdateListaEsperaEntry from '../../functions/ListaEspera/UpdateListaEsperaEntry';
-import CalendarFilter from '../Calendar/CalendarFilter';
 
 const AtualizarRegistro = ({
   registroId,

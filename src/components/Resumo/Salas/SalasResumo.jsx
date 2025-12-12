@@ -15,7 +15,8 @@ const SalasResumo = ({ especialidade }) => {
     try {
       const filters = especialidade ? `especialidade=${especialidade}` : null;
       const response = await GetSalas({ filter: filters });
-      setSalas(response);
+      const data = response?.items || response || [];
+      setSalas(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error('Erro ao buscar salas:', error);
     }
@@ -50,62 +51,49 @@ const SalasResumo = ({ especialidade }) => {
   };
 
   return (
-    <div className="salas-resumo">
-      <div className="salas-resumo__header">
-        <h4>Salas</h4>
-        <button onClick={handleNavigateSalas}>Novo Registro</button>
+    <div className="salas-resumo compact-widget">
+      <div className="salas-resumo__header widget-header" onClick={() => navigate('/sala')}>
+        <h4>Salas ↗</h4>
       </div>
 
-      <div className="salas-resumo__body">
+      <div className="salas-resumo__body compact-body">
         {salas.length === 0 ? (
-          <p>Nenhuma sala cadastrada para essa especialidade.</p>
+          <p className="salas-message">Nenhuma sala encontrada.</p>
         ) : (
-          <>
-            <div className="salas-resumo__select">
-              <label htmlFor="salas-select">Escolha uma sala:</label>
-              <select
-                id="salas-select"
-                onChange={handleSelecionarSala}
-                defaultValue=""
-              >
-                <option value="" disabled>
-                  Selecione uma sala
+          <div className="salas-compact-row">
+            <select
+              id="salas-select"
+              onChange={handleSelecionarSala}
+              defaultValue=""
+              className="salas-select-compact"
+            >
+              <option value="" disabled>
+                Selecione uma sala...
+              </option>
+              {salas.map((sala) => (
+                <option key={sala.id} value={sala.id}>
+                  {sala.nome}
                 </option>
-                {salas.map((sala) => (
-                  <option key={sala.id} value={sala.id}>
-                    {sala.nome}
-                  </option>
-                ))}
-              </select>
-            </div>
+              ))}
+            </select>
 
-            <div className="salas-resumo__actions">
-              <button
-                onClick={handleBloquearDesbloquear}
-                disabled={!salaSelecionada}
-              >
-                {salaSelecionada?.isDisponivel
-                  ? 'Bloquear Sala'
-                  : 'Desbloquear Sala'}
-              </button>
-            </div>
+            <button
+              onClick={handleBloquearDesbloquear}
+              disabled={!salaSelecionada}
+              className={`btn-icon-lock ${salaSelecionada?.isDisponivel ? 'unlocked' : 'locked'}`}
+              title={salaSelecionada ? (salaSelecionada.isDisponivel ? 'Bloquear' : 'Desbloquear') : 'Selecione uma sala'}
+            >
+              {salaSelecionada ? (salaSelecionada.isDisponivel ? '🔓' : '🔒') : '🔒'}
+            </button>
+          </div>
+        )}
 
-            {salaSelecionada && (
-              <div className="salas-resumo__status">
-                <p>
-                  Sala selecionada: <strong>{salaSelecionada.nome}</strong>
-                </p>
-                <p>
-                  Status:{' '}
-                  <strong>
-                    {salaSelecionada.isDisponivel
-                      ? 'Desbloqueada'
-                      : 'Bloqueada'}
-                  </strong>
-                </p>
-              </div>
-            )}
-          </>
+        {salaSelecionada && (
+          <div className="sala-status-mini">
+            <small>
+              {salaSelecionada.isDisponivel ? 'Disponível' : 'Bloqueada'}
+            </small>
+          </div>
         )}
       </div>
     </div>

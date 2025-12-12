@@ -1,110 +1,91 @@
+/* Salas Resumo CSS - Simplified */
+
 .salas-resumo {
   width: 100%;
-  background: var(--branco);
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(125, 20, 116, 0.07);
-  overflow: hidden;
-  margin-bottom: 1.2rem;
-  padding: 0.5rem 0.5rem 1rem 0.5rem;
-}
-
-.salas-resumo__header {
+  height: 100%;
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  background: var(--vermelho-escuro);
-  color: var(--branco);
-  padding: 0.7rem 1rem;
-  border-radius: 10px 10px 0 0;
+  flex-direction: column;
 }
 
-.salas-resumo__header h4 {
-  color: var(--branco);
-  text-shadow: 0 2px 8px rgba(125, 20, 116, 0.08);
-  font-size: 1.15rem;
-  margin: 0;
+/* Ajuste para o container ficar bonito estreito */
+.salas-resumo__body.compact-body {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  /* Começa do topo */
+  gap: 1rem;
 }
 
-.salas-resumo__header button {
-  background: rgba(255, 255, 255, 0.85);
-  border: 1px solid var(--cinza-300);
-  color: var(--vermelho-escuro);
-  font-weight: 600;
-  font-size: 1rem;
-}
-
-.salas-resumo__header button:hover {
-  background: var(--vermelho-escuro);
-  color: var(--branco);
-}
-
-.salas-resumo__body {
-  padding: 0.5rem 0.5rem 0 0.5rem;
-}
-
-.salas-resumo__select label {
-  font-size: 0.98rem;
-  color: var(--vermelho-escuro);
-  font-weight: 600;
-  margin-bottom: 0.25rem;
-}
-
-.salas-resumo__select select {
-  width: 100%;
-  padding: 0.5rem 0.75rem;
-  border: 1px solid var(--cinza-400);
-  border-radius: 6px;
-  font-size: 1rem;
-  background: var(--cinza-100);
-  color: var(--cinza-600);
-  margin-bottom: 0.5rem;
-  box-sizing: border-box;
-  transition: border 0.2s, box-shadow 0.2s;
-}
-
-.salas-resumo__select select:focus {
-  border-color: var(--vermelho-escuro);
-  box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.12);
-  outline: none;
-}
-
-.salas-resumo__actions {
-  margin-top: 10px;
+.salas-message {
+  font-size: 0.9rem;
+  color: var(--cinza-500);
   text-align: center;
+  margin-top: 1rem;
 }
 
-.salas-resumo__actions button {
-  background: var(--cinza-300);
-  color: var(--cinza-600);
-  border: none;
+.salas-compact-row {
+  display: flex;
+  align-items: stretch;
+  /* Garante altura igual */
+  gap: 8px;
+  /* Gap menor para economizar espaço horizontal */
+  width: 100%;
+}
+
+.salas-select-compact {
+  flex-grow: 1;
+  width: 0;
+  /* Truque CSS: permite que o flex item encolha abaixo do conteúdo se necessário */
+  min-width: 0;
+  padding: 6px 10px;
+  font-size: 0.85rem;
+  /* Fonte levemente menor */
   border-radius: 6px;
-  padding: 0.4rem 1rem;
-  font-size: 0.95rem;
-  font-weight: 500;
+  border: 1px solid var(--cinza-400);
+  background: var(--cinza-100);
+  text-overflow: ellipsis;
+  /* Adiciona ... se o nome da sala for muito longo */
+}
+
+.btn-icon-lock {
+  flex-shrink: 0;
+  /* IMPEDE que o botão seja esmagado */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  /* Altura fixa igual ao select */
+  border-radius: 6px;
   cursor: pointer;
-  transition: background 0.2s, color 0.2s;
+  font-size: 1.1rem;
+  transition: all 0.2s;
+  /* Garante alinhamento visual com o input */
+  margin-top: 0;
 }
 
-.salas-resumo__actions button:disabled {
-  background: var(--cinza-200);
-  color: #aaa;
+.btn-icon-lock.locked {
+  background: #ffebee;
+  color: var(--vermelho-escuro);
+  border-color: #ffcdd2;
+}
+
+.btn-icon-lock.unlocked {
+  background: #e8f5e9;
+  color: var(--verde-principal);
+  border-color: #c8e6c9;
+}
+
+.btn-icon-lock:disabled {
+  opacity: 0.5;
   cursor: not-allowed;
+  filter: grayscale(1);
 }
 
-.salas-resumo__actions button:hover:not(:disabled) {
-  background: var(--vermelho-escuro);
-  color: var(--branco);
-}
-
-.salas-resumo__status {
-  margin-top: 15px;
-  font-size: 0.98rem;
-}
-
-@media (max-width: 600px) {
-  .salas-resumo__header,
-  .salas-resumo__body {
-    padding: 0.5rem 0.25rem;
-  }
+.sala-status-mini {
+  margin-top: 5px;
+  text-align: right;
+  color: var(--cinza-500);
+  font-size: 0.8rem;
 }

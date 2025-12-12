@@ -8,6 +8,7 @@ import PesquisarPacientes from '../../Pacientes/PesquisarPacientes';
 
 const PacientesResumo = ({
   pacientes,
+  pacienteEtapa, // Novo prop
   setPacienteEtapa,
   setPacienteSelecionadoId,
   onPesquisar,
@@ -46,53 +47,139 @@ const PacientesResumo = ({
     navigate('/pacientes?view=add');
   };
 
-  return (
-    <div className="pacientes-resumo">
-      <div className="pacientes-resumo__header">
-        <h4>Pacientes</h4>
-        <button onClick={handleNavigatePacientes}>Novo Registro</button>
-      </div>
-      <div className="pacientes-resumo__body">
-        <PesquisarPacientes onPesquisar={onPesquisar} />
-        {pacientes && pacientes.length > 0 ? (
-          pacientes.slice(0, 7).map((paciente, index) => (
-            <div
-              className={`pacientes-relatorio__item ${selectedPaciente === index ? 'selected' : ''
-                }`}
-              key={paciente.id || index}
-              onClick={() => handleSelectPaciente(index)}
-            >
-              <div className="paciente-item__button">
-                <div
-                  className={`round-button ${selectedPaciente === index ? 'marked' : ''
-                    }`}
-                ></div>
-              </div>
-              <div className="paciente-item__info">
-                <p>
-                  <strong>Nome:</strong> {paciente.nome}
-                </p>
-                <p>
-                  <strong>Telefone:</strong> {paciente.telefone}
-                </p>
-                <p>
-                  <strong>Idade:</strong> {paciente.idade}
-                </p>
-              </div>
+
+  // Helper Component para o Stepper
+  const PatientStepper = ({ etapa }) => {
+    const steps = [
+      { id: 1, label: 'Cadastro' },
+      { id: 2, label: 'Lista de Espera' },
+      { id: 3, label: 'Agendamento' },
+      { id: 4, label: 'Consulta' },
+    ];
+
+    // Lógica simples: se etapa atual >= step.id, então está ativo (exceto cancelados/específicos se houver, mas seguindo o pedido linear)
+    // Ajuste para etapa 5 (Cancelada) talvez tratar como step 2 ou visual específico. 
+    // O usuario pediu: "Se o paciente estiver na etapa 2, as etapas 1 e 2 ficam vermelhas".
+    // Vamos assumir progressão linear por ID para 1, 2, 3, 4.
+    // Se etapa for 5, vou deixar como se fosse 2 (ainda na lista/pendente) ou algo assim, mas por enquanto linear.
+
+    const getStepClass = (stepId) => {
+      // Se etapa 5 (Cancelada), vamos considerar que parou em lista de espera ou similar, ou tratar a parte.
+      // Mas para o básico:
+      let current = etapa;
+      if (etapa === 5) current = 2; // Treat canceled as waiting list level for visual or just stop. 
+
+      if (current >= stepId) return 'step-item active';
+      return 'step-item';
+    };
+
+    return (
+      <div className="stepper-container">
+        {steps.map((step, index) => (
+          <div key={step.id} className={getStepClass(step.id)}>
+            <div className="step-circle">
+              {getStepClass(step.id).includes('active') ? '✔' : step.id}
             </div>
-          ))
-        ) : (
-          <div className="no-pacientes">Nenhum paciente encontrado.</div>
+            <span className="step-label">{step.label}</span>
+            {index < steps.length - 1 && <div className="step-line"></div>}
+          </div>
+        ))}
+      </div>
+    );
+  };
+
+  return (
+    <div className="pacientes-resumo tracker-card">
+      <div
+        className="pacientes-resumo__header widget-header"
+        onClick={() => navigate('/pacientes')}
+        title="Ver todos os pacientes"
+      >
+        <h4>Pacientes ↗</h4>
+        {/* <button
+          onClick={(e) => {
+            e.stopPropagation(); // Evita navegar ao clicar no botão
+            handleNavigatePacientes();
+          }}
+          className="btn-novo-paciente"
+        >
+          Novo Paciente
+        </button> */}
+      </div>
+
+      <div className="pacientes-resumo__body">
+
+        {/* BUSCA */}
+        <div className="search-section">
+          <PesquisarPacientes onPesquisar={onPesquisar} />
+        </div>
+
+        {/* STEPPER VISUAL (Só aparece se tiver paciente selecionado/etapa definida) */}
+        {pacienteEtapa && selectedPaciente !== null && (
+          <div className="stepper-wrapper">
+            <PatientStepper etapa={pacienteEtapa} />
+            <div className="selected-patient-info">
+              <p>Paciente Selecionado: <strong>{pacientes[selectedPaciente]?.nome}</strong></p>
+            </div>
+          </div>
+        )}
+
+        {/* LISTA DE RESULTADOS (Mostra só se não tiver selecionado ou se quiser mudar) */}
+        {(!pacienteEtapa || selectedPaciente === null) && (
+          <div className="results-list">
+            {pacientes && pacientes.length > 0 ? (
+              pacientes.slice(0, 3).map((paciente, index) => (
+                <div
+                  className={`pacientes-relatorio__item ${selectedPaciente === index ? 'selected' : ''
+                    }`}
+                  key={paciente.id || index}
+                  onClick={() => handleSelectPaciente(index)}
+                >
+                  <div className="paciente-item__selection">
+                    <div
+                      className={`radio-indicator ${selectedPaciente === index ? 'active' : ''
+                        }`}
+                    ></div>
+                  </div>
+                  <div className="paciente-item__content">
+                    <span className="paciente-name">{paciente.nome}</span>
+                    <span className="paciente-detail">
+                      {paciente.telefone || 'Sem telefone'} • {paciente.idade ? `${paciente.idade} anos` : 'Idade n/i'}
+                    </span>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="no-pacientes">Utilize a busca para localizar um paciente.</div>
+            )}
+          </div>
         )}
       </div>
-      <div className="pacientes-resumo__footer">
-        <button
-          onClick={handleNext}
-          disabled={selectedPaciente === null || isLoading}
-        >
-          {isLoading ? 'Localizando...' : 'Localizar Paciente'}
-        </button>
-      </div>
+
+      {/* Footer renderizado para permitir rastreio, desabilitado se nenhum selecionado */}
+      {!pacienteEtapa && (
+        <div className="pacientes-resumo__footer">
+          <button
+            onClick={handleNext}
+            disabled={selectedPaciente === null || isLoading}
+          >
+            {isLoading ? 'Localizando...' : 'Rastrear Paciente'}
+          </button>
+        </div>
+      )}
+
+      {/* Botão de Limpar Rastreio se já estiver rastreando */}
+      {pacienteEtapa && (
+        <div className="pacientes-resumo__footer">
+          <button onClick={() => {
+            setPacienteEtapa(null);
+            setPacienteSelecionadoId(null);
+            setSelectedPaciente(null);
+          }}>
+            Limpar Rastreio
+          </button>
+        </div>
+      )}
     </div>
   );
 };

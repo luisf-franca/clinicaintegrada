@@ -7,7 +7,7 @@ import GetAgendamentos from '../../../functions/Agendamentos/GetAgendamentos';
 import FormatarDateTimeToLocal from '../../../functions/FormatarDateTime/FormatDateTimeToLocal';
 
 const AgendamentosResumo = ({ pacienteId }) => {
-  const [intervalo, setIntervalo] = useState('sempre');
+  const [intervalo, setIntervalo] = useState('hoje');
   const [agendamentos, setAgendamentos] = useState([]);
   const [pacienteFilter, setPacienteFilter] = useState(pacienteId);
   const navigate = useNavigate();
@@ -80,13 +80,16 @@ const AgendamentosResumo = ({ pacienteId }) => {
 
   return (
     <div className="agendamentos-resumo">
-      <div className="agendamentos-resumo__header">
-        <h4>Agendamentos</h4>
-        <button onClick={handleNavigateAgendamentos}>Novo Registro</button>
+      <div
+        className="agendamentos-resumo__header widget-header"
+        onClick={() => navigate('/agendamento')}
+        title="Ver agendamentos completos"
+      >
+        <h4>Agendamentos ↗</h4>
       </div>
 
       <div className="agendamentos-resumo__intervalo">
-        {['sempre', 'hoje', 'semana', 'mes'].map((opcao) => (
+        {['hoje', 'semana', 'mes', 'sempre'].map((opcao) => (
           <button
             key={opcao}
             onClick={() => setIntervalo(opcao)}
@@ -102,35 +105,31 @@ const AgendamentosResumo = ({ pacienteId }) => {
           <thead>
             <tr>
               <th>Nome</th>
-              <th>Data/Hora Início</th>
-              <th>Data/Hora Fim</th>
+              <th>Horário</th>
               <th>Sala</th>
-              <th>Status Consulta</th>
               <th>Especialidade</th>
-              <th>Ações</th>
             </tr>
           </thead>
           <tbody>
             {agendamentos.length > 0 ? (
-              agendamentos.slice(0, 7).map((item) => (
-                <tr key={item.id}>
-                  <td>{item.nome}</td>
-                  <td>{FormatarDateTimeToLocal(item.dataHoraInicio)}</td>
-                  <td>{FormatarDateTimeToLocal(item.dataHoraFim)}</td>
-                  <td>{item.sala}</td>
-                  <td>{item.statusConsulta}</td>
-                  <td>{item.especialidade}</td>
-                  <td>
-                    <button onClick={() => handleNavigateConsulta(item.consultaId)}>
-                      Visualizar Consulta
-                    </button>
+              agendamentos.map((item) => (
+                <tr key={item.id} onClick={() => handleNavigateConsulta(item.consultaId)} style={{ cursor: 'pointer' }}>
+                  <td title={item.nome}>
+                    <div className="truncate-text">{item.nome}</div>
                   </td>
+                  <td>
+                    {item.dataHoraInicio
+                      ? new Date(item.dataHoraInicio).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                      : '-'}
+                  </td>
+                  <td>{item.sala}</td>
+                  <td>{item.especialidade}</td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan="5" className="agendamentos-resumo__empty">
-                  {getEmptyMessage()}
+                <td colSpan="4" className="agendamentos-resumo__empty">
+                  {getEmptyMessage() || 'Sem agendamentos.'}
                 </td>
               </tr>
             )}

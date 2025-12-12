@@ -72,14 +72,12 @@ const ConsultaResumo = ({ pacienteId }) => {
 
   return (
     <div className="consulta-resumo">
-      <div className="consulta-resumo__header">
-        <h2>Consultas</h2>
-        <button
-          onClick={handleCadastrarConsulta}
-          className="btn-cadastrar-consulta"
-        >
-          Novo Registro
-        </button>
+      <div
+        className="consulta-resumo__header widget-header"
+        onClick={() => navigate('/consulta')}
+        title="Ver todas as consultas"
+      >
+        <h4>Consultas ↗</h4>
       </div>
 
       <div className="consulta-resumo__body">
@@ -87,33 +85,33 @@ const ConsultaResumo = ({ pacienteId }) => {
           <thead>
             <tr>
               <th>Paciente</th>
-              <th>Data/Hora</th>
-              <th>Sala</th>
-              <th>Equipe</th>
-              <th>Especialidade</th>
-              <th>Ações</th>
+              <th>Horário</th>
+              <th>Médico/Equipe</th>
+              <th>Status</th>
             </tr>
           </thead>
           <tbody>
             {consultas.length > 0 ? (
-              consultas.slice(0, 7).map((item) => (
-                <tr key={item.id}>
-                  <td>{item.paciente?.nome || 'N/A'}</td>
+              consultas.map((item) => (
+                <tr key={item.id} onClick={() => handleNavigateConsulta(item.id)} style={{ cursor: 'pointer' }}>
+                  <td title={item.paciente?.nome}>
+                    <div className="truncate-text">{item.paciente?.nome || 'N/A'}</div>
+                  </td>
                   <td>
                     {item.agendamento?.dataHoraInicio
-                      ? FormatarDateTimeToLocal(item.agendamento.dataHoraInicio)
-                      : 'N/A'}
+                      ? new Date(item.agendamento.dataHoraInicio).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                      : '-'}
                   </td>
-                  <td>{item.sala?.nome || 'N/A'}</td>
-                  <td>{item.equipe?.nome || 'N/A'}</td>
-                  <td>{item.especialidade}</td>
-                  <td>{renderButton({ id: item.id })}</td>
+                  <td title={item.equipe?.nome}>
+                    <div className="truncate-text">{item.equipe?.nome || 'N/A'}</div>
+                  </td>
+                  <td>{item.status || 'Agendada'}</td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan="6" className="consulta-resumo__empty">
-                  {getEmptyMessage()}
+                <td colSpan="4" className="consulta-resumo__empty">
+                  {getEmptyMessage() || 'Nenhuma consulta.'}
                 </td>
               </tr>
             )}

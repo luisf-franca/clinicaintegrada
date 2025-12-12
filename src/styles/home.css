@@ -95,128 +95,264 @@
   color: var(--branco);
 }
 
-.react-tabs__tab-list {
-  border-bottom: none;
-  margin: 0 0 1.5rem 0;
-  padding: 0;
-  display: flex;
-  gap: 0.5rem;
-  background: none;
-  justify-content: flex-start;
-}
-
-.react-tabs__tab {
-  background: var(--cinza-300);
-  color: var(--cinza-600);
-  border: none;
-  border-radius: 8px 8px 0 0;
-  padding: 0.7rem 2rem;
-  font-size: 1.08rem;
-  font-weight: 500;
-  cursor: pointer;
-  margin-right: 0.5rem;
-  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
-  box-shadow: 0 2px 8px rgba(211, 47, 47, 0.04);
-  outline: none;
-  position: relative;
-  top: 0;
-}
-
-.react-tabs__tab--selected {
-  background: var(--vermelho-escuro);
-  color: var(--branco);
-  font-weight: 700;
-  z-index: 2;
-  box-shadow: 0 4px 18px rgba(211, 47, 47, 0.1);
-}
-
-.react-tabs__tab:not(.react-tabs__tab--selected):hover {
-  background: var(--vermelho-escuro);
-  color: var(--branco);
-}
-
-.react-tabs__tab:focus {
-  box-shadow: 0 0 0 2px var(--vermelho-escuro);
-  outline: none;
-}
-
-.react-tabs__tab--selected:after {
-  content: '';
-  display: block;
-  position: absolute;
-  left: 10%;
-  right: 10%;
-  bottom: -6px;
-  height: 6px;
-  background: var(--vermelho-escuro);
-  border-radius: 0 0 8px 8px;
-  z-index: 3;
-}
+/* CSS TABS REMOVED */
 
 /* Estilos para a barra de abas e botões de tabs manuais */
-.tab-bar {
+/* TAB BUTTONS REMOVED */
+
+/* ========================================= */
+/* DASHBOARD GRID LAYOUT                     */
+/* ========================================= */
+
+.home-dashboard {
   display: flex;
-  gap: 1rem;
-  margin-bottom: 2rem;
-  background: none;
-  border-bottom: none;
-  padding-left: 0;
+  flex-direction: column;
+  gap: 1.5rem;
+  /* Reduzi um pouco o gap vertical */
+  width: 100%;
 }
-.tab-btn {
-  background: rgba(255, 255, 255, 0.85);
-  color: var(--vermelho-escuro);
-  border: 1px solid var(--cinza-300);
-  border-radius: 6px;
-  padding: 0.5rem 1.25rem;
-  font-size: 1rem;
-  font-weight: 600;
+
+/* CORREÇÃO 1: Estabilidade Visual */
+.dashboard-hero {
+  width: 100%;
+  /* Define uma altura mínima baseada no tamanho do componente expandido. 
+     Ajuste este valor (ex: 220px, 250px) conforme a altura real do seu tracker aberto */
+  min-height: 240px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  /* Mantém o buscador no topo */
+  transition: min-height 0.3s ease;
+}
+
+/* CORREÇÃO 2: Grid Assimétrico para diminuir o widget de Salas */
+.dashboard-grid {
+  display: grid;
+  /* Definição de colunas manuais:
+     1ª Coluna (Lista Espera): 1.2 frações
+     2ª Coluna (Agendamentos): 1.5 frações (Mais largo para caber a tabela)
+     3ª Coluna (Salas): 0.8 frações (Mais estreito, como solicitado)
+  */
+  grid-template-columns: 1.2fr 1.5fr 0.8fr;
+  gap: 1.5rem;
+  width: 100%;
+  align-items: start;
+  /* Impede que widgets menores estiquem a altura desnecessariamente */
+}
+
+/* WIDGET CARDS */
+.widget-card {
+  background: var(--branco);
+  border-radius: 12px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.05);
+  border: 1px solid #eee;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 100%;
+  /* Garante uma altura consistente para alinhar visualmente */
+  min-height: 350px;
+  max-height: 400px;
+}
+
+/* RESPONSIVIDADE DO GRID */
+
+/* Em telas médias (ex: laptops pequenos), joga o Salas para baixo ou ajusta */
+@media (max-width: 1200px) {
+  .dashboard-grid {
+    /* Muda para 2 colunas: Lista e Agendamentos em cima, Salas embaixo ocupando tudo ou metade */
+    grid-template-columns: 1fr 1fr;
+  }
+
+  /* Opcional: Se quiser que o 3º item (Salas) ocupe a linha toda quando descer */
+  .widget-card:nth-child(3) {
+    grid-column: span 2;
+  }
+}
+
+/* Em telas pequenas/tablets verticais, empilha tudo */
+@media (max-width: 900px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .widget-card:nth-child(3) {
+    grid-column: auto;
+    /* Reseta o span */
+  }
+
+  .dashboard-hero {
+    min-height: auto;
+    /* Em mobile, pode deixar flexível pois o scroll é natural */
+  }
+}
+
+/* WIDGET HEADER GLOBAL STYLE */
+.widget-header {
+  display: flex;
+  justify-content: center;
+  /* Changed from space-between to center */
+  align-items: center;
+  background: var(--cinza-100);
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--cinza-300);
   cursor: pointer;
-  margin-bottom: 0;
-  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
-  box-shadow: 0 2px 8px rgba(125, 20, 116, 0.04);
-  outline: none;
-  position: relative;
+  transition: background 0.2s, color 0.2s;
+}
+
+.widget-header:hover {
+  background: var(--cinza-200);
+}
+
+.widget-header h4 {
+  margin: 0;
+  color: var(--vermelho-escuro);
+  font-size: 1rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Added to center text/icon within h4 if it grows */
+  gap: 8px;
+}
+
+.widget-header:hover h4 {
+  color: var(--vermelho-principal);
+}
+
+
+/* CONTEUDO DO WIDGET GLOBAL */
+.widget-card .lista-espera-resumo,
+.widget-card .agendamentos-resumo,
+.widget-card .consulta-resumo,
+.widget-card .salas-resumo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  width: 100%;
+}
+
+.widget-card .lista-espera-resumo__body,
+.widget-card .agendamentos-resumo__body,
+.widget-card .consulta-resumo__body,
+.widget-card .salas-resumo__body {
+  overflow-y: auto;
+  flex: 1;
+  padding: 0;
+}
+
+/* COMPACT TABLES */
+.widget-card table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.widget-card table th,
+.widget-card table td {
+  padding: 8px 10px;
+  font-size: 0.85rem;
+  text-align: left;
+  border-bottom: 1px solid #f0f0f0;
+  color: var(--cinza-600);
+}
+
+.widget-card table th {
+  background: #fcfcfc;
+  color: var(--vermelho-escuro);
+  font-weight: 600;
+  position: sticky;
   top: 0;
+  z-index: 5;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+}
+
+.widget-card table tr:last-child td {
   border-bottom: none;
 }
-.tab-btn.active {
-  background: var(--vermelho-escuro);
-  color: var(--branco);
-  font-weight: 700;
-  z-index: 2;
-  box-shadow: 0 4px 18px rgba(125, 20, 116, 0.1);
-  border: 1.5px solid var(--vermelho-escuro);
+
+.widget-card table tr:hover td {
+  background-color: var(--cinza-100);
 }
-.tab-btn:not(.active):hover {
-  background: var(--vermelho-escuro);
-  color: var(--branco);
+
+/* ACTION BUTTONS IN TABLES */
+.btn-icon-action {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: var(--verde-principal);
+  padding: 2px 6px;
+  border-radius: 4px;
 }
+
+.btn-icon-action:hover {
+  background: var(--verde-claro);
+}
+
+/* TEXT TRUNCATION UTILS */
+.truncate-text {
+  max-width: 130px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* SCROLLBAR */
+.widget-card ::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+.widget-card ::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.widget-card ::-webkit-scrollbar-thumb {
+  background: var(--cinza-300);
+  border-radius: 4px;
+}
+
+.widget-card ::-webkit-scrollbar-thumb:hover {
+  background: var(--cinza-400);
+}
+
+/* GRID RESPONSIVENESS */
+/* Old grid responsiveness removed in favor of new unified block */
+
 .tab-content {
   width: 100%;
 }
 
 @media (max-width: 900px) {
+
   .home-header,
   .home-body {
     padding: 1rem 0.5rem;
   }
+
   .component {
     padding: 1rem 0.5rem;
   }
+
   .react-tabs__tab {
     padding: 0.5rem 1rem;
     font-size: 1rem;
   }
+
   .tab-btn {
     padding: 0.5rem 1.2rem;
     font-size: 1rem;
   }
 }
+
 @media (max-width: 600px) {
   .home {
     border-radius: 0;
     min-height: 100vh;
   }
+
   .home-header {
     flex-direction: column;
     align-items: flex-start;
@@ -224,22 +360,27 @@
     padding: 1rem 0.5rem 0.5rem 0.5rem;
     border-radius: 0;
   }
+
   .home-body {
     padding: 0.5rem;
   }
+
   .component {
     padding: 0.5rem 0.25rem;
     border-radius: 8px;
   }
+
   .react-tabs__tab {
     padding: 0.4rem 0.5rem;
     font-size: 0.95rem;
   }
+
   .tab-bar {
     gap: 0.2rem;
     margin-bottom: 1rem;
     padding-left: 0;
   }
+
   .tab-btn {
     padding: 0.4rem 0.5rem;
     font-size: 0.95rem;

@@ -82,11 +82,12 @@ const ListaEsperaResumo = ({ pacienteId }) => {
 
   return (
     <div className="lista-espera-resumo">
-      <div className="lista-espera-resumo__header">
-        <h4>Aguardando Atendimento</h4>
-        <button onClick={handleCadastrarRegistroListaEspera}>
-          Novo Registro
-        </button>
+      <div
+        className="lista-espera-resumo__header widget-header"
+        onClick={() => navigate('/listaespera')}
+        title="Ver lista de espera completa"
+      >
+        <h4>Lista de Espera ↗</h4>
       </div>
 
       <div className="lista-espera-resumo__body">
@@ -94,43 +95,54 @@ const ListaEsperaResumo = ({ pacienteId }) => {
           <thead>
             <tr>
               <th>Nome</th>
-              <th>Data Entrada</th>
-              <th>Prioridade</th>
+              <th>Entrada</th>
               <th>Especialidade</th>
-              <th>Ações</th>
+              <th style={{ width: '40px' }}></th>
             </tr>
           </thead>
           <tbody>
             {isLoading ? (
               <tr>
-                <td colSpan="5" className="lista-espera-resumo__loading">
+                <td colSpan="4" className="lista-espera-resumo__loading">
                   Carregando...
                 </td>
               </tr>
             ) : error ? (
               <tr>
-                <td colSpan="5" className="lista-espera-resumo__error">
+                <td colSpan="4" className="lista-espera-resumo__error">
                   {error}
                 </td>
               </tr>
             ) : listaEspera.length > 0 ? (
-              listaEspera.slice(0, 7).map((item) => (
+              listaEspera.map((item) => (
                 <tr key={item.id}>
-                  <td>{item.nome}</td>
-                  <td>{FormatarDateTimeToLocal(item.dataEntrada)}</td>
-                  <td>{item.prioridade}</td>
+                  <td title={item.nome}>
+                    <div className="truncate-text">{item.nome}</div>
+                  </td>
+                  <td>
+                    {item.dataEntrada
+                      ? new Date(item.dataEntrada).toLocaleDateString()
+                      : '-'}
+                  </td>
                   <td>{item.especialidade}</td>
                   <td>
-                    <button onClick={() => handleAgendarConsulta(item.id)}>
-                      Agendar
+                    <button
+                      className="btn-icon-action"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleAgendarConsulta(item.id);
+                      }}
+                      title="Chamar / Agendar"
+                    >
+                      ▶
                     </button>
                   </td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan="5" className="lista-espera-resumo__empty">
-                  {getEmptyMessage()}
+                <td colSpan="4" className="lista-espera-resumo__empty">
+                  {getEmptyMessage() || 'Lista vazia.'}
                 </td>
               </tr>
             )}
