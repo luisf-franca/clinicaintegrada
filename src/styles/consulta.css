@@ -5,6 +5,7 @@
   gap: 1.5rem;
   margin-bottom: 0.5rem;
 }
+
 .consulta-hgroup h1 {
   font-size: 2rem;
   color: var(--vermelho-escuro);
@@ -19,6 +20,7 @@
   flex-wrap: wrap;
   margin-bottom: 0.5rem;
 }
+
 .consulta-nav .btn-secondary {
   padding: 0.5rem 1.25rem;
   border-radius: 6px;
@@ -30,6 +32,7 @@
   color: var(--vermelho-escuro);
   transition: background 0.2s, color 0.2s;
 }
+
 .consulta-nav .btn-secondary.active,
 .consulta-nav .btn-secondary:hover {
   background: var(--vermelho-escuro);
@@ -51,6 +54,7 @@
   border-bottom: 2px solid #eee;
   padding-left: 0.2rem;
 }
+
 .consulta-tab-btn {
   background: var(--cinza-300, var(--cinza-300));
   color: var(--cinza-600, var(--cinza-600));
@@ -68,6 +72,7 @@
   top: 0;
   border-bottom: 2px solid transparent;
 }
+
 .consulta-tab-btn.active {
   background: var(--vermelho-escuro);
   color: var(--branco, var(--branco));
@@ -76,6 +81,7 @@
   box-shadow: 0 4px 18px rgba(211, 47, 47, 0.1);
   border-bottom: 2px solid var(--vermelho-escuro);
 }
+
 .consulta-tab-btn:not(.active):hover {
   background: var(--vermelho-escuro);
   color: var(--branco, var(--branco));
@@ -120,7 +126,7 @@
   border-radius: 12px;
   box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
   padding: 1.5rem 1rem;
-  margin-bottom: 1.5rem;
+  /* margin-bottom: 1.5rem; */
 }
 
 .search-container h4 {
@@ -149,6 +155,7 @@
   transition: border 0.2s, box-shadow 0.2s;
   color: var(--cinza-600, var(--cinza-600));
 }
+
 .search-container select:focus,
 .search-container input:focus {
   border-color: var(--vermelho-escuro);
@@ -168,6 +175,7 @@
   transition: background 0.2s, color 0.2s;
   margin-top: 0.5rem;
 }
+
 .search-container button:hover {
   background: var(--vermelho-escuro);
   color: var(--branco, var(--branco));
@@ -192,7 +200,7 @@
 .table-container td {
   border: 1px solid #eee;
   padding: 10px 8px;
-  text-align: left;
+  text-align: center;
   font-size: 1rem;
 }
 
@@ -313,6 +321,7 @@
   transition: border 0.2s, box-shadow 0.2s;
   outline: none;
 }
+
 .especialidade select:focus {
   border-color: var(--roxo);
   box-shadow: 0 0 0 2px rgba(176, 23, 27, 0.12);
@@ -411,30 +420,36 @@
 }
 
 @media (max-width: 900px) {
+
   .consulta-header,
   .consulta-body {
     padding: 1rem 0.5rem;
   }
+
   .consulta-tab-btn {
     padding: 0.5rem 1.2rem;
     font-size: 1rem;
   }
+
   .bottom-section {
     flex-direction: column;
     gap: 1rem;
   }
+
   .left-column,
   .right-column {
     width: 100%;
     padding: 1rem 0.5rem;
   }
 }
+
 @media (max-width: 600px) {
   .consulta {
     border-radius: 0;
     min-height: 100vh;
     padding: 0.5rem;
   }
+
   .consulta-header {
     flex-direction: column;
     align-items: flex-start;
@@ -442,20 +457,583 @@
     padding: 1rem 0.5rem 0.5rem 0.5rem;
     border-radius: 0;
   }
+
   .consulta-body {
     padding: 0.5rem;
   }
+
   .consulta-tab-bar {
     gap: 0.2rem;
     margin-bottom: 1rem;
     padding-left: 0;
   }
+
   .consulta-tab-btn {
     padding: 0.4rem 0.5rem;
     font-size: 0.95rem;
   }
+
   .consulta-detalhes {
     padding: 0.5rem 0.25rem;
     border-radius: 8px;
   }
+}
+
+/* STATUS BADGES */
+.status-badge {
+  display: inline-block;
+  padding: 0.375rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.status-badge.agendada {
+  background: rgba(59, 130, 246, 0.15);
+  color: #1d4ed8;
+}
+
+.status-badge.triagem {
+  background: rgba(147, 51, 234, 0.15);
+  color: #7e22ce;
+}
+
+.status-badge.aguardando {
+  background: rgba(245, 158, 11, 0.15);
+  color: #b45309;
+}
+
+.status-badge.em-andamento {
+  background: rgba(34, 197, 94, 0.15);
+  color: #15803d;
+}
+
+.status-badge.concluida {
+  background: rgba(107, 114, 128, 0.15);
+  color: #374151;
+}
+
+.status-badge.cancelada {
+  background: rgba(239, 68, 68, 0.15);
+  color: #b91c1c;
+}
+
+/* --- [REFATORAÇÃO LAYOUT] --- */
+
+/* Wrapper principal */
+.consulta-dashboard-grid {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  /* Coluna fixa na esquerda, tabela flexível */
+  gap: 1.5rem;
+  align-items: start;
+}
+
+/* Área da esquerda (Calendário + Filtros) */
+.consulta-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  /* Espaço entre o calendário e os filtros */
+}
+
+/* Área da direita (Apenas a Tabela) */
+.consulta-main-area {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-width: 0;
+  /* Impede que a tabela estoure o grid se tiver muitas colunas */
+}
+
+/* --- [ESTILO DOS FILTROS NA SIDEBAR] --- */
+
+.search-container {
+  background: var(--branco);
+  border-radius: 16px;
+  box-shadow: 0 6px 32px rgba(125, 20, 116, 0.1);
+  padding: 1.5rem;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  /* Espaçamento vertical entre os grupos de input */
+}
+
+/* Grupo de controle (Label + Input) */
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+/* Estilo unificado para os rótulos (Nome, Status, Tipo) */
+.filter-label {
+  color: var(--vermelho-escuro);
+  font-size: 1rem;
+  /* Tamanho harmonioso */
+  font-weight: 700;
+  text-align: center;
+  /* CENTRALIZADO NA HORIZONTAL */
+  display: block;
+  width: 100%;
+  margin: 0;
+}
+
+/* Inputs e Selects */
+.search-container input,
+.search-container select {
+  width: 100%;
+  padding: 0.75rem;
+  /* border: 1px solid var(--cinza-300); */
+  border-radius: 8px;
+  /* background: var(--cinza-100); */
+  font-size: 0.95rem;
+  box-sizing: border-box;
+  /* Garante que padding não estoure largura */
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  text-align: center;
+  /* Centraliza texto e placeholder */
+}
+
+.search-container input::placeholder {
+  text-align: center;
+  color: var(--cinza-400);
+  /* Opcional: cor mais suave para o placeholder */
+}
+
+.search-container input:focus,
+.search-container select:focus {
+  border-color: var(--vermelho-escuro);
+  box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.1);
+}
+
+/* Botão Buscar Principal */
+.btn-buscar {
+  width: 100%;
+  padding: 0.8rem;
+  background: var(--cinza-300);
+  /* Cinza padrão */
+  color: var(--cinza-600);
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 0.5rem;
+}
+
+.btn-buscar:hover {
+  background: var(--vermelho-escuro);
+  color: var(--branco);
+}
+
+/* Ajuste Responsivo */
+@media (max-width: 1100px) {
+  .consulta-dashboard-grid {
+    grid-template-columns: 1fr;
+    /* Empilha tudo em telas menores */
+  }
+
+  .consulta-sidebar {
+    flex-direction: column-reverse;
+    /* Em mobile, filtros vêm antes ou depois conforme preferência, aqui mantemos fluxo normal ou invertido se quiser o calendário no topo */
+  }
+}
+
+/* --- [ESTILO DO CALENDÁRIO (CalendarFilter.css embedded)] --- */
+.calendar-widget {
+  background: var(--branco);
+  border-radius: 16px;
+  box-shadow: 0 6px 32px rgba(125, 20, 116, 0.1);
+  padding: 1.5rem;
+  width: 100%;
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  color: var(--vermelho-escuro);
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.calendar-header button {
+  background: none;
+  border: none;
+  color: var(--vermelho-escuro);
+  cursor: pointer;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.calendar-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  font-weight: 600;
+  color: var(--cinza-600);
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.3rem;
+}
+
+.calendar-day {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+  color: var(--cinza-600);
+}
+
+.calendar-day:hover:not(.empty) {
+  background-color: #fce4ec;
+  /* Rosa bem claro */
+  color: var(--vermelho-escuro);
+}
+
+.calendar-day.selected {
+  background-color: var(--vermelho-escuro);
+  color: white;
+  font-weight: bold;
+}
+
+.calendar-day.today {
+  border: 2px solid var(--vermelho-escuro);
+}
+
+.calendar-footer {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.calendar-footer button {
+  padding: 0.4rem 0.8rem;
+  font-size: 0.8rem;
+  border-radius: 6px;
+  cursor: pointer;
+  border: 1px solid var(--cinza-300);
+  background: transparent;
+}
+
+.calendar-footer .btn-today {
+  color: var(--vermelho-escuro);
+  border-color: var(--vermelho-escuro);
+}
+
+/* --- RESPONSIVIDADE --- */
+@media (max-width: 1100px) {
+  .consulta-dashboard-grid {
+    grid-template-columns: 1fr;
+    /* Volta para 1 coluna em telas menores */
+  }
+
+  .search-container>form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-container input,
+  .search-container select {
+    width: 100%;
+  }
+}
+
+/* Botão Voltar */
+.detalhes-toolbar {
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.btn-voltar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: transparent;
+  border: none;
+  color: var(--vermelho-escuro);
+  /* Cor baseada no seu tema (vermelho/vinho) */
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0.5rem 0;
+  transition: color 0.2s;
+}
+
+.btn-voltar:hover {
+  color: #80181c;
+  text-decoration: underline;
+}
+
+.btn-voltar svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Ajuste fino para a tabela */
+.clickable-row:hover {
+  background-color: #f9f9f9;
+}
+
+/* --- LAYOUT GERAL DOS DETALHES --- */
+.consulta-detalhes-view {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.detalhes-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+/* Badge grande para o topo dos detalhes */
+.status-badge.large {
+  font-size: 0.9rem;
+  padding: 0.4rem 1rem;
+}
+
+/* Card Principal */
+.consulta-detalhes-card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  padding: 2rem;
+  border: 1px solid #e0e0e0;
+}
+
+/* Grid Layout para o conteúdo */
+.detalhes-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  /* Duas colunas por padrão */
+  gap: 2rem;
+  row-gap: 2rem;
+}
+
+.full-width {
+  grid-column: span 2;
+}
+
+/* --- HEADER DO PACIENTE --- */
+.header-section {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.patient-avatar-placeholder {
+  width: 60px;
+  height: 60px;
+  background-color: var(--vermelho-escuro);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.patient-info h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.meta-label {
+  font-size: 0.85rem;
+  color: #888;
+  font-family: monospace;
+}
+
+.actions-wrapper {
+  margin-left: auto;
+  /* Empurra botões para a direita */
+}
+
+/* --- SEÇÕES DE CONTEÚDO --- */
+.detalhes-section h3 {
+  font-size: 1.1rem;
+  color: #555;
+  border-bottom: 2px solid #f0f0f0;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.info-row {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.info-group label {
+  display: block;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  color: #888;
+  margin-bottom: 0.2rem;
+  font-weight: 600;
+}
+
+.info-group p {
+  margin: 0;
+  font-weight: 500;
+  color: #333;
+  font-size: 1rem;
+}
+
+/* --- CRONOLOGIA CARDS --- */
+.info-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.info-card {
+  background-color: #f9f9fc;
+  border: 1px solid #eee;
+  padding: 1rem;
+  border-radius: 6px;
+}
+
+.highlight-date {
+  color: var(--vermelho-escuro);
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin: 0.5rem 0 !important;
+}
+
+.mini-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.3rem;
+  font-size: 0.9rem;
+}
+
+/* --- TEXTAREA DE OBSERVAÇÃO --- */
+.textarea-wrapper {
+  background-color: #fff;
+}
+
+.styled-textarea {
+  width: 100%;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background-color: #fafafa;
+  /* Leve cinza para indicar read-only */
+  color: #333;
+  font-family: inherit;
+  font-size: 0.95rem;
+  resize: vertical;
+  /* Permite redimensionar altura */
+  outline: none;
+}
+
+.styled-textarea:focus {
+  border-color: var(--vermelho-escuro);
+  background-color: #fff;
+}
+
+/* --- FOOTER --- */
+.detalhes-footer {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid #eee;
+  display: flex;
+  gap: 2rem;
+  color: #aaa;
+  font-size: 0.75rem;
+  font-family: monospace;
+}
+
+.divider {
+  border: 0;
+  border-top: 1px solid #eee;
+  margin: 0;
+}
+
+/* Responsividade para Mobile */
+@media (max-width: 768px) {
+  .detalhes-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .full-width {
+    grid-column: span 1;
+  }
+
+  .header-section {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .actions-wrapper {
+    margin-left: 0;
+    margin-top: 1rem;
+    width: 100%;
+  }
+}
+
+/* --- PAGINAÇÃO --- */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--cinza-300);
+}
+
+.btn-pagination {
+  padding: 0.5rem 1rem;
+  background: var(--cinza-300);
+  color: var(--cinza-600);
+  border: none;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-pagination:hover:not(:disabled) {
+  background: var(--vermelho-escuro);
+  color: var(--branco);
+}
+
+.btn-pagination:disabled {
+  background: var(--cinza-200);
+  color: var(--cinza-400);
+  cursor: not-allowed;
+}
+
+.page-info {
+  font-weight: 600;
+  color: var(--cinza-600);
 }

@@ -32,7 +32,7 @@ const LoginPage = () => {
     <div className="login-container">
       <div className="login-card">
         <div className="login-header">
-          <h1>Sistema de Atendimento</h1>
+          <h1>Clínica Integrada</h1>
           <p>Faça login para acessar o sistema</p>
         </div>
 

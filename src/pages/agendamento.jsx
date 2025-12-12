@@ -351,7 +351,7 @@ const Agendamento = () => {
 
     try {
       const agendamento = await GetAgendamentoById(selectedAgendamentoId);
-      navigate(`/consulta?consultaId=${agendamento.data.consultaId}`);
+      navigate(`/consulta?consultaId=${agendamento.data.consultaId}&tab=1`);
     } catch (error) {
       console.error('Erro ao buscar agendamento:', error);
     }
