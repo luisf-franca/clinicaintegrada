@@ -399,7 +399,7 @@ const Agendamento = () => {
 
             {/* Filtro de Tipo */}
             <div className="filtro-wrapper">
-              <label>Tipo de Agendamento</label>
+              <label>Tipo</label>
               <select value={tipo || ''} onChange={(e) => setTipo(e.target.value)}>
                 <option value="">Todos</option>
                 <option value={1}>Triagens</option>

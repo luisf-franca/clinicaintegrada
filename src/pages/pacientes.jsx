@@ -29,7 +29,7 @@ const Pacientes = () => {
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     const viewParam = searchParams.get('view');
-    
+
     if (viewParam === 'add') {
       setView('add');
     }
@@ -61,10 +61,15 @@ const Pacientes = () => {
     atualizarListaPacientes(currentPage, filtroNome);
   }, [currentPage, filtroNome, atualizarListaPacientes]);
 
-  const handlePesquisar = useCallback((novoFiltro) => {
-    setFiltroNome(novoFiltro);
-    setCurrentPage(1);
-  }, []); 
+  const handlePesquisar = useCallback(
+    (novoFiltro) => {
+      if (novoFiltro !== filtroNome) {
+        setFiltroNome(novoFiltro);
+        setCurrentPage(1);
+      }
+    },
+    [filtroNome],
+  );
 
   const handleMudarPagina = (novaPagina) => {
     if (
@@ -94,11 +99,14 @@ const Pacientes = () => {
         }
 
         // Recalcula se precisa voltar uma página
-        const novaPagina = pacientes.length === 1 && currentPage > 1 
-          ? currentPage - 1 
+        const novaPagina = pacientes.length === 1 && currentPage > 1
+          ? currentPage - 1
           : currentPage;
-        
+
         setCurrentPage(novaPagina);
+        if (novaPagina === currentPage) {
+          atualizarListaPacientes(novaPagina, filtroNome);
+        }
       } catch (error) {
         console.error('Erro ao deletar paciente:', error);
       }
@@ -159,7 +167,10 @@ const Pacientes = () => {
               </div>
             ))}
           {view === 'list' && (
-            <PesquisarPacientes onPesquisar={handlePesquisar} />
+            <PesquisarPacientes
+              onPesquisar={handlePesquisar}
+              initialValue={filtroNome}
+            />
           )}
         </div>
         <div className="pacientes-list-card">

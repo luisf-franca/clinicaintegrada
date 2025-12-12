@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 
-const PesquisarPacientes = ({ onPesquisar }) => {
-  const [nome, setNome] = useState('');
-  const [debouncedNome, setDebouncedNome] = useState('');
+const PesquisarPacientes = ({ onPesquisar, initialValue = '' }) => {
+  const [nome, setNome] = useState(initialValue);
+  const [debouncedNome, setDebouncedNome] = useState(initialValue);
 
   // Debounce para evitar muitas requisições
   useEffect(() => {

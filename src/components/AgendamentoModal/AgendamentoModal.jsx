@@ -30,6 +30,7 @@ const AgendamentoModal = ({
       status: 1,
       status: 1,
       pacienteId: modalData.pacienteId || '',
+      nomePaciente: '',
       salaId: modalData.salaId || '',
     },
     consulta: {
@@ -49,11 +50,16 @@ const AgendamentoModal = ({
   const handleRegistroListaEsperaChange = (registro) => {
     setRegistroListaEspera(registro);
     handleStateChange('agendamento', 'pacienteId', registro.pacienteId);
+    handleStateChange('agendamento', 'nomePaciente', '');
   };
 
   const handleLimparRegistroListaEspera = () => {
     setRegistroListaEspera(null);
     handleStateChange('agendamento', 'pacienteId', '');
+  };
+
+  const handleNomeChange = (nome) => {
+    handleStateChange('agendamento', 'nomePaciente', nome);
   };
 
   const handleEquipeChange = (equipe) => {
@@ -110,6 +116,7 @@ const AgendamentoModal = ({
           tipo: parseInt(requestData.agendamento.tipo, 10),
           status: parseInt(requestData.agendamento.status, 10),
           pacienteId: requestData.agendamento.pacienteId || null,
+          nomePaciente: !requestData.agendamento.pacienteId ? requestData.agendamento.nomePaciente : undefined,
         },
         consulta: {
           ...requestData.consulta,
@@ -138,6 +145,7 @@ const AgendamentoModal = ({
                 onSelectRegistro={handleRegistroListaEsperaChange}
                 registroSelecionado={registroListaEspera}
                 onLimparRegistro={handleLimparRegistroListaEspera}
+                onNomeChange={handleNomeChange}
               />
             </div>
 

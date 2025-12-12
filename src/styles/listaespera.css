@@ -51,13 +51,15 @@
   border-radius: 12px;
   overflow: hidden;
 }
+
 .listaespera .pacientes-table th,
 .listaespera .pacientes-table td {
   padding: 10px 8px;
-  text-align: left;
+  text-align: center;
   border-bottom: 1px solid #eee;
   font-size: 0.98rem;
 }
+
 .listaespera .pacientes-table thead th {
   background: rgba(244, 244, 244, 0.95);
   color: var(--vermelho-escuro);
@@ -67,20 +69,23 @@
   top: 0;
   z-index: 1;
 }
+
 .listaespera .pacientes-table tbody tr {
   cursor: pointer;
   transition: background 0.2s;
 }
+
 .listaespera .pacientes-table tbody tr:hover {
   background: #f9f9f9;
 }
+
 .listaespera .pacientes-table tbody tr.selected,
 .listaespera .pacientes-table tbody tr[style*='background-color: #f0f8ff'] {
   background: var(--branco);
   font-weight: 700;
-  color: var(--vermelho-escuro);
   border-left: 3px solid var(--vermelho-escuro);
 }
+
 .listaespera .pacientes-table tbody tr:last-child td {
   border-bottom: none;
 }
@@ -96,10 +101,12 @@
   color: var(--vermelho-escuro);
   transition: background 0.2s, color 0.2s;
 }
+
 .listaespera button:hover {
   background: var(--vermelho-escuro);
   color: var(--branco);
 }
+
 .listaespera button:disabled {
   background: var(--cinza-200);
   color: #aaa;
@@ -120,6 +127,7 @@
   box-sizing: border-box;
   transition: border 0.2s, box-shadow 0.2s;
 }
+
 .listaespera select:focus,
 .listaespera input[type='text']:focus,
 .listaespera input[type='date']:focus {
@@ -142,6 +150,7 @@
   gap: 1.5rem;
   margin-bottom: 0.5rem;
 }
+
 .listaespera-hgroup h1 {
   font-size: 2rem;
   color: var(--vermelho-escuro);
@@ -156,6 +165,7 @@
   flex-wrap: wrap;
   margin-bottom: 0.5rem;
 }
+
 .listaespera-nav .btn-secondary {
   padding: 0.5rem 1.25rem;
   border-radius: 6px;
@@ -167,6 +177,7 @@
   color: var(--vermelho-escuro);
   transition: background 0.2s, color 0.2s;
 }
+
 .listaespera-nav .btn-secondary.active,
 .listaesperta-nav .btn-secondary:hover {
   background: var(--vermelho-escuro);
@@ -213,6 +224,7 @@
   transition: border 0.2s, box-shadow 0.2s;
   outline: none;
 }
+
 .especialidade select:focus {
   border-color: var(--roxo);
   box-shadow: 0 0 0 2px rgba(176, 23, 27, 0.12);
@@ -241,14 +253,17 @@
     gap: 1rem;
     padding: 0 0.5rem 1rem 0.5rem;
   }
+
   .listaespera .pesquisar-pacientes,
   .listaespera .lista-pacientes {
     width: 100%;
   }
+
   .listaespera .pesquisar-pacientes {
     padding: 1rem 0.5rem;
   }
 }
+
 @media (max-width: 600px) {
   .listaespera .pacientes-header {
     flex-direction: column;
@@ -256,11 +271,13 @@
     gap: 0.5rem;
     padding: 0 0.5rem;
   }
+
   .listaespera .pacientes-body {
     flex-direction: column;
     gap: 0.5rem;
     padding: 0 0.25rem 0.5rem 0.25rem;
   }
+
   .listaespera .pesquisar-pacientes {
     padding: 0.5rem 0.25rem;
     border-radius: 8px;

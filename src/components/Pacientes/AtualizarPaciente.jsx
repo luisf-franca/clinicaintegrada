@@ -23,7 +23,11 @@ const AtualizarPaciente = ({ pacienteInicial, onSuccess }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await UpdatePaciente(paciente.id, paciente);
+      const payload = {
+        ...paciente,
+        idade: paciente.idade ? parseInt(paciente.idade, 10) : 0,
+      };
+      await UpdatePaciente(paciente.id, payload);
 
       if (onSuccess) onSuccess();
     } catch (error) {
@@ -46,6 +50,7 @@ const AtualizarPaciente = ({ pacienteInicial, onSuccess }) => {
                 name="nome"
                 value={paciente.nome}
                 onChange={handleInputChange}
+                required
               />
             </div>
 

@@ -1,17 +1,25 @@
 import { useState, useEffect, useRef } from 'react';
 import GetListaEntries from '../../functions/ListaEspera/GetListaEntries';
 
-const PesquisarListaEspera = ({ 
-  especialidade, 
-  onSelectRegistro, 
+const PesquisarListaEspera = ({
+  especialidade,
+  onSelectRegistro,
   registroSelecionado,
-  onLimparRegistro 
+  onLimparRegistro,
+  onNomeChange
 }) => {
   const [nome, setNome] = useState('');
   const [debouncedNome, setDebouncedNome] = useState('');
   const [registros, setRegistros] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [showResults, setShowResults] = useState(false);
+
+  // Notifica o componente pai sobre mudança no nome
+  useEffect(() => {
+    if (onNomeChange) {
+      onNomeChange(nome);
+    }
+  }, [nome, onNomeChange]);
 
   // Debounce para evitar muitas requisições
   useEffect(() => {
@@ -110,7 +118,7 @@ const PesquisarListaEspera = ({
           autoComplete="off"
           disabled={registroSelecionado}
         />
-        
+
         {registroSelecionado && (
           <button
             type="button"
@@ -135,7 +143,7 @@ const PesquisarListaEspera = ({
               >
                 <div>{registro.nome}</div>
                 <div>
-                  Prioridade: {registro.prioridade} | 
+                  Prioridade: {registro.prioridade} |
                   Entrada: {new Date(registro.dataEntrada).toLocaleDateString()}
                 </div>
               </div>

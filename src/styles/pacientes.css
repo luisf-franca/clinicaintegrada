@@ -224,7 +224,7 @@
 .pacientes-table th,
 .pacientes-table td {
   padding: 10px 8px;
-  text-align: left;
+  text-align: center;
   border-bottom: 1px solid #eee;
   font-size: 0.98rem;
 }
@@ -251,7 +251,6 @@
 .pacientes-table tbody tr.selected {
   background: var(--branco);
   font-weight: 700;
-  color: var(--vermelho-escuro);
   border-left: 3px solid var(--vermelho-escuro);
 }
 

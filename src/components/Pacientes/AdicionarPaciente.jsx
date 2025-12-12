@@ -59,7 +59,12 @@ const AdicionarPaciente = ({ onSuccess }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const pacienteData = { paciente };
+    const pacienteData = {
+      paciente: {
+        ...paciente,
+        idade: paciente.idade ? parseInt(paciente.idade, 10) : 0,
+      },
+    };
 
     if (
       desejaListaEspera &&
@@ -115,7 +120,6 @@ const AdicionarPaciente = ({ onSuccess }) => {
                 name="idade"
                 value={paciente.idade}
                 onChange={handleInputChange}
-                required
               />
             </div>
           </>
@@ -133,7 +137,6 @@ const AdicionarPaciente = ({ onSuccess }) => {
                 name="nomeResponsavel"
                 value={paciente.nomeResponsavel}
                 onChange={handleInputChange}
-                required
               />
             </div>
             <div className="form-group">
@@ -144,7 +147,6 @@ const AdicionarPaciente = ({ onSuccess }) => {
                 name="parentescoResponsavel"
                 value={paciente.parentescoResponsavel}
                 onChange={handleInputChange}
-                required
               />
             </div>
           </>
@@ -270,7 +272,7 @@ const AdicionarPaciente = ({ onSuccess }) => {
             type="button"
             className="btn-primary"
             onClick={handleNextStep}
-            disabled={!paciente.nome || !paciente.idade}
+            disabled={!paciente.nome}
             style={{
               marginLeft: 'auto',
               display: step < 3 ? 'block' : 'none',
