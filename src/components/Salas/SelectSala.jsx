@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import GetSalas from '../../functions/Salas/GetSalas';
 
 // Este componente agora é totalmente controlado pelo pai.
-const SelectSala = ({ especialidade, onSelectSala, selectedSala }) => {
+const SelectSala = ({ especialidade, onSelectSala, onSelectSalaObj, selectedSala }) => {
   const [salas, setSalas] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -14,7 +14,7 @@ const SelectSala = ({ especialidade, onSelectSala, selectedSala }) => {
       setLoading(true);
       try {
         const data = await GetSalas({
-          filter: `especialidade=${especialidade}`,
+          filter: `Especialidade=${especialidade}`,
         });
         console.log('Data from GetSalas in SelectSala:', data);
         setSalas(data.items || []);
@@ -22,6 +22,7 @@ const SelectSala = ({ especialidade, onSelectSala, selectedSala }) => {
         // sugere a primeira sala para o pai.
         if (!selectedSala && data.items && data.items.length > 0) {
           onSelectSala(data.items[0].id);
+          if (onSelectSalaObj) onSelectSalaObj(data.items[0]);
         }
       } catch (error) {
         console.error('Erro ao buscar salas:', error);
@@ -34,11 +35,19 @@ const SelectSala = ({ especialidade, onSelectSala, selectedSala }) => {
     fetchSalas();
     // A dependência 'onSelectSala' foi removida para evitar re-renderizações desnecessárias.
     // O 'selectedSala' foi adicionado para reavaliar a seleção se o pai mudar o valor.
-  }, [especialidade, selectedSala]); 
+  }, [especialidade, selectedSala]);
 
   const handleSalaChange = (e) => {
+    const salaId = e.target.value;
     // Apenas notifica o pai sobre a mudança. Não controla mais o estado aqui.
-    onSelectSala(e.target.value);
+    onSelectSala(salaId);
+
+    if (onSelectSalaObj) {
+      const salaObj = salas.find(s => s.id === salaId);
+      if (salaObj) {
+        onSelectSalaObj(salaObj);
+      }
+    }
   };
 
   return (

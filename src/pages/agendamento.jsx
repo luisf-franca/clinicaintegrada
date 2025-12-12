@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react'; // Adicionado useMemo
+import React, { useState, useEffect, useMemo, useCallback } from 'react'; // Adicionado useMemo
 import '../styles/agendamento.css';
 import { useNavigate, useLocation } from 'react-router-dom';
 
@@ -12,6 +12,23 @@ import GetAgendamentos from '../functions/Agendamentos/GetAgendamentos';
 import DeleteAgendamento from '../functions/Agendamentos/DeleteAgendamento';
 import GetAgendamentoById from '../functions/Agendamentos/GetAgendamentoById';
 
+const generateTimeSlots = () => {
+  const slots = [];
+  for (let hour = 9; hour < 22; hour++) {
+    for (let minute = 0; minute < 60; minute += 15) {
+      const formattedTime = `${hour.toString().padStart(2, '0')}:${minute
+        .toString()
+        .padStart(2, '0')}`;
+      slots.push(formattedTime);
+    }
+  }
+  slots.push('22:00');
+  return slots;
+};
+
+// Constante para evitar recriação
+const TIME_SLOTS = generateTimeSlots();
+
 const Agendamento = () => {
   const [reloadAgendamentos, setReloadAgendamentos] = useState(false);
   const [tipo, setTipo] = useState('');
@@ -21,6 +38,7 @@ const Agendamento = () => {
     localStorage.getItem('selectedSpecialty') || 1,
   );
   const [selectedSala, setSelectedSala] = useState(null);
+  const [currentSalaCapacity, setCurrentSalaCapacity] = useState(1);
   const [isDragging, setIsDragging] = useState(false);
   const [currentDay, setCurrentDay] = useState(null); // Agora armazena o objeto do dia inteiro
   const [startSlot, setStartSlot] = useState(null);
@@ -33,32 +51,18 @@ const Agendamento = () => {
     endSlot: '',
   });
   const [currentWeek, setCurrentWeek] = useState(0);
-  const [selectedSlotForDelete, setSelectedSlotForDelete] = useState(null);
+  const [selectedAgendamentoId, setSelectedAgendamentoId] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
 
-  const generateTimeSlots = () => {
-    const slots = [];
-    for (let hour = 9; hour < 22; hour++) {
-      for (let minute = 0; minute < 60; minute += 15) {
-        const formattedTime = `${hour.toString().padStart(2, '0')}:${minute
-          .toString()
-          .padStart(2, '0')}`;
-        slots.push(formattedTime);
-      }
-    }
-    // Adiciona o último horário para fechar o intervalo final
-    slots.push('22:00');
-    return slots;
-  };
-
-  const [timeSlots] = useState(generateTimeSlots());
+  // Substituir o useState(generateTimeSlots()) por:
+  const timeSlots = TIME_SLOTS;
 
   // Lê parâmetros da URL para definir especialidade automaticamente
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     const especialidadeParam = searchParams.get('especialidade');
-    
+
     if (especialidadeParam) {
       const especialidadeId = parseInt(especialidadeParam, 10);
       if (!isNaN(especialidadeId)) {
@@ -69,69 +73,88 @@ const Agendamento = () => {
     }
   }, [location.search]);
 
+  // 2. MELHORIA: Extrair lógica complexa de processamento de dados
+  // Isso separa a busca de dados da regra de negócio de visualização
+  const processAgendamentosToSlots = useCallback((agendamentosRaw) => {
+    // Ordenação
+    const agendamentos = agendamentosRaw.sort((a, b) => new Date(a.dataHoraInicio) - new Date(b.dataHoraInicio));
+    const processedSlots = {};
+    const conflictMap = {}; // Auxiliar para conflitos
+
+    agendamentos.forEach((agendamento) => {
+      const startTime = new Date(agendamento.dataHoraInicio);
+      const endTime = new Date(agendamento.dataHoraFim);
+
+      const dayLabel = startTime.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+
+      const startSlotStr = `${startTime.getHours().toString().padStart(2, '0')}:${startTime.getMinutes().toString().padStart(2, '0')}`;
+      const endSlotStr = `${endTime.getHours().toString().padStart(2, '0')}:${endTime.getMinutes().toString().padStart(2, '0')}`;
+
+      const startIndex = timeSlots.indexOf(startSlotStr);
+      const endIndex = timeSlots.indexOf(endSlotStr);
+
+      if (startIndex === -1 || endIndex === -1) return;
+
+      if (!processedSlots[dayLabel]) processedSlots[dayLabel] = {};
+
+      for (let i = startIndex; i < endIndex; i++) {
+        const currentTime = timeSlots[i];
+        if (!processedSlots[dayLabel][currentTime]) {
+          processedSlots[dayLabel][currentTime] = [];
+        }
+
+        const slotList = processedSlots[dayLabel][currentTime];
+        const exists = slotList.some(a => a.agendamentoId === agendamento.id);
+
+        if (!exists) {
+          slotList.push({
+            nome: agendamento.nome,
+            agendamentoId: agendamento.id,
+          });
+
+          // Contagem de conflitos
+          const currentCount = slotList.length;
+          conflictMap[agendamento.id] = Math.max(conflictMap[agendamento.id] || 0, currentCount);
+        }
+      }
+    });
+
+    // Injeção de maxConflict
+    Object.keys(processedSlots).forEach(day => {
+      Object.keys(processedSlots[day]).forEach(time => {
+        processedSlots[day][time] = processedSlots[day][time].map(app => ({
+          ...app,
+          maxConflict: conflictMap[app.agendamentoId] || 1
+        }));
+      });
+    });
+
+    return processedSlots;
+  }, [timeSlots]);
+
+  // UseEffect agora fica muito mais limpo
   useEffect(() => {
     const fetchAgendamentos = async () => {
       try {
         let filters = [];
-        if (selectedSpecialty)
-          filters.push(`especialidade=${selectedSpecialty}`);
+        if (selectedSpecialty) filters.push(`especialidade=${selectedSpecialty}`);
         if (selectedSala) filters.push(`salaId=${selectedSala}`);
         if (tipo) filters.push(`tipo=${tipo}`);
         if (status) filters.push(`status=${status}`);
 
-        const agendamentos = await GetAgendamentos({
-          filter: filters.join(','),
-        });
-        //console.log('agendamentos', agendamentos);
-        const processedSlots = {};
+        const agendamentosRaw = await GetAgendamentos({ filter: filters.join(',') });
 
-        agendamentos.forEach((agendamento) => {
-          const startTime = new Date(agendamento.dataHoraInicio);
-          const endTime = new Date(agendamento.dataHoraFim);
-          const dayLabel = startTime.toLocaleDateString('pt-BR', {
-            day: '2-digit',
-            month: '2-digit',
-          });
+        // Chamada da função extraída
+        const processed = processAgendamentosToSlots(agendamentosRaw);
 
-          const startSlotIndex = timeSlots.findIndex(
-            (time) =>
-              time ===
-              `${startTime.getHours().toString().padStart(2, '0')}:${startTime
-                .getMinutes()
-                .toString()
-                .padStart(2, '0')}`,
-          );
-          const endSlotIndex = timeSlots.findIndex(
-            (time) =>
-              time ===
-              `${endTime.getHours().toString().padStart(2, '0')}:${endTime
-                .getMinutes()
-                .toString()
-                .padStart(2, '0')}`,
-          );
-
-          if (startSlotIndex === -1 || endSlotIndex === -1) return;
-
-          if (!processedSlots[dayLabel]) processedSlots[dayLabel] = {};
-
-          // ### CORREÇÃO PRINCIPAL ###
-          // O loop agora usa '<' em vez de '<=' para não incluir a célula do horário de término.
-          for (let i = startSlotIndex; i < endSlotIndex; i++) {
-            processedSlots[dayLabel][timeSlots[i]] = {
-              nome: agendamento.nome,
-              agendamentoId: agendamento.id,
-            };
-          }
-        });
-
-        setSelectedSlots(processedSlots);
-        setSelectedSlotForDelete(null);
+        setSelectedSlots(processed);
+        setSelectedAgendamentoId(null);
       } catch (error) {
         console.error('Erro ao buscar agendamentos:', error);
       }
     };
     fetchAgendamentos();
-  }, [selectedSpecialty, reloadAgendamentos, selectedSala, tipo, status, timeSlots]);
+  }, [selectedSpecialty, reloadAgendamentos, selectedSala, tipo, status, processAgendamentosToSlots]);
 
 
   // ### MELHORIA DE PERFORMANCE ###
@@ -159,9 +182,12 @@ const Agendamento = () => {
 
   const handleMouseDown = (dayObject, time) => {
     // ADIÇÃO: Limpa a seleção de um agendamento anterior ao iniciar uma nova seleção.
-    setSelectedSlotForDelete(null);
+    if (selectedAgendamentoId) setSelectedAgendamentoId(null);
 
-    if (isSelected(dayObject.label, time)) return;
+    // Se estiver ocupado, só impede se estiver CHEIO
+    const appointments = selectedSlots[dayObject.label]?.[time] || [];
+    if (appointments.length >= currentSalaCapacity) return;
+
     setIsDragging(true);
     setCurrentDay(dayObject);
     setStartSlot(time);
@@ -183,8 +209,8 @@ const Agendamento = () => {
 
     // Verifica se algum slot no novo intervalo já está ocupado
     for (const slot of newRange) {
-      if (isSelected(currentDay.label, slot)) {
-        return; // Impede a seleção sobreposta
+      if (isSelectedFull(currentDay.label, slot)) {
+        return; // Impede a seleção sobreposta se estiver CHEIO
       }
     }
 
@@ -194,6 +220,8 @@ const Agendamento = () => {
   const handleMouseUp = () => {
     if (isDragging) {
       // MODIFICAÇÃO: Apenas abre o modal se 2 ou mais slots forem selecionados.
+      // OU se for apenas 1 slot mas a intenção for click-to-book (handled by click?)
+      // Mantendo lógica original de drag >= 2
       if (currentRange.length >= 2) {
         handleOpenModal();
       }
@@ -205,7 +233,15 @@ const Agendamento = () => {
   const handleSpecialtyChange = (specialtyId) => {
     setSelectedSpecialty(specialtyId);
     // Limpa a sala selecionada para forçar a auto-seleção no componente SelectSala
-    setSelectedSala(null); 
+    setSelectedSala(null);
+    setCurrentSalaCapacity(1); // Reseta capacidade
+  };
+
+  const handleSelectSalaObj = (sala) => {
+    // Atualiza capacidade quando sala é selecionada (via SelectSala)
+    if (sala) {
+      setCurrentSalaCapacity(sala.capacidade || 1);
+    }
   };
 
   const handleOpenModal = () => {
@@ -250,27 +286,22 @@ const Agendamento = () => {
       ...prev,
       startSlot: formattedStart,
       endSlot: formattedEnd,
+      salaId: selectedSala,
     }));
 
     setIsModalOpen(true);
   };
 
+  // ALTERAÇÃO 3: Delete muito mais simples
   const handleDeleteProcedure = async () => {
-    if (!selectedSlotForDelete || selectedSlotForDelete.length === 0) {
-      return;
-    }
+    if (!selectedAgendamentoId) return;
 
-    const agendamentoId =
-      selectedSlots[selectedSlotForDelete[0].day][selectedSlotForDelete[0].time]
-        .agendamentoId;
+    const confirmDelete = window.confirm('Tem certeza que deseja excluir o agendamento?');
 
-    const confirmDelete = window.confirm(
-      'Tem certeza que deseja excluir o agendamento?',
-    );
     if (confirmDelete) {
       try {
-        await DeleteAgendamento(agendamentoId);
-        setSelectedSlotForDelete(null);
+        await DeleteAgendamento(selectedAgendamentoId); // Usa o ID direto
+        setSelectedAgendamentoId(null);
         handleReloadAgendamentos();
       } catch (error) {
         console.error('Erro ao deletar agendamento:', error);
@@ -278,7 +309,14 @@ const Agendamento = () => {
     }
   };
 
-  const isSelected = (dayLabel, time) => selectedSlots[dayLabel]?.[time];
+  const isSelected = (dayLabel, time) => {
+    return selectedSlots[dayLabel]?.[time] && selectedSlots[dayLabel][time].length > 0;
+  };
+
+  const isSelectedFull = (dayLabel, time) => {
+    const apps = selectedSlots[dayLabel]?.[time] || [];
+    return apps.length >= currentSalaCapacity;
+  };
 
   const handlePreviousWeek = () => {
     setCurrentWeek(currentWeek - 1);
@@ -288,26 +326,16 @@ const Agendamento = () => {
     setCurrentWeek(currentWeek + 1);
   };
 
-  const handleSlotClick = (dayLabel, time) => {
-    if (isSelected(dayLabel, time)) {
-      // ADIÇÃO: Limpa qualquer seleção de novo horário pendente.
-      setCurrentRange([]);
+  // ALTERAÇÃO 2: Handler de clique simplificado (Otimização Máxima)
+  const handleAppointmentClick = (e, agendamentoId) => {
+    e.stopPropagation(); // IMPORTANTE: Impede que o click passe para a célula (td)
 
-      const agendamentoId = selectedSlots[dayLabel][time].agendamentoId;
+    // Toggle: se já estiver selecionado, deseleciona. Se não, seleciona.
+    setSelectedAgendamentoId(prev => (prev === agendamentoId ? null : agendamentoId));
 
-      const slotsToDelete = [];
-      Object.keys(selectedSlots).forEach((dayKey) => {
-        Object.keys(selectedSlots[dayKey]).forEach((timeKey) => {
-          if (selectedSlots[dayKey][timeKey].agendamentoId === agendamentoId) {
-            slotsToDelete.push({ day: dayKey, time: timeKey });
-          }
-        });
-      });
-
-      setSelectedSlotForDelete(slotsToDelete);
-    } else {
-      setSelectedSlotForDelete(null);
-    }
+    // Limpa qualquer range de drag que possa ter ficado residual
+    setCurrentRange([]);
+    setCurrentDay(null);
   };
 
   const handleReloadAgendamentos = () => {
@@ -317,16 +345,31 @@ const Agendamento = () => {
     setCurrentDay(null);
   };
 
+  // ALTERAÇÃO 4: Navegação direta pelo ID
   const handleNavigateConsulta = async () => {
-    const agendamentoId =
-      selectedSlots[selectedSlotForDelete[0].day][selectedSlotForDelete[0].time]
-        .agendamentoId;
+    if (!selectedAgendamentoId) return;
+
     try {
-      const agendamento = await GetAgendamentoById(agendamentoId);
+      const agendamento = await GetAgendamentoById(selectedAgendamentoId);
       navigate(`/consulta?consultaId=${agendamento.data.consultaId}`);
     } catch (error) {
       console.error('Erro ao buscar agendamento:', error);
     }
+  };
+
+  // 3. MELHORIA: Função auxiliar para limpar o JSX (Renderização Condicional)
+  // 1. Função ajustada: cuida apenas da célula (arrastar para criar ou seleção vazia)
+  const getCellClassName = (dayLabel, time) => {
+    const classes = [];
+
+    // Verifica apenas DRAG (criação)
+    const isDraggingCell = currentRange.includes(time) && currentDay?.label === dayLabel;
+    if (isDraggingCell) classes.push('dragging');
+
+    // Verifica se a célula tem itens (para bordas, se quiser manter)
+    if (isSelected(dayLabel, time)) classes.push('has-items');
+
+    return classes.join(' ');
   };
 
   return (
@@ -339,7 +382,10 @@ const Agendamento = () => {
         <h1>Agendamentos</h1>
         <div className="filtros-container">
           <div className="filtros-secundarios">
-            <div className="especialidade">
+
+            {/* Filtro de Status */}
+            <div className="filtro-wrapper">
+              <label>Status</label>
               <select
                 value={status || ''}
                 onChange={(e) => setStatus(e.target.value)}
@@ -349,39 +395,48 @@ const Agendamento = () => {
                 <option value={2}>Concluídos</option>
               </select>
             </div>
-            <div className="especialidade">
+
+            {/* Filtro de Tipo */}
+            <div className="filtro-wrapper">
+              <label>Tipo de Agendamento</label>
               <select value={tipo || ''} onChange={(e) => setTipo(e.target.value)}>
                 <option value="">Todos</option>
                 <option value={1}>Triagens</option>
                 <option value={2}>Consultas</option>
               </select>
             </div>
-            <div className="especialidade">
-            <SelectSala
-              especialidade={selectedSpecialty}
-              onSelectSala={setSelectedSala}
-              selectedSala={selectedSala}
-            />
+
+            {/* Filtro de Sala */}
+            <div className="filtro-wrapper">
+              <label>Sala</label>
+              <SelectSala
+                especialidade={selectedSpecialty}
+                onSelectSala={setSelectedSala}
+                onSelectSalaObj={handleSelectSalaObj}
+                selectedSala={selectedSala}
+              />
             </div>
           </div>
-          <Especialidade
-    selectedSpecialty={selectedSpecialty}
-    onSelectSpecialty={handleSpecialtyChange} // Use a nova função aqui
-/>
+
+          {/* Filtro de Especialidade */}
+          <div className="filtro-wrapper">
+            <label>Especialidade</label>
+            <Especialidade
+              selectedSpecialty={selectedSpecialty}
+              onSelectSpecialty={handleSpecialtyChange}
+            />
+          </div>
         </div>
       </hgroup>
 
       <nav>
-        {selectedSlotForDelete === null && currentRange.length > 0 && (
-          <button
-            onClick={handleOpenModal}
-            disabled={currentRange.length === 0}
-          >
-            Agendar
-          </button>
+        {/* Lógica do botão Agendar (mantida) */}
+        {((!selectedAgendamentoId && currentRange.length > 0)) && (
+          <button onClick={handleOpenModal}>Agendar</button>
         )}
 
-        {selectedSlotForDelete && (
+        {/* Lógica dos botões de ação (Agora baseada no ID) */}
+        {selectedAgendamentoId && (
           <>
             <button onClick={handleNavigateConsulta}>Ver Detalhes</button>
             <button onClick={handleDeleteProcedure}>Excluir</button>
@@ -403,40 +458,45 @@ const Agendamento = () => {
             </tr>
           </thead>
           <tbody>
-            {timeSlots.map((time, index) =>
-              // Não renderiza a linha para as 22:00, que é apenas um delimitador
+            {timeSlots.map((time) =>
               time === '22:00' ? null : (
-                <tr key={index}>
+                <tr key={time}>
                   <td>{time}</td>
-                  {daysForWeek.map((day, dayIndex) => (
+                  {daysForWeek.map((day) => (
                     <td
-                      key={dayIndex}
-                      className={`${isSelected(day.label, time) ? 'selected' : ''
-                        } ${currentRange.includes(time) &&
-                          currentDay?.label === day.label
-                          ? 'dragging'
-                          : ''
-                        } ${selectedSlotForDelete?.some(
-                          (slot) =>
-                            slot.day === day.label &&
-                            slot.time === time,
-                        )
-                          ? 'dragging' // Reutiliza a classe 'dragging' para destacar a seleção
-                          : ''
-                        }`}
-                      onMouseDown={() => handleMouseDown(day, time)} // Passa o objeto 'day' completo
+                      key={`${day.label}-${time}`}
+                      className={getCellClassName(day.label, time)}
+                      onMouseDown={() => handleMouseDown(day, time)}
                       onMouseEnter={() => handleMouseEnter(time)}
-                      onClick={() => handleSlotClick(day.label, time)}
+                      // Se clicar na célula branca, limpa a seleção do agendamento
+                      onClick={() => setSelectedAgendamentoId(null)}
                     >
                       {isSelected(day.label, time) && (
-                        <div className="procedure">
-                          {selectedSlots[day.label][time].nome}
+                        <div className="procedures-container">
+                          {selectedSlots[day.label][time].map((agendamento, idx) => {
+
+                            // AQUI ESTÁ A MÁGICA: Comparação simples de ID
+                            const isActive = agendamento.agendamentoId === selectedAgendamentoId;
+
+                            return (
+                              <div
+                                key={idx}
+                                className={`procedure item-${idx} ${isActive ? 'selected' : ''}`}
+                                // Passamos o ID direto no click
+                                onClick={(e) => handleAppointmentClick(e, agendamento.agendamentoId)}
+                                style={{ flex: '1', minWidth: 0 }}
+                              >
+                                {agendamento.nome}
+                              </div>
+                            );
+                          })}
                         </div>
                       )}
                     </td>
                   ))}
                 </tr>
-              ))}
+              )
+            )}
           </tbody>
         </table>
       </div>

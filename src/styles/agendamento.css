@@ -1,5 +1,5 @@
-.agendamento {
-  & > hgroup {
+﻿.agendamento {
+  &>hgroup {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -29,7 +29,7 @@
     }
   }
 
-  & > nav {
+  &>nav {
     display: flex;
     gap: 1rem;
     flex-wrap: wrap;
@@ -83,7 +83,7 @@
       background: var(--branco);
 
       & thead {
-        & tr > th {
+        & tr>th {
           position: sticky;
           top: 0;
           z-index: 1;
@@ -109,7 +109,7 @@
       }
 
       & tbody {
-        & tr > td {
+        & tr>td {
           border: 1px solid #eee;
           text-align: center;
           padding: 6px 2px;
@@ -124,39 +124,106 @@
           white-space: nowrap;
           font-size: 0.98rem;
 
-          /* Previne seleção de texto nas células */
+          /* Previne seleÃ§Ã£o de texto nas cÃ©lulas */
           user-select: none;
           -webkit-user-select: none;
           -moz-user-select: none;
           -ms-user-select: none;
 
           &:not(:first-child) {
-            width: calc(100% / 7);
+            width: calc((100% - 2rem) / 7);
           }
 
           &:nth-child(1) {
             width: 2rem;
+            min-width: 2rem;
           }
 
-          &.selected {
+          &.has-items {
             background-color: var(--branco);
-            border: 1.5px solid var(--vermelho-escuro);
-            border-radius: 0.25rem;
-            color: var(--vermelho-escuro);
-            font-weight: 600;
           }
 
           &.dragging {
-            background-color: var(--roxo);
-            border-radius: 0.25rem;
-            color: white;
+            background-color: rgba(125, 20, 116, 0.15);
+            position: relative;
+          }
+
+          & .procedures-container {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            gap: 2px;
           }
 
           & .procedure {
-            font-size: 0.97rem;
-            color: var(--cinza-600);
-            font-weight: 500;
-            padding: 2px 0;
+            font-size: 0.85rem;
+            color: #333;
+            /* Texto escuro para leitura */
+            font-weight: 600;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+
+            /* Estilo padrÃ£o "Card" com borda lateral */
+            border-left: 4px solid transparent;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            /* Ajuste para texto alinhar esquerda ou centro conforme preferÃªncia, user pediu flex:1 */
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+
+            /* Item 0: Roxo Suave */
+            &.item-0 {
+              background-color: #f3e5f5;
+              /* LilÃ¡s bem claro */
+              border-left-color: #8e24aa;
+              /* Roxo forte */
+              color: #6a1b9a;
+            }
+
+            /* Item 1: Azul/Teal Suave */
+            &.item-1 {
+              background-color: #e0f2f1;
+              /* Verde Ã¡gua claro */
+              border-left-color: #00897b;
+              /* Teal forte */
+              color: #00695c;
+            }
+
+            /* Item 2: Laranja Suave */
+            &.item-2 {
+              background-color: #fff3e0;
+              /* Laranja claro */
+              border-left-color: #fb8c00;
+              /* Laranja forte */
+              color: #ef6c00;
+            }
+
+            /* --- ESTADO SELECIONADO (O ajuste visual principal) --- */
+            &.selected {
+              /* Efeito de "Pop" */
+              transform: scale(1.02);
+              z-index: 10;
+              box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+
+              /* Borda de destaque */
+              border: 1px solid var(--vermelho-escuro);
+              border-left-width: 6px;
+
+              background-color: #ffffff;
+            }
+
+            /* Hover simples para feedback visual antes do clique */
+            &:hover:not(.selected) {
+              opacity: 0.9;
+              transform: translateY(-1px);
+            }
           }
         }
       }
@@ -187,6 +254,7 @@
   transition: border 0.2s, box-shadow 0.2s;
   outline: none;
 }
+
 .especialidade select:focus {
   border-color: var(--roxo);
   box-shadow: 0 0 0 2px rgba(176, 23, 27, 0.12);
@@ -216,26 +284,87 @@
 
   .calendario-wrapper {
     padding: 0.5rem 0.25rem;
-    -webkit-user-select: none; /* Safari */
-    -moz-user-select: none; /* Firefox */
-    -ms-user-select: none; /* IE10+/Edge */
-    user-select: none; /* Padrão */
+    -webkit-user-select: none;
+    /* Safari */
+    -moz-user-select: none;
+    /* Firefox */
+    -ms-user-select: none;
+    /* IE10+/Edge */
+    user-select: none;
+    /* PadrÃ£o */
   }
 }
 
 @media (max-width: 600px) {
-  .agendamento > hgroup {
+  .agendamento>hgroup {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.5rem;
   }
 
-  .agendamento > nav {
+  .agendamento>nav {
     flex-direction: column;
     gap: 0.5rem;
   }
 
-  .calendario-wrapper {
-    padding: 0.25rem 0.1rem;
-  }
+}
+
+/* --- NOVOS ESTILOS PARA OS FILTROS --- */
+
+/* Wrapper que segura o Label + Input */
+.filtro-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-start;
+}
+
+/* Estilo do Label */
+.filtro-wrapper label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--vermelho-escuro);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-left: 2px;
+  margin-bottom: 2px;
+}
+
+/* ESTILO PRINCIPAL QUE FALTAVA: Torna os selects visíveis */
+.filtro-wrapper select {
+  background-color: var(--branco, #fff); /* Fundo branco */
+  border: 1px solid var(--cinza-300, #ccc); /* Borda visível */
+  border-radius: 6px;
+  padding: 0.4rem 0.8rem; /* Espaçamento interno */
+  font-size: 0.9rem;
+  color: var(--cinza-600, #333);
+  font-weight: 500;
+  outline: none;
+  cursor: pointer;
+  min-width: 140px;
+  height: 40px; /* Altura fixa para alinhar todos */
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+/* Efeito ao passar o mouse ou focar */
+.filtro-wrapper select:hover,
+.filtro-wrapper select:focus {
+  border-color: var(--vermelho-escuro);
+  box-shadow: 0 2px 6px rgba(125, 20, 116, 0.1);
+}
+
+/* Ajuste específico para o componente Especialidade para manter o destaque dele */
+.especialidade select {
+  height: 40px; /* Garante que ele tenha a mesma altura dos outros */
+  border-width: 1.5px; /* Mantém ele um pouco mais grosso se desejar destaque */
+}
+
+/* Ajuste no container pai para alinhar tudo na base verticalmente */
+.agendamento > hgroup .filtros-container,
+.agendamento > hgroup .filtros-secundarios {
+  display: flex;
+  align-items: flex-end; /* Alinha os inputs pela parte de baixo */
+  gap: 1rem;
+  flex-wrap: wrap;
 }

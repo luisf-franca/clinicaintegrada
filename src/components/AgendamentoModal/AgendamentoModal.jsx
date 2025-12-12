@@ -18,7 +18,7 @@ const AgendamentoModal = ({
   atualizarRegistros,
 }) => {
   const [step, setStep] = useState(1);
-  const [reservarSala, setReservarSala] = useState(false);
+  const [reservarSala, setReservarSala] = useState(!!modalData.salaId);
   const [registroListaEspera, setRegistroListaEspera] = useState(null);
   const [equipeSelecionada, setEquipeSelecionada] = useState(null);
 
@@ -28,8 +28,9 @@ const AgendamentoModal = ({
       dataHoraFim: modalData.endSlot,
       tipo: 1,
       status: 1,
+      status: 1,
       pacienteId: modalData.pacienteId || '',
-      salaId: '',
+      salaId: modalData.salaId || '',
     },
     consulta: {
       observacao: '',
@@ -58,11 +59,13 @@ const AgendamentoModal = ({
   const handleEquipeChange = (equipe) => {
     setEquipeSelecionada(equipe);
     handleStateChange('consulta', 'equipeId', equipe.id);
+    handleStateChange('agendamento', 'nomeEquipe', equipe.nome);
   };
 
   const handleLimparEquipe = () => {
     setEquipeSelecionada(null);
     handleStateChange('consulta', 'equipeId', '');
+    handleStateChange('agendamento', 'nomeEquipe', '');
   };
 
   const handleReservarSalaChange = (event) => {
@@ -94,6 +97,11 @@ const AgendamentoModal = ({
 
   const handlePostAgendamento = async () => {
     try {
+      if (reservarSala && !requestData.agendamento.salaId) {
+        alert("Selecione uma sala ou desmarque a opção 'Reservar sala'.");
+        return;
+      }
+
       // Cria um payload limpo para o request, convertendo os valores
       const payload = {
         ...requestData,
@@ -101,12 +109,14 @@ const AgendamentoModal = ({
           ...requestData.agendamento,
           tipo: parseInt(requestData.agendamento.tipo, 10),
           status: parseInt(requestData.agendamento.status, 10),
+          pacienteId: requestData.agendamento.pacienteId || null,
         },
         consulta: {
-            ...requestData.consulta,
-            especialidade: parseInt(requestData.consulta.especialidade, 10),
+          ...requestData.consulta,
+          especialidade: parseInt(requestData.consulta.especialidade, 10),
         }
       };
+      console.log('Payload Criar Agendamento:', payload);
       await CreateAgendamento(payload);
       atualizarRegistros();
       setIsModalOpen(false);
@@ -122,7 +132,7 @@ const AgendamentoModal = ({
         return (
           <>
             <div className="form-group">
-              
+
               <PesquisarListaEspera
                 especialidade={requestData.consulta.especialidade}
                 onSelectRegistro={handleRegistroListaEsperaChange}
@@ -160,71 +170,71 @@ const AgendamentoModal = ({
           <>
             <div className="form-group">
 
-                <PesquisarEquipes
-                    especialidade={requestData.consulta.especialidade}
-                    onSelectEquipe={handleEquipeChange}
-                    equipeSelecionada={equipeSelecionada}
-                    onLimparEquipe={handleLimparEquipe}
-                />
+              <PesquisarEquipes
+                especialidade={requestData.consulta.especialidade}
+                onSelectEquipe={handleEquipeChange}
+                equipeSelecionada={equipeSelecionada}
+                onLimparEquipe={handleLimparEquipe}
+              />
             </div>
 
             <div className="form-group checkbox-group">
-                <label
-                  htmlFor="reservarSala"
+              <label
+                htmlFor="reservarSala"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  cursor: 'pointer',
+                  userSelect: 'none',
+                }}
+              >
+                <input
+                  type="checkbox"
+                  id="reservarSala"
+                  checked={reservarSala}
+                  onChange={handleReservarSalaChange}
+                  style={{ display: 'none' }}
+                />
+                <span
+                  className="checkmark"
                   style={{
-                    display: 'flex',
+                    width: '20px',
+                    height: '20px',
+                    border: '1px solid #aaa',
+                    display: 'inline-flex',
                     alignItems: 'center',
-                    gap: '0.5rem',
-                    cursor: 'pointer',
-                    userSelect: 'none',
+                    justifyContent: 'center',
+                    fontSize: '1rem',
+                    background: reservarSala ? '#e6f7e6' : 'var(--branco)',
                   }}
                 >
-                  <input
-                    type="checkbox"
-                    id="reservarSala"
-                    checked={reservarSala}
-                    onChange={handleReservarSalaChange}
-                    style={{ display: 'none' }}
-                  />
-                  <span
-                    className="checkmark"
-                    style={{
-                      width: '20px',
-                      height: '20px',
-                      border: '1px solid #aaa',
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontSize: '1rem',
-                      background: reservarSala ? '#e6f7e6' : 'var(--branco)',
-                    }}
-                  >
-                    {reservarSala ? '✔' : ''}
-                  </span>
-                  Reservar sala?
-                </label>
+                  {reservarSala ? '✔' : ''}
+                </span>
+                Reservar sala?
+              </label>
             </div>
-            
+
             {reservarSala && (
               <div className="form-group">
                 <label htmlFor="sala">Sala</label>
                 <SelectSala
-                    id="sala"
-                    especialidade={requestData.consulta.especialidade}
-                    onSelectSala={(value) => handleStateChange('agendamento', 'salaId', value)}
-                    selectedSala={requestData.agendamento.salaId}
+                  id="sala"
+                  especialidade={requestData.consulta.especialidade}
+                  onSelectSala={(value) => handleStateChange('agendamento', 'salaId', value)}
+                  selectedSala={requestData.agendamento.salaId}
                 />
               </div>
             )}
 
             <div className="form-group">
-                <label htmlFor="observacoes">Observações</label>
-                <textarea
-                    id="observacoes"
-                    placeholder="Adicione observações relevantes..."
-                    value={requestData.consulta.observacao || ''}
-                    onChange={(e) => handleStateChange('consulta', 'observacao', e.target.value)}
-                />
+              <label htmlFor="observacoes">Observações</label>
+              <textarea
+                id="observacoes"
+                placeholder="Adicione observações relevantes..."
+                value={requestData.consulta.observacao || ''}
+                onChange={(e) => handleStateChange('consulta', 'observacao', e.target.value)}
+              />
             </div>
           </>
         );
@@ -248,7 +258,7 @@ const AgendamentoModal = ({
         </hgroup>
 
         <form onSubmit={(e) => e.preventDefault()}>
-            {renderStep()}
+          {renderStep()}
         </form>
 
         <div className="step-buttons">
@@ -258,15 +268,15 @@ const AgendamentoModal = ({
             </button>
           )}
           {step === 2 && (
-             <button type="button" onClick={() => setIsModalOpen(false)}>Cancelar</button>
+            <button type="button" onClick={() => setIsModalOpen(false)}>Cancelar</button>
           )}
 
-          {step < 2 && registroListaEspera && (
+          {step < 2 && (
             <button type="button" onClick={() => setStep((prevStep) => prevStep + 1)}>
               Avançar
             </button>
           )}
-          
+
           {step === 2 && (
             <button onClick={handlePostAgendamento}>Salvar Agendamento</button>
           )}
