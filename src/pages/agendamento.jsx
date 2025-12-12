@@ -162,7 +162,8 @@ const Agendamento = () => {
   const daysForWeek = useMemo(() => {
     const today = new Date();
     // Ajusta o início da semana para o dia atual, deslocado pela currentWeek
-    const startOfWeek = new Date(today.setDate(today.getDate() - today.getDay() + currentWeek * 7));
+    // REMOVIDO: - today.getDay() para que comece HOJE e não no Domingo
+    const startOfWeek = new Date(today.setDate(today.getDate() + currentWeek * 7));
 
     const days = [];
     for (let i = 0; i < 7; i++) {
