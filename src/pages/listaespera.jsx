@@ -34,7 +34,7 @@ const ListaEspera = () => {
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     const viewParam = searchParams.get('view');
-    
+
     if (viewParam === 'add') {
       setSelectedComponent('Adicionar');
     }
@@ -46,29 +46,29 @@ const ListaEspera = () => {
       try {
         const options = { page: pageToLoad, pageSize };
         let filters = [`especialidade=${selectedSpecialty}`];
-        
+
         if (filtrosAtuais.nome && filtrosAtuais.nome.trim()) {
           filters.push(`PacienteNome^${filtrosAtuais.nome}`);
         }
-        
+
         if (filtrosAtuais.prioridade && filtrosAtuais.prioridade.trim()) {
           filters.push(`prioridade=${filtrosAtuais.prioridade}`);
         }
-        
+
         if (filtrosAtuais.status && filtrosAtuais.status.trim()) {
           filters.push(`status=${filtrosAtuais.status}`);
         }
-        
+
         if (filters.length > 0) {
           options.filter = filters.join(',');
         }
-        
+
         const response = await GetListaEntries(options);
-        
+
         // Agora a resposta já vem com a estrutura correta
         const registrosData = response?.items || [];
         const totalCountData = response?.totalCount || 0;
-        
+
         setRegistros(registrosData);
         setTotalCount(totalCountData);
       } catch (error) {
@@ -109,12 +109,12 @@ const ListaEspera = () => {
     if (confirmDelete) {
       try {
         await DeleteRegistro(id);
-        
+
         // Recalcula se precisa voltar uma página
-        const novaPagina = registros.length === 1 && currentPage > 1 
-          ? currentPage - 1 
+        const novaPagina = registros.length === 1 && currentPage > 1
+          ? currentPage - 1
           : currentPage;
-        
+
         setCurrentPage(novaPagina);
         // A atualização será feita pelo useEffect quando currentPage mudar
       } catch (error) {
@@ -138,25 +138,22 @@ const ListaEspera = () => {
       </div>
       <nav className="listaespera-nav">
         <button
-          className={`btn-secondary${
-            selectedComponent === 'Pesquisar' ? ' active' : ''
-          }`}
+          className={`btn-secondary${selectedComponent === 'Pesquisar' ? ' active' : ''
+            }`}
           onClick={() => setSelectedComponent('Pesquisar')}
         >
           Pesquisar
         </button>
         <button
-          className={`btn-secondary${
-            selectedComponent === 'Adicionar' ? ' active' : ''
-          }`}
+          className={`btn-secondary${selectedComponent === 'Adicionar' ? ' active' : ''
+            }`}
           onClick={() => setSelectedComponent('Adicionar')}
         >
           Adicionar
         </button>
         <button
-          className={`btn-secondary${
-            selectedComponent === 'Atualizar' ? ' active' : ''
-          }`}
+          className={`btn-secondary${selectedComponent === 'Atualizar' ? ' active' : ''
+            }`}
           onClick={() => setSelectedComponent('Atualizar')}
         >
           Atualizar
@@ -165,7 +162,7 @@ const ListaEspera = () => {
       <div className="listaespera-content-wrapper">
         <div className="listaespera-form-card">
           {selectedComponent === 'Pesquisar' && (
-            <PesquisarRegistros 
+            <PesquisarRegistros
               onPesquisar={handlePesquisar}
               especialidade={selectedSpecialty}
             />

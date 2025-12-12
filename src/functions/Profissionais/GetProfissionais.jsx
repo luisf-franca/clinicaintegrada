@@ -3,7 +3,7 @@ import { api } from '../../contexts/AuthContext';
 const GetProfissionais = async (options = {}) => {
   try {
     const { page = 1, pageSize = 10, filter } = options;
-    
+
     const params = new URLSearchParams();
     params.append('page', page);
     params.append('pageSize', pageSize);
@@ -11,7 +11,7 @@ const GetProfissionais = async (options = {}) => {
       params.append('filter', filter);
     }
 
-    console.log('Fetching professionals with options:', options);
+    //console.log('Fetching professionals with options:', options);
 
     const response = await api.get('/profissionais', { params });
 

@@ -114,7 +114,7 @@ const ListaEsperaResumo = ({ pacienteId }) => {
                 </td>
               </tr>
             ) : listaEspera.length > 0 ? (
-              listaEspera.slice(0, 4).map((item) => (
+              listaEspera.slice(0, 7).map((item) => (
                 <tr key={item.id}>
                   <td>{item.nome}</td>
                   <td>{FormatarDateTimeToLocal(item.dataEntrada)}</td>

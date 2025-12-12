@@ -50,6 +50,7 @@ const AgendamentosResumo = ({ pacienteId }) => {
 
         const filterString = filters.join(',');
         const response = await GetAgendamentos({ filter: filterString });
+        //console.log('Agendamentos:', response);
         setAgendamentos(response);
       } catch (error) {
         console.error('Erro ao buscar agendamentos:', error);
@@ -111,7 +112,7 @@ const AgendamentosResumo = ({ pacienteId }) => {
           </thead>
           <tbody>
             {agendamentos.length > 0 ? (
-              agendamentos.slice(0, 4).map((item) => (
+              agendamentos.slice(0, 7).map((item) => (
                 <tr key={item.id}>
                   <td>{item.nome}</td>
                   <td>{FormatarDateTimeToLocal(item.dataHoraInicio)}</td>
@@ -120,7 +121,7 @@ const AgendamentosResumo = ({ pacienteId }) => {
                   <td>{item.statusConsulta}</td>
                   <td>{item.especialidade}</td>
                   <td>
-                    <button onClick={() => handleNavigateConsulta(item.id)}>
+                    <button onClick={() => handleNavigateConsulta(item.consultaId)}>
                       Visualizar Consulta
                     </button>
                   </td>

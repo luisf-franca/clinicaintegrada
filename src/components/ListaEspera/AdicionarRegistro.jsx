@@ -39,7 +39,7 @@ const AdicionarRegistro = ({ atualizarRegistros, especialidade }) => {
       setIsLoading(true);
       try {
         const response = await GetPacientes({ pageSize: 3 });
-        
+
         let pacientesData = [];
         if (response && response.items) {
           pacientesData = response.items;
@@ -48,7 +48,7 @@ const AdicionarRegistro = ({ atualizarRegistros, especialidade }) => {
         } else if (response && response.data) {
           pacientesData = response.data;
         }
-        
+
         setPacientes(pacientesData);
         setShowResults(true);
       } catch (error) {
@@ -68,14 +68,14 @@ const AdicionarRegistro = ({ atualizarRegistros, especialidade }) => {
       setIsLoading(true);
       try {
         const options = { pageSize: 3 }; // Sempre busca 3 resultados
-        
+
         // Se há texto digitado, adiciona filtro de nome
         if (debouncedNome.trim()) {
           options.filter = `nome^${debouncedNome}`;
         }
-        
+
         const response = await GetPacientes(options);
-        
+
         // Verifica se a resposta tem a estrutura esperada
         let pacientesData = [];
         if (response && response.items) {
@@ -85,7 +85,7 @@ const AdicionarRegistro = ({ atualizarRegistros, especialidade }) => {
         } else if (response && response.data) {
           pacientesData = response.data;
         }
-        
+
         setPacientes(pacientesData);
         // Sempre mostra resultados quando há pacientes ou quando não há texto digitado
         if (pacientesData.length > 0 || !debouncedNome.trim()) {
@@ -127,15 +127,15 @@ const AdicionarRegistro = ({ atualizarRegistros, especialidade }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { pacienteId, dataEntrada, status, especialidade, prioridade } =
+      const { pacienteId, dataEntrada, especialidade, prioridade } =
         listaEspera;
       const listaEsperaData = {
         dataEntrada,
-        status: parseInt(status, 10),
+        status: 1,
         especialidade: parseInt(especialidade, 10),
         prioridade: parseInt(prioridade, 10),
       };
-      console.log('listaEsperaData:', listaEsperaData);
+      // console.log('listaEsperaData:', listaEsperaData);
       await CreateListaEsperaEntry(pacienteId, listaEsperaData);
       atualizarRegistros();
       setPacienteSelecionado(null);
@@ -168,9 +168,8 @@ const AdicionarRegistro = ({ atualizarRegistros, especialidade }) => {
                 placeholder="Digite o nome para buscar..."
                 autoComplete="off"
               />
-              {isLoading && <div style={{ color: 'var(--cinza)', fontStyle: 'italic', marginTop: '0.5rem' }}>Carregando...</div>}
-              
-              {showResults && !isLoading && (
+
+              {showResults && !isLoading && !pacienteSelecionado && (
                 <div style={{ marginTop: '0.5rem' }}>
                   {pacientes.length > 0 && !pacienteSelecionado ? (
                     <ul style={{ listStyle: 'none', margin: 0, padding: 0, border: '1px solid var(--border-color)', borderRadius: '4px', maxHeight: '200px', overflowY: 'auto', backgroundColor: 'var(--branco)', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)' }}>
@@ -196,13 +195,13 @@ const AdicionarRegistro = ({ atualizarRegistros, especialidade }) => {
             </div>
 
             {pacienteSelecionado && (
-              <div>
-                <label>Paciente Selecionado</label>
-                <div style={{ padding: '0.75rem', border: '1px solid var(--border-color)', borderRadius: '4px', backgroundColor: 'var(--branco)' }}>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                    <strong style={{ fontSize: '1rem', color: 'var(--text-color)' }}>{pacienteSelecionado.nome}</strong>
-                    <span style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Telefone: {pacienteSelecionado.telefone}</span>
-                    <span style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Idade: {pacienteSelecionado.idade}</span>
+              <div className="paciente-selecionado-container">
+                <div className="paciente-selecionado-card">
+                  <h3>Paciente Selecionado</h3>
+                  <div className="paciente-selecionado-info">
+                    <span className="paciente-nome">{pacienteSelecionado.nome}</span>
+                    <span className="paciente-detalhe">Telefone: {pacienteSelecionado.telefone}</span>
+                    <span className="paciente-detalhe">Idade: {pacienteSelecionado.idade}</span>
                   </div>
                   <button
                     type="button"
@@ -212,7 +211,6 @@ const AdicionarRegistro = ({ atualizarRegistros, especialidade }) => {
                       setListaEspera((prev) => ({ ...prev, pacienteId: '' }));
                     }}
                     className="btn-secondary"
-                    style={{ marginTop: '0.75rem' }}
                   >
                     Trocar Paciente
                   </button>
@@ -243,7 +241,7 @@ const AdicionarRegistro = ({ atualizarRegistros, especialidade }) => {
                 required
               />
             </div>
-            <div>
+            {/* <div>
               <label htmlFor="status">Status</label>
               <select
                 id="status"
@@ -257,7 +255,7 @@ const AdicionarRegistro = ({ atualizarRegistros, especialidade }) => {
                 <option value={2}>Atendido</option>
                 <option value={3}>Cancelado</option>
               </select>
-            </div>
+            </div> */}
             <div>
               <label htmlFor="prioridade">Prioridade</label>
               <select

@@ -28,7 +28,6 @@ const AgendamentoModal = ({
       dataHoraFim: modalData.endSlot,
       tipo: 1,
       status: 1,
-      status: 1,
       pacienteId: modalData.pacienteId || '',
       nomePaciente: '',
       salaId: modalData.salaId || '',
@@ -123,7 +122,7 @@ const AgendamentoModal = ({
           especialidade: parseInt(requestData.consulta.especialidade, 10),
         }
       };
-      console.log('Payload Criar Agendamento:', payload);
+      //console.log('Payload Criar Agendamento:', payload);
       await CreateAgendamento(payload);
       atualizarRegistros();
       setIsModalOpen(false);

@@ -6,6 +6,7 @@ const AdicionarSala = ({ onVoltar }) => {
   const [formData, setFormData] = useState({
     nome: '',
     especialidade: 1,
+    capacidade: 1,
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
@@ -32,6 +33,7 @@ const AdicionarSala = ({ onVoltar }) => {
       const salaData = {
         ...formData,
         especialidade: parseInt(formData.especialidade),
+        capacidade: parseInt(formData.capacidade),
       };
 
       await CreateSala(salaData);
@@ -60,6 +62,19 @@ const AdicionarSala = ({ onVoltar }) => {
             value={formData.nome}
             onChange={handleInputChange}
             placeholder="Nome da sala"
+            required
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Capacidade *</label>
+          <input
+            type="number"
+            name="capacidade"
+            value={formData.capacidade}
+            onChange={handleInputChange}
+            placeholder="Capacidade da sala"
+            min="1"
             required
           />
         </div>

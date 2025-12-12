@@ -4,7 +4,8 @@ import UpdateSala from '../../functions/Salas/UpdateSala';
 const AtualizarSala = ({ sala, onVoltar }) => {
   const [formData, setFormData] = useState({
     nome: '',
-    especialidade: 1
+    especialidade: 1,
+    capacidade: 1
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
@@ -13,7 +14,7 @@ const AtualizarSala = ({ sala, onVoltar }) => {
   const getEspecialidadeEnum = (especialidadeString) => {
     const especialidadeMap = {
       'Psicologia': 1,
-      'Odontologia': 2, 
+      'Odontologia': 2,
       'Fisioterapia': 3,
       'Nutricao': 4,
       'Nutrição': 4
@@ -25,9 +26,10 @@ const AtualizarSala = ({ sala, onVoltar }) => {
     if (sala) {
       setFormData({
         nome: sala.nome || '',
-        especialidade: typeof sala.especialidade === 'string' 
-          ? getEspecialidadeEnum(sala.especialidade) 
-          : Number(sala.especialidade) || 1
+        especialidade: typeof sala.especialidade === 'string'
+          ? getEspecialidadeEnum(sala.especialidade)
+          : Number(sala.especialidade) || 1,
+        capacidade: sala.capacidade || 1
       });
     }
   }, [sala]);
@@ -43,7 +45,7 @@ const AtualizarSala = ({ sala, onVoltar }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!formData.nome) {
       setError('Por favor, preencha o nome da sala');
       return;
@@ -53,9 +55,10 @@ const AtualizarSala = ({ sala, onVoltar }) => {
     try {
       const salaData = {
         ...formData,
-        especialidade: parseInt(formData.especialidade)
+        especialidade: parseInt(formData.especialidade),
+        capacidade: parseInt(formData.capacidade)
       };
-      
+
       await UpdateSala(sala.id, salaData);
       // alert('Sala atualizada com sucesso!');
       onVoltar();
@@ -70,9 +73,9 @@ const AtualizarSala = ({ sala, onVoltar }) => {
   return (
     <div className="form-container">
       <h2>Editar Sala</h2>
-      
+
       {error && <div className="error-message">{error}</div>}
-      
+
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label>Nome *</label>
@@ -82,6 +85,19 @@ const AtualizarSala = ({ sala, onVoltar }) => {
             value={formData.nome}
             onChange={handleInputChange}
             placeholder="Nome da sala"
+            required
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Capacidade *</label>
+          <input
+            type="number"
+            name="capacidade"
+            value={formData.capacidade}
+            onChange={handleInputChange}
+            placeholder="Capacidade da sala"
+            min="1"
             required
           />
         </div>

@@ -20,7 +20,7 @@ const ConsultaResumo = ({ pacienteId }) => {
         const filterString = filters.length > 0 ? filters.join(',') : null;
 
         const response = await GetConsultas({ filter: filterString });
-        console.log('response', response);  
+        //console.log('response', response);
         setConsultas(response);
       } catch (error) {
         console.error('Erro ao buscar consultas:', error);
@@ -87,35 +87,29 @@ const ConsultaResumo = ({ pacienteId }) => {
           <thead>
             <tr>
               <th>Paciente</th>
-              <th>Data Início</th>
-              <th>Data Fim</th>
-              <th>Status</th>
+              <th>Data/Hora</th>
+              <th>Sala</th>
+              <th>Equipe</th>
               <th>Especialidade</th>
               <th>Ações</th>
             </tr>
           </thead>
           <tbody>
             {consultas.length > 0 ? (
-              consultas.map(
-                ({
-                  id,
-                  nome,
-                  dataHoraInicio,
-                  dataHoraFim,
-                  especialidade,
-                  status,
-                  tipo,
-                }) => (
-                  <tr key={id}>
-                    <td>{nome}</td>
-                    <td>{FormatarDateTimeToLocal(dataHoraInicio)}</td>
-                    <td>{FormatarDateTimeToLocal(dataHoraFim)}</td>
-                    <td>{status}</td>
-                    <td>{especialidade}</td>
-                    <td>{renderButton({ id })}</td>
-                  </tr>
-                ),
-              )
+              consultas.slice(0, 7).map((item) => (
+                <tr key={item.id}>
+                  <td>{item.paciente?.nome || 'N/A'}</td>
+                  <td>
+                    {item.agendamento?.dataHoraInicio
+                      ? FormatarDateTimeToLocal(item.agendamento.dataHoraInicio)
+                      : 'N/A'}
+                  </td>
+                  <td>{item.sala?.nome || 'N/A'}</td>
+                  <td>{item.equipe?.nome || 'N/A'}</td>
+                  <td>{item.especialidade}</td>
+                  <td>{renderButton({ id: item.id })}</td>
+                </tr>
+              ))
             ) : (
               <tr>
                 <td colSpan="6" className="consulta-resumo__empty">

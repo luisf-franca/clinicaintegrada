@@ -23,7 +23,7 @@ const AdicionarProfissional = ({ onVoltar }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formData.nome || !formData.ra || !formData.email) {
+    if (!formData.nome) {
       setError('Por favor, preencha todos os campos obrigatórios');
       return;
     }
@@ -74,7 +74,6 @@ const AdicionarProfissional = ({ onVoltar }) => {
             value={formData.ra}
             onChange={handleInputChange}
             placeholder="Registro Acadêmico"
-            required
           />
         </div>
 
@@ -90,14 +89,13 @@ const AdicionarProfissional = ({ onVoltar }) => {
         </div>
 
         <div className="form-group">
-          <label>Email *</label>
+          <label>Email</label>
           <input
             type="email"
             name="email"
             value={formData.email}
             onChange={handleInputChange}
             placeholder="email@exemplo.com"
-            required
           />
         </div>
 

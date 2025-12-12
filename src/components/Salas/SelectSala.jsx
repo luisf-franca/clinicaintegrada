@@ -16,7 +16,7 @@ const SelectSala = ({ especialidade, onSelectSala, onSelectSalaObj, selectedSala
         const data = await GetSalas({
           filter: `Especialidade=${especialidade}`,
         });
-        console.log('Data from GetSalas in SelectSala:', data);
+        //console.log('Data from GetSalas in SelectSala:', data);
         setSalas(data.items || []);
         // Se nenhuma sala estiver selecionada no pai E houver salas na resposta,
         // sugere a primeira sala para o pai.

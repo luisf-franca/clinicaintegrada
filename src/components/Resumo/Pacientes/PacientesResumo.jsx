@@ -55,19 +55,17 @@ const PacientesResumo = ({
       <div className="pacientes-resumo__body">
         <PesquisarPacientes onPesquisar={onPesquisar} />
         {pacientes && pacientes.length > 0 ? (
-          pacientes.slice(0, 5).map((paciente, index) => (
+          pacientes.slice(0, 7).map((paciente, index) => (
             <div
-              className={`pacientes-relatorio__item ${
-                selectedPaciente === index ? 'selected' : ''
-              }`}
+              className={`pacientes-relatorio__item ${selectedPaciente === index ? 'selected' : ''
+                }`}
               key={paciente.id || index}
               onClick={() => handleSelectPaciente(index)}
             >
               <div className="paciente-item__button">
                 <div
-                  className={`round-button ${
-                    selectedPaciente === index ? 'marked' : ''
-                  }`}
+                  className={`round-button ${selectedPaciente === index ? 'marked' : ''
+                    }`}
                 ></div>
               </div>
               <div className="paciente-item__info">
@@ -88,8 +86,8 @@ const PacientesResumo = ({
         )}
       </div>
       <div className="pacientes-resumo__footer">
-        <button 
-          onClick={handleNext} 
+        <button
+          onClick={handleNext}
           disabled={selectedPaciente === null || isLoading}
         >
           {isLoading ? 'Localizando...' : 'Localizar Paciente'}

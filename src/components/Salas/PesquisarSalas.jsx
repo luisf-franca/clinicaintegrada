@@ -86,6 +86,7 @@ const PesquisarSalas = ({
                 <tr>
                   <th>Nome</th>
                   <th>Especialidade</th>
+                  <th>Capacidade</th>
                   <th>Disponibilidade</th>
                   <th>Ações</th>
                 </tr>
@@ -93,7 +94,7 @@ const PesquisarSalas = ({
               <tbody>
                 {salas.length === 0 ? (
                   <tr>
-                    <td colSpan="4" className="empty-state">
+                    <td colSpan="5" className="empty-state">
                       Nenhuma sala encontrada
                     </td>
                   </tr>
@@ -102,6 +103,7 @@ const PesquisarSalas = ({
                     <tr key={sala.id}>
                       <td>{sala.nome}</td>
                       <td>{getEspecialidadeNome(sala.especialidade)}</td>
+                      <td>{sala.capacidade}</td>
                       <td>
                         <span className={`status-badge ${sala.isDisponivel ? 'disponivel' : 'indisponivel'}`}>
                           {sala.isDisponivel ? 'Disponível' : 'Indisponível'}

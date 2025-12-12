@@ -17,7 +17,7 @@ const AtualizarProfissional = ({ profissional, onVoltar }) => {
   const getEspecialidadeEnum = (especialidadeString) => {
     const especialidadeMap = {
       'Psicologia': 1,
-      'Odontologia': 2, 
+      'Odontologia': 2,
       'Fisioterapia': 3,
       'Nutricao': 4,
       'Nutrição': 4
@@ -41,10 +41,10 @@ const AtualizarProfissional = ({ profissional, onVoltar }) => {
         ra: profissional.ra || '',
         telefone: profissional.telefone || '',
         email: profissional.email || '',
-        tipo: typeof profissional.tipo === 'string' 
+        tipo: typeof profissional.tipo === 'string'
           ? String(getTipoEnum(profissional.tipo))
           : String(profissional.tipo) || '1',
-        especialidade: typeof profissional.especialidade === 'string' 
+        especialidade: typeof profissional.especialidade === 'string'
           ? String(getEspecialidadeEnum(profissional.especialidade))
           : String(profissional.especialidade) || '1'
       });
@@ -59,8 +59,8 @@ const AtualizarProfissional = ({ profissional, onVoltar }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    if (!formData.nome || !formData.ra || !formData.email) {
+
+    if (!formData.nome) {
       setError('Por favor, preencha todos os campos obrigatórios');
       return;
     }
@@ -72,9 +72,8 @@ const AtualizarProfissional = ({ profissional, onVoltar }) => {
         tipo: parseInt(formData.tipo),
         especialidade: parseInt(formData.especialidade)
       };
-      
+
       await UpdateProfissional(profissional.id, profissionalData);
-      alert('Profissional atualizado com sucesso!');
       onVoltar();
     } catch (err) {
       console.error('Erro ao atualizar profissional:', err);
@@ -87,9 +86,9 @@ const AtualizarProfissional = ({ profissional, onVoltar }) => {
   return (
     <div className="form-container">
       <h2>Editar Profissional</h2>
-      
+
       {error && <div className="error-message">{error}</div>}
-      
+
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label>Nome *</label>
@@ -111,7 +110,6 @@ const AtualizarProfissional = ({ profissional, onVoltar }) => {
             value={formData.ra}
             onChange={handleInputChange}
             placeholder="Registro Acadêmico"
-            required
           />
         </div>
 
@@ -127,14 +125,13 @@ const AtualizarProfissional = ({ profissional, onVoltar }) => {
         </div>
 
         <div className="form-group">
-          <label>Email *</label>
+          <label>Email</label>
           <input
             type="email"
             name="email"
             value={formData.email}
             onChange={handleInputChange}
             placeholder="email@exemplo.com"
-            required
           />
         </div>
 
