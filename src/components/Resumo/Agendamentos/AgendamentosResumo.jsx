@@ -112,20 +112,23 @@ const AgendamentosResumo = ({ pacienteId }) => {
           </thead>
           <tbody>
             {agendamentos.length > 0 ? (
-              agendamentos.map((item) => (
-                <tr key={item.id} onClick={() => handleNavigateConsulta(item.consultaId)} style={{ cursor: 'pointer' }}>
-                  <td title={item.nome}>
-                    <div className="truncate-text">{item.nome}</div>
-                  </td>
-                  <td>
-                    {item.dataHoraInicio
-                      ? new Date(item.dataHoraInicio).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-                      : '-'}
-                  </td>
-                  <td>{item.sala}</td>
-                  <td>{item.especialidade}</td>
-                </tr>
-              ))
+              agendamentos.map((item) => {
+                const displayName = item.nome || item.nomeEquipe || item.equipe?.nome || 'Sem Nome';
+                return (
+                  <tr key={item.id} onClick={() => handleNavigateConsulta(item.consultaId)} style={{ cursor: 'pointer' }}>
+                    <td title={displayName}>
+                      <div className="truncate-text">{displayName}</div>
+                    </td>
+                    <td>
+                      {item.dataHoraInicio
+                        ? new Date(item.dataHoraInicio).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                        : '-'}
+                    </td>
+                    <td>{item.sala}</td>
+                    <td>{item.especialidade}</td>
+                  </tr>
+                );
+              })
             ) : (
               <tr>
                 <td colSpan="4" className="agendamentos-resumo__empty">

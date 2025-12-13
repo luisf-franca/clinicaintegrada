@@ -227,7 +227,7 @@ const AgendamentoModal = ({
                 <label htmlFor="sala">Sala</label>
                 <SelectSala
                   id="sala"
-                  especialidade={requestData.consulta.especialidade}
+                  initialSala={modalData.salaObj}
                   onSelectSala={(value) => handleStateChange('agendamento', 'salaId', value)}
                   selectedSala={requestData.agendamento.salaId}
                 />

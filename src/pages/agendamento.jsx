@@ -38,6 +38,7 @@ const Agendamento = () => {
     localStorage.getItem('selectedSpecialty') || 1,
   );
   const [selectedSala, setSelectedSala] = useState(null);
+  const [selectedSalaObj, setSelectedSalaObj] = useState(null); // Novo estado
   const [currentSalaCapacity, setCurrentSalaCapacity] = useState(1);
   const [isDragging, setIsDragging] = useState(false);
   const [currentDay, setCurrentDay] = useState(null); // Agora armazena o objeto do dia inteiro
@@ -49,6 +50,7 @@ const Agendamento = () => {
     pacienteId: '',
     startSlot: '',
     endSlot: '',
+    salaObj: null // Novo campo
   });
   const [currentWeek, setCurrentWeek] = useState(0);
   const [selectedAgendamentoId, setSelectedAgendamentoId] = useState(null);
@@ -107,8 +109,11 @@ const Agendamento = () => {
         const exists = slotList.some(a => a.agendamentoId === agendamento.id);
 
         if (!exists) {
+          // Lógica de fallback para o nome
+          const displayName = agendamento.nome || agendamento.nomeEquipe || agendamento.equipe?.nome || 'Sem Nome';
+
           slotList.push({
-            nome: agendamento.nome,
+            nome: displayName,
             agendamentoId: agendamento.id,
           });
 
@@ -134,6 +139,8 @@ const Agendamento = () => {
 
   // UseEffect agora fica muito mais limpo
   useEffect(() => {
+    let isActive = true;
+
     const fetchAgendamentos = async () => {
       try {
         let filters = [];
@@ -144,16 +151,23 @@ const Agendamento = () => {
 
         const agendamentosRaw = await GetAgendamentos({ filter: filters.join(',') });
 
-        // Chamada da função extraída
-        const processed = processAgendamentosToSlots(agendamentosRaw);
+        // Apenas atualiza o estado se o componente ainda estiver montado/ativo com esses props
+        if (isActive) {
+          // Chamada da função extraída
+          const processed = processAgendamentosToSlots(agendamentosRaw);
 
-        setSelectedSlots(processed);
-        setSelectedAgendamentoId(null);
+          setSelectedSlots(processed);
+          setSelectedAgendamentoId(null);
+        }
       } catch (error) {
-        console.error('Erro ao buscar agendamentos:', error);
+        if (isActive) console.error('Erro ao buscar agendamentos:', error);
       }
     };
     fetchAgendamentos();
+
+    return () => {
+      isActive = false;
+    };
   }, [selectedSpecialty, reloadAgendamentos, selectedSala, tipo, status, processAgendamentosToSlots]);
 
 
@@ -233,15 +247,16 @@ const Agendamento = () => {
 
   const handleSpecialtyChange = (specialtyId) => {
     setSelectedSpecialty(specialtyId);
-    // Limpa a sala selecionada para forçar a auto-seleção no componente SelectSala
-    setSelectedSala(null);
-    setCurrentSalaCapacity(1); // Reseta capacidade
+    // Não limpa mais a sala, pois as salas são independentes da especialidade
+    // setSelectedSala(null);
+    // Mantém a capacidade atual se a sala não mudou
   };
 
   const handleSelectSalaObj = (sala) => {
     // Atualiza capacidade quando sala é selecionada (via SelectSala)
     if (sala) {
       setCurrentSalaCapacity(sala.capacidade || 1);
+      setSelectedSalaObj(sala); // Atualiza o objeto
     }
   };
 
@@ -288,6 +303,7 @@ const Agendamento = () => {
       startSlot: formattedStart,
       endSlot: formattedEnd,
       salaId: selectedSala,
+      salaObj: selectedSalaObj, // Passa o objeto
     }));
 
     setIsModalOpen(true);
@@ -411,7 +427,6 @@ const Agendamento = () => {
             <div className="filtro-wrapper">
               <label>Sala</label>
               <SelectSala
-                especialidade={selectedSpecialty}
                 onSelectSala={setSelectedSala}
                 onSelectSalaObj={handleSelectSalaObj}
                 selectedSala={selectedSala}
@@ -482,7 +497,7 @@ const Agendamento = () => {
                             return (
                               <div
                                 key={idx}
-                                className={`procedure item-${idx} ${isActive ? 'selected' : ''}`}
+                                className={`procedure item-${idx % 3} ${isActive ? 'selected' : ''}`}
                                 // Passamos o ID direto no click
                                 onClick={(e) => handleAppointmentClick(e, agendamento.agendamentoId)}
                                 style={{ flex: '1', minWidth: 0 }}
