@@ -1037,3 +1037,64 @@
   font-weight: 600;
   color: var(--cinza-600);
 }
+/* --- [EDITAR OBSERVAÇÃO] --- */
+.textarea-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  width: 100%;
+}
+
+.styled-textarea {
+  width: 100%;
+  padding: 1rem;
+  border: 1px solid var(--cinza-300);
+  border-radius: 8px;
+  background: var(--cinza-100);
+  font-family: inherit;
+  font-size: 0.95rem;
+  color: var(--cinza-600);
+  resize: vertical;
+  line-height: 1.5;
+  box-sizing: border-box;
+  transition: all 0.2s;
+}
+
+.styled-textarea.editable {
+  background: var(--branco);
+  border-color: var(--cinza-400);
+}
+
+.styled-textarea.editable:focus {
+  border-color: var(--vermelho-escuro);
+  box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.08);
+  outline: none;
+}
+
+.btn-salvar-obs {
+  align-self: flex-end;
+  padding: 0.6rem 1.2rem;
+  background: var(--vermelho-escuro);
+  color: var(--branco);
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.btn-salvar-obs:hover:not(:disabled) {
+  background: var(--vermelho);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.btn-salvar-obs:disabled {
+  background: var(--cinza-300);
+  color: var(--cinza-400);
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+

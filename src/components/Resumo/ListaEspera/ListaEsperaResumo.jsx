@@ -27,11 +27,13 @@ const ListaEsperaResumo = ({ pacienteId }) => {
           filters.push(`pacienteId=${pacienteFilter}`);
         }
         filters.push('status=1');
+
         const filterString = filters.length > 0 ? filters.join(',') : null;
 
         const response = await GetListaEspera({
           filter: filterString,
           orderBy: 'dataEntrada',
+          pageSize: 5,
         });
         setListaEspera(response?.items || response || []);
       } catch (error) {

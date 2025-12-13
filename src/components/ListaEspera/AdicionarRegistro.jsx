@@ -8,7 +8,7 @@ import Especialidade from '../Especialidade/Especialidade';
 const AdicionarRegistro = ({ atualizarRegistros, especialidade }) => {
   const [listaEspera, setListaEspera] = useState({
     pacienteId: '',
-    dataEntrada: '',
+    dataEntrada: new Date().toISOString().split('T')[0],
     status: 1,
     especialidade: especialidade || localStorage.getItem('selectedSpecialty') || 1,
     prioridade: 1,
@@ -143,7 +143,7 @@ const AdicionarRegistro = ({ atualizarRegistros, especialidade }) => {
       setNomePesquisa('');
       setListaEspera({
         pacienteId: '',
-        dataEntrada: '',
+        dataEntrada: new Date().toISOString().split('T')[0],
         status: 1,
         especialidade: especialidade || localStorage.getItem('selectedSpecialty') || 1,
         prioridade: 1,

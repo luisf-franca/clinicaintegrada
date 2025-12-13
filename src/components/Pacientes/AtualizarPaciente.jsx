@@ -61,9 +61,30 @@ const AtualizarPaciente = ({ pacienteInicial, onSuccess }) => {
                 type="text"
                 name="telefone"
                 value={paciente.telefone}
-                onChange={handleInputChange}
+                onChange={(e) => {
+                  const value = e.target.value.replace(/\D/g, "");
+
+                  let maskedValue = value;
+
+                  if (value.length > 2) {
+                    maskedValue = `(${value.slice(0, 2)}) ${value.slice(2)}`;
+                  }
+                  if (value.length > 7) {
+                    maskedValue = `(${value.slice(0, 2)}) ${value.slice(2, 7)}-${value.slice(7, 11)}`;
+                  }
+
+                  handleInputChange({
+                    target: {
+                      name: "telefone",
+                      value: maskedValue
+                    }
+                  });
+                }}
+                maxLength={15}
+              // placeholder="(99) 99999-9999"
               />
             </div>
+
 
             <div className="form-group">
               <label htmlFor="idade">Idade</label>
@@ -132,16 +153,27 @@ const AtualizarPaciente = ({ pacienteInicial, onSuccess }) => {
             </div>
 
             <div className="form-group">
-              <label htmlFor="parentescoResponsavel">
-                Parentesco do Responsável
-              </label>
-              <input
+              <label htmlFor="parentescoResponsavel">Parentesco</label>
+              <select
                 id="parentescoResponsavel"
-                type="text"
                 name="parentescoResponsavel"
-                value={paciente.parentescoResponsavel || ''}
+                value={paciente.parentescoResponsavel}
                 onChange={handleInputChange}
-              />
+              >
+                <option value="">Selecione</option>
+                <option value="Pai">Pai</option>
+                <option value="Mãe">Mãe</option>
+                <option value="Filho(a)">Filho(a)</option>
+                <option value="Cônjuge">Cônjuge</option>
+                <option value="Companheiro(a)">Companheiro(a)</option>
+                <option value="Irmão(ã)">Irmão(ã)</option>
+                <option value="Avô(ó)">Avô(ó)</option>
+                <option value="Neto(a)">Neto(a)</option>
+                <option value="Tio(a)">Tio(a)</option>
+                <option value="Sobrinho(a)">Sobrinho(a)</option>
+                <option value="Primo(a)">Primo(a)</option>
+                <option value="Outro">Outro</option>
+              </select>
             </div>
 
             <div className="form-group">

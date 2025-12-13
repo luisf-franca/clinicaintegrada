@@ -47,27 +47,17 @@ const PacientesResumo = ({
     navigate('/pacientes?view=add');
   };
 
-
-  // Helper Component para o Stepper
   const PatientStepper = ({ etapa }) => {
     const steps = [
       { id: 1, label: 'Cadastro' },
       { id: 2, label: 'Lista de Espera' },
       { id: 3, label: 'Agendamento' },
-      { id: 4, label: 'Consulta' },
+      { id: 4, label: 'Consulta' }
     ];
 
-    // Lógica simples: se etapa atual >= step.id, então está ativo (exceto cancelados/específicos se houver, mas seguindo o pedido linear)
-    // Ajuste para etapa 5 (Cancelada) talvez tratar como step 2 ou visual específico. 
-    // O usuario pediu: "Se o paciente estiver na etapa 2, as etapas 1 e 2 ficam vermelhas".
-    // Vamos assumir progressão linear por ID para 1, 2, 3, 4.
-    // Se etapa for 5, vou deixar como se fosse 2 (ainda na lista/pendente) ou algo assim, mas por enquanto linear.
-
     const getStepClass = (stepId) => {
-      // Se etapa 5 (Cancelada), vamos considerar que parou em lista de espera ou similar, ou tratar a parte.
-      // Mas para o básico:
       let current = etapa;
-      if (etapa === 5) current = 2; // Treat canceled as waiting list level for visual or just stop. 
+      if (etapa === 5) current = 1;
 
       if (current >= stepId) return 'step-item active';
       return 'step-item';

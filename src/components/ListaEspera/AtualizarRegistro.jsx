@@ -25,7 +25,7 @@ const AtualizarRegistro = ({
       });
 
       setListaEspera({
-        dataEntrada: formatDate(registroInicial.dataEntrada),
+        dataEntrada: formatDate(registroInicial.dataEntrada) || new Date().toISOString().split('T')[0],
         dataSaida: formatDate(registroInicial.dataSaida),
         pacienteId: registroInicial.pacienteId,
         prioridade: registroInicial.prioridadeInt,

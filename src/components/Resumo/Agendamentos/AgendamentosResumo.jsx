@@ -49,8 +49,9 @@ const AgendamentosResumo = ({ pacienteId }) => {
         }
 
         const filterString = filters.join(',');
-        const response = await GetAgendamentos({ filter: filterString });
-        //console.log('Agendamentos:', response);
+        console.log(filters);
+        const response = await GetAgendamentos({ filter: filterString, pageSize: 5 });
+        console.log('Agendamentos:', response);
         setAgendamentos(response);
       } catch (error) {
         console.error('Erro ao buscar agendamentos:', error);
@@ -105,7 +106,7 @@ const AgendamentosResumo = ({ pacienteId }) => {
           <thead>
             <tr>
               <th>Nome</th>
-              <th>Horário</th>
+              <th>Data/Hora</th>
               <th>Sala</th>
               <th>Especialidade</th>
             </tr>
@@ -121,7 +122,7 @@ const AgendamentosResumo = ({ pacienteId }) => {
                     </td>
                     <td>
                       {item.dataHoraInicio
-                        ? new Date(item.dataHoraInicio).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                        ? new Date(item.dataHoraInicio).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })
                         : '-'}
                     </td>
                     <td>{item.sala}</td>

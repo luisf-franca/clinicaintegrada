@@ -35,6 +35,41 @@
   color: var(--branco);
 }
 
+/* Specific small buttons for lists */
+.btn-add-small,
+.btn-delete-small {
+  padding: 0.4rem 0.8rem;
+  font-size: 0.85rem;
+  border-radius: 4px;
+  cursor: pointer;
+  border: none;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.btn-add-small {
+  background-color: var(--roxo);
+  color: #fff;
+}
+
+.btn-add-small:hover {
+  background-color: #5f0f58;
+  /* Darker roxo manually or filter */
+}
+
+.btn-delete-small {
+  background-color: transparent;
+  color: var(--vermelho-escuro);
+  border: 1px solid var(--cinza-300);
+}
+
+.btn-delete-small:hover {
+  background-color: var(--vermelho-escuro);
+  color: #fff;
+  border-color: var(--vermelho-escuro);
+}
+
+
 /* Container */
 .form-container {
   background: var(--branco);
@@ -127,4 +162,133 @@
 .form-actions .btn-secondary:hover {
   background: var(--vermelho-escuro);
   color: var(--branco);
+}
+
+/* --- Manage Team Specifics --- */
+
+.manage-team-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+@media (max-width: 768px) {
+  .manage-team-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.section-card {
+  background: var(--branco);
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 1px solid var(--border-color, #e0e0e0);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  display: flex;
+  flex-direction: column;
+}
+
+.section-card h3 {
+  font-size: 1.1rem;
+  color: var(--roxo);
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--background-page);
+}
+
+.member-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+  /* Space for scrollbar */
+}
+
+/* Scrollbar styling for member list */
+.member-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.member-list::-webkit-scrollbar-thumb {
+  background-color: var(--cinza-400);
+  border-radius: 3px;
+}
+
+.member-list::-webkit-scrollbar-track {
+  background-color: var(--cinza-200);
+}
+
+
+.member-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--background-page, #f9f9f9);
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  transition: all 0.2s;
+}
+
+.member-item:hover {
+  background: var(--branco);
+  border-color: var(--roxo-claro, #d1c4e9);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  transform: translateY(-1px);
+}
+
+.member-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.member-name {
+  font-weight: 600;
+  color: var(--texto-primary, #333);
+}
+
+.member-ra {
+  font-size: 0.85rem;
+  color: var(--cinza-600);
+}
+
+/* Search Results Look */
+.search-results {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.result-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--branco);
+  padding: 0.75rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-color, #eee);
+  transition: background-color 0.2s;
+}
+
+.result-item:hover {
+  background-color: var(--background-hover, #f0f0f0);
+}
+
+.form-inline {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-end;
+}
+
+@media (max-width: 500px) {
+  .form-inline {
+    flex-direction: column;
+    align-items: stretch;
+  }
 }

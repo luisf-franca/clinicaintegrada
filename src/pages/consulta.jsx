@@ -12,10 +12,7 @@ import GetAgendamentoById from '../functions/Agendamentos/GetAgendamentoById';
 import GetConsultaById from '../functions/Consultas/GetConsultaById';
 import GetConsultas from '../functions/Consultas/GetConsultas';
 import FormatarDateTimeToLocal from '../functions/FormatarDateTime/FormatDateTimeToLocal';
-import IniciarTriagem from '../functions/Consultas/IniciarTriagem';
-import FinalizarTriagem from '../functions/Consultas/FinalizarTriagem';
-import IniciarConsulta from '../functions/Consultas/IniciarConsulta';
-import FinalizarConsulta from '../functions/Consultas/FinalizarConsulta';
+import PutConsultaObservacoesById from '../functions/Consultas/PutConsultaObservacoesById';
 
 const Consulta = () => {
   const location = useLocation();
@@ -23,12 +20,11 @@ const Consulta = () => {
     localStorage.getItem('selectedSpecialty') || 1,
   );
 
-  // --- ESTADOS DE DADOS E PAGINAÇÃO ---
   const [registros, setRegistros] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize] = useState(10);
-  const [isLoading, setIsLoading] = useState(false); // [Adicionado] Igual PesquisarSalas
+  const [isLoading, setIsLoading] = useState(false);
 
   const [activeTab, setActiveTab] = useState(0);
   const [agendamentoSelecionado, setAgendamentoSelecionado] = useState({});
@@ -36,10 +32,9 @@ const Consulta = () => {
   const [selectedRowId, setSelectedRowId] = useState(null);
   const [filtrosAtuais, setFiltrosAtuais] = useState({});
 
-  // ESTADOS DE CONTROLE
   const [dataSelecionada, setDataSelecionada] = useState(null);
+  const [localObservacao, setLocalObservacao] = useState('');
 
-  // Variável computada para total de páginas
   const totalPages = Math.ceil(totalCount / pageSize);
 
   useEffect(() => {
@@ -88,9 +83,8 @@ const Consulta = () => {
     return `${year}-${month}-${day}`;
   };
 
-  // --- FETCH DADOS CORRIGIDO ---
   const fetchConsultas = async (page, filters = {}) => {
-    setIsLoading(true); // Inicia loading
+    setIsLoading(true);
     try {
       const options = {
         page: page,
@@ -115,8 +109,6 @@ const Consulta = () => {
 
       const response = await GetConsultas(options);
 
-      // [CORREÇÃO] Verifica estrutura da resposta para extrair lista e total
-      // Adapte 'data' ou 'items' conforme o retorno real do seu Back-end
       const lista = response.data || response.items || (Array.isArray(response) ? response : []);
       const total = response.totalCount || (Array.isArray(response) ? response.length : 0);
 
@@ -125,9 +117,9 @@ const Consulta = () => {
 
     } catch (error) {
       console.error('Erro ao buscar consultas:', error);
-      setRegistros([]); // Garante lista vazia em erro
+      setRegistros([]);
     } finally {
-      setIsLoading(false); // Finaliza loading
+      setIsLoading(false);
     }
   };
 
@@ -136,13 +128,18 @@ const Consulta = () => {
     fetchConsultas(1, filtrosAtuais);
   }, [selectedSpecialty, dataSelecionada]);
 
+  useEffect(() => {
+    if (consultaSelecionada && consultaSelecionada.id) {
+      setLocalObservacao(consultaSelecionada.observacao || '');
+    }
+  }, [consultaSelecionada]);
+
   const handlePesquisar = (novosFiltros) => {
     setFiltrosAtuais(novosFiltros);
     setCurrentPage(1);
     fetchConsultas(1, novosFiltros);
   };
 
-  // [CORREÇÃO] Lógica simplificada igual PesquisarSalas
   const handleMudarPagina = (novaPagina) => {
     if (novaPagina >= 1 && novaPagina <= totalPages) {
       setCurrentPage(novaPagina);
@@ -170,6 +167,7 @@ const Consulta = () => {
     try {
       const consultaResponse = await GetConsultaById(consultaId);
       setConsultaSelecionada(consultaResponse.data);
+      setLocalObservacao(consultaResponse.data.observacao || ''); // [NOVO] Inicializa observação
 
       if (agendamentoId) {
         const agendamentoResponse = await GetAgendamentoById(agendamentoId);
@@ -238,6 +236,33 @@ const Consulta = () => {
     }
   };
 
+  const handleSalvarObservacao = async () => {
+    if (!consultaSelecionada.id) return;
+
+    try {
+      const response = await PutConsultaObservacoesById(consultaSelecionada.id, localObservacao);
+
+      if (response && response.succeeded && response.data) {
+        setConsultaSelecionada(prev => ({ ...prev, ...response.data }));
+        setLocalObservacao(response.data.observacao || '');
+      } else {
+        setConsultaSelecionada(prev => ({ ...prev, observacao: localObservacao }));
+      }
+
+    } catch (error) {
+      console.error('Erro ao salvar observação:', error);
+      alert('Erro ao salvar observação. Tente novamente.');
+    }
+  };
+
+  const getButtonText = () => {
+    if (consultaSelecionada.status === 'Concluída' || consultaSelecionada.status === 'Concluida') {
+      return 'Atualizar Consulta';
+    }
+    return 'Finalizar Consulta';
+  };
+
+
   return (
     <div className="consulta container">
       <div className="consulta-hgroup">
@@ -268,7 +293,6 @@ const Consulta = () => {
             <div className="consulta-main-area">
               <div className="consulta-list-card">
                 <div className="table-container">
-                  {/* [ADICIONADO] Loading State igual PesquisarSalas */}
                   {isLoading ? (
                     <div className="loading-state">Carregando consultas...</div>
                   ) : (
@@ -309,7 +333,6 @@ const Consulta = () => {
                         </tbody>
                       </table>
 
-                      {/* [CORREÇÃO] Paginação renderizada condicionalmente igual PesquisarSalas */}
                       {totalPages > 1 && (
                         <div className="pagination">
                           <button
@@ -339,7 +362,6 @@ const Consulta = () => {
           </div>
         )}
 
-        {/* MANTIVE O TAB 1 (DETALHES) INALTERADO POIS NÃO AFETA A PAGINAÇÃO */}
         {activeTab === 1 && (
           <div className="consulta-detalhes-view">
             <div className="detalhes-toolbar">
@@ -420,12 +442,22 @@ const Consulta = () => {
                     <h3><span className="icon">📝</span> Observações e Prontuário</h3>
                     <div className="textarea-wrapper">
                       <textarea
-                        readOnly
-                        value={consultaSelecionada.observacao || ''}
+                        value={localObservacao}
+                        onChange={(e) => {
+                          const newVal = e.target.value;
+                          setLocalObservacao(newVal);
+                        }}
                         placeholder="Nenhuma observação registrada para esta consulta."
-                        className="styled-textarea"
+                        className="styled-textarea editable"
                         rows={5}
                       />
+                      <button
+                        className="btn-salvar-obs"
+                        onClick={handleSalvarObservacao}
+                        disabled={localObservacao === (consultaSelecionada.observacao || '')}
+                      >
+                        {getButtonText()}
+                      </button>
                     </div>
                   </div>
 

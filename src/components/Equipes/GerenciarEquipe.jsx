@@ -122,100 +122,114 @@ const GerenciarEquipe = ({ equipe, onVoltar }) => {
   return (
     <div className="form-container flat">
       {/* O Título pode ser dinâmico para indicar se é uma criação ou edição */}
-      <h2>Gerenciar Membros da Equipe: {equipeAtual.nome}</h2>
-      <p>
-        <strong>Especialidade:</strong> {equipeAtual.especialidade}
-      </p>
+      {/* Título Centralizado com Especialidade */}
+      <h2 style={{ textAlign: 'center', marginBottom: '2rem' }}>
+        Gerenciar Membros Equipe - {equipeAtual.especialidade}
+      </h2>
 
-      {/* Seção para Adicionar Novos Membros */}
-      <div className="adicionar-profissional">
-        <h3>Adicionar Profissional</h3>
-        <div className="form-inline">
-          <div className="form-group">
-            <label>Tipo</label>
-            <select
-              value={tipoBusca}
-              onChange={(e) => setTipoBusca(e.target.value)}
-            >
-              <option value="">Todos</option>
-              <option value="1">Estagiário</option>
-              <option value="2">Professor</option>
-            </select>
-          </div>
-          <div className="form-group" style={{ flexGrow: 1 }}>
-            <label>Pesquisar por nome</label>
-            <input
-              type="text"
-              placeholder="Digite no mínimo 3 letras..."
-              value={termoBusca}
-              onChange={(e) => setTermoBusca(e.target.value)}
-            />
-          </div>
-        </div>
+      <div className="manage-team-grid">
+        {/* Left Column: Add New Members */}
+        <section className="section-card">
+          <h3>Adicionar Profissional</h3>
+          <div className="form-inline">
+            <div className="form-group" style={{ flexGrow: 1 }}>
+              <label>Pesquisar por nome</label>
+              <input
+                type="text"
+                placeholder="Nome (min. 3 letras)"
+                value={termoBusca}
+                onChange={(e) => setTermoBusca(e.target.value)}
+              />
+            </div>
 
-        {/* Lista de Resultados da Busca */}
-        <div className="search-results">
-          {isBuscando && <p>Buscando...</p>}
-          {!isBuscando &&
-            debouncedTermoBusca.length >= 3 &&
-            resultadosBusca.length === 0 && (
-              <p>Nenhum profissional encontrado.</p>
+            <div className="form-group" style={{ minWidth: '120px' }}>
+              <label>Tipo</label>
+              <select
+                value={tipoBusca}
+                onChange={(e) => setTipoBusca(e.target.value)}
+              >
+                <option value="">Todos</option>
+                <option value="1">Estagiário</option>
+                <option value="2">Professor</option>
+              </select>
+            </div>
+
+          </div>
+
+          {/* Search Results */}
+          <div className="search-results">
+            {isBuscando && <p style={{ color: 'var(--cinza-600)', fontStyle: 'italic' }}>Buscando...</p>}
+            {!isBuscando &&
+              debouncedTermoBusca.length >= 3 &&
+              resultadosBusca.length === 0 && (
+                <p style={{ color: 'var(--cinza-600)', fontStyle: 'italic' }}>Nenhum profissional encontrado.</p>
+              )}
+            {resultadosBusca.map((prof) => (
+              <div key={prof.id} className="result-item">
+                <div className="member-info">
+                  <span className="member-name">{prof.nome}</span>
+                  <span className="member-ra">{prof.ra}</span>
+                </div>
+                <button
+                  onClick={() => handleAdicionarProfissional(prof.id)}
+                  className="btn-add-small"
+                  title="Adicionar à equipe"
+                >
+                  Adicionar
+                </button>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Right Column: Current Team Members */}
+        <section className="section-card">
+          <h3>Membros da Equipe</h3>
+
+          <div className="member-list">
+            <h4 style={{ fontSize: '0.95rem', color: 'var(--cinza-600)', marginBottom: '0.5rem', marginTop: '1rem' }}>Estagiários</h4>
+            {equipeAtual.estagiarios?.length > 0 ? (
+              equipeAtual.estagiarios.map((est) => (
+                <div key={est.id} className="member-item">
+                  <div className="member-info">
+                    <span className="member-name">{est.nome}</span>
+                    <span className="member-ra">RA: {est.ra}</span>
+                  </div>
+                  <button
+                    onClick={() => handleRemoverProfissional(est.id)}
+                    className="btn-delete-small"
+                    title="Remover da equipe"
+                  >
+                    Remover
+                  </button>
+                </div>
+              ))
+            ) : (
+              <p style={{ color: 'var(--cinza-500)', fontSize: '0.9rem' }}>Nenhum estagiário.</p>
             )}
-          {resultadosBusca.map((prof) => (
-            <div key={prof.id} className="result-item">
-              <span>
-                {prof.nome} - {prof.ra}
-              </span>
-              <button
-                onClick={() => handleAdicionarProfissional(prof.id)}
-                className="btn-add-small"
-              >
-                Adicionar
-              </button>
-            </div>
-          ))}
-        </div>
-      </div>
 
-      {/* Listas de Membros Atuais */}
-      <div className="equipe-membros">
-        <h3>Estagiários na Equipe</h3>
-        {equipeAtual.estagiarios?.length > 0 ? (
-          equipeAtual.estagiarios.map((est) => (
-            <div key={est.id} className="membro-item">
-              <span>
-                {est.nome} - {est.ra}
-              </span>
-              <button
-                onClick={() => handleRemoverProfissional(est.id)}
-                className="btn-delete-small"
-              >
-                Remover
-              </button>
-            </div>
-          ))
-        ) : (
-          <p>Nenhum estagiário na equipe.</p>
-        )}
-
-        <h3>Professores na Equipe</h3>
-        {equipeAtual.professores?.length > 0 ? (
-          equipeAtual.professores.map((prof) => (
-            <div key={prof.id} className="membro-item">
-              <span>
-                {prof.nome} - {prof.ra}
-              </span>
-              <button
-                onClick={() => handleRemoverProfissional(prof.id)}
-                className="btn-delete-small"
-              >
-                Remover
-              </button>
-            </div>
-          ))
-        ) : (
-          <p>Nenhum professor na equipe.</p>
-        )}
+            <h4 style={{ fontSize: '0.95rem', color: 'var(--cinza-600)', marginBottom: '0.5rem', marginTop: '1.5rem' }}>Professores</h4>
+            {equipeAtual.professores?.length > 0 ? (
+              equipeAtual.professores.map((prof) => (
+                <div key={prof.id} className="member-item">
+                  <div className="member-info">
+                    <span className="member-name">{prof.nome}</span>
+                    <span className="member-ra">Registro: {prof.ra}</span>
+                  </div>
+                  <button
+                    onClick={() => handleRemoverProfissional(prof.id)}
+                    className="btn-delete-small"
+                    title="Remover da equipe"
+                  >
+                    Remover
+                  </button>
+                </div>
+              ))
+            ) : (
+              <p style={{ color: 'var(--cinza-500)', fontSize: '0.9rem' }}>Nenhum professor.</p>
+            )}
+          </div>
+        </section>
       </div>
 
       <div className="form-actions">

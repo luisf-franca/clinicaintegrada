@@ -78,13 +78,33 @@ const AdicionarProfissional = ({ onVoltar }) => {
         </div>
 
         <div className="form-group">
-          <label>Telefone *</label>
+          <label htmlFor="telefone">Telefone</label>
           <input
-            type="tel"
+            id="telefone"
+            type="text"
             name="telefone"
             value={formData.telefone}
-            onChange={handleInputChange}
-            placeholder="(00) 00000-0000"
+            onChange={(e) => {
+              const value = e.target.value.replace(/\D/g, "");
+
+              let maskedValue = value;
+
+              if (value.length > 2) {
+                maskedValue = `(${value.slice(0, 2)}) ${value.slice(2)}`;
+              }
+              if (value.length > 7) {
+                maskedValue = `(${value.slice(0, 2)}) ${value.slice(2, 7)}-${value.slice(7, 11)}`;
+              }
+
+              handleInputChange({
+                target: {
+                  name: "telefone",
+                  value: maskedValue
+                }
+              });
+            }}
+            maxLength={15}
+            placeholder="(99) 99999-9999"
           />
         </div>
 

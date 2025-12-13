@@ -67,7 +67,7 @@ const AdicionarSala = ({ onVoltar }) => {
         </div>
 
         <div className="form-group">
-          <label>Capacidade *</label>
+          <label>Capacidade Equipes *</label>
           <input
             type="number"
             name="capacidade"
