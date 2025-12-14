@@ -7,7 +7,7 @@ import GetAgendamentos from '../../../functions/Agendamentos/GetAgendamentos';
 import FormatarDateTimeToLocal from '../../../functions/FormatarDateTime/FormatDateTimeToLocal';
 
 const AgendamentosResumo = ({ pacienteId }) => {
-  const [intervalo, setIntervalo] = useState('hoje');
+  const [intervalo, setIntervalo] = useState('semana');
   const [agendamentos, setAgendamentos] = useState([]);
   const [pacienteFilter, setPacienteFilter] = useState(pacienteId);
   const navigate = useNavigate();
@@ -90,7 +90,7 @@ const AgendamentosResumo = ({ pacienteId }) => {
       </div>
 
       <div className="agendamentos-resumo__intervalo">
-        {['hoje', 'semana', 'mes', 'sempre'].map((opcao) => (
+        {['hoje', 'semana', 'mes'].map((opcao) => (
           <button
             key={opcao}
             onClick={() => setIntervalo(opcao)}

@@ -166,11 +166,13 @@ const Consulta = () => {
 
     try {
       const consultaResponse = await GetConsultaById(consultaId);
+      console.log(consultaResponse);
       setConsultaSelecionada(consultaResponse.data);
       setLocalObservacao(consultaResponse.data.observacao || ''); // [NOVO] Inicializa observação
 
       if (agendamentoId) {
         const agendamentoResponse = await GetAgendamentoById(agendamentoId);
+        console.log(agendamentoResponse);
         setAgendamentoSelecionado(agendamentoResponse.data);
       } else {
         setAgendamentoSelecionado({
@@ -188,53 +190,7 @@ const Consulta = () => {
     }
   };
 
-  const renderAcoesDetalhes = () => {
-    if (Object.keys(consultaSelecionada).length === 0) return null;
 
-    const { status, tipo, id } = consultaSelecionada;
-
-    if (tipo === 1) {
-      if (status === 'Agendada') return <div className="acoes-container"><button className="btn-action btn-iniciar-triagem" onClick={(e) => handleAction(e, 'iniciar-triagem', id)}>Iniciar Triagem</button></div>;
-      if (status === 'Triagem') return <div className="acoes-container"><button className="btn-action btn-finalizar-triagem" onClick={(e) => handleAction(e, 'finalizar-triagem', id)}>Finalizar Triagem</button></div>;
-      if (status === 'AguardandoConsulta') return <div className="acoes-container"><button className="btn-action btn-iniciar-consulta" onClick={(e) => handleAction(e, 'iniciar-consulta', id)}>Iniciar Consulta</button></div>;
-      if (status === 'EmAndamento') return <div className="acoes-container"><button className="btn-action btn-finalizar-consulta" onClick={(e) => handleAction(e, 'finalizar-consulta', id)}>Finalizar Consulta</button></div>;
-    }
-    if (tipo === 2) {
-      if (status === 'Agendada') return <div className="acoes-container"><button className="btn-action btn-iniciar-consulta" onClick={(e) => handleAction(e, 'iniciar-consulta', id)}>Iniciar Consulta</button></div>;
-      if (status === 'EmAndamento') return <div className="acoes-container"><button className="btn-action btn-finalizar-consulta" onClick={(e) => handleAction(e, 'finalizar-consulta', id)}>Finalizar Consulta</button></div>;
-    }
-    return null;
-  };
-
-  const handleAction = async (event, action, consultaId) => {
-    event.stopPropagation();
-    try {
-      switch (action) {
-        case 'iniciar-triagem': await IniciarTriagem(consultaId); break;
-        case 'finalizar-triagem': await FinalizarTriagem(consultaId); break;
-        case 'iniciar-consulta': await IniciarConsulta(consultaId); break;
-        case 'finalizar-consulta': await FinalizarConsulta(consultaId); break;
-        default: console.log(`Ação desconhecida: ${action}`); return;
-      }
-
-      if (selectedRowId === consultaId) {
-        try {
-          const [agendamentoResponse, consultaResponse] = await Promise.all([
-            GetAgendamentoById(agendamentoSelecionado.id),
-            GetConsultaById(consultaId),
-          ]);
-          setAgendamentoSelecionado(agendamentoResponse.data);
-          setConsultaSelecionada(consultaResponse.data);
-        } catch (error) {
-          console.error('Erro ao recarregar dados:', error);
-        }
-      }
-      handleAtualizarLista();
-    } catch (error) {
-      console.error(`Erro na ação ${action}:`, error);
-      alert(`Erro ao processar ação. Tente novamente.`);
-    }
-  };
 
   const handleSalvarObservacao = async () => {
     if (!consultaSelecionada.id) return;
@@ -256,10 +212,13 @@ const Consulta = () => {
   };
 
   const getButtonText = () => {
-    if (consultaSelecionada.status === 'Concluída' || consultaSelecionada.status === 'Concluida') {
-      return 'Atualizar Consulta';
+    if (consultaSelecionada.status === 'Agendada' || consultaSelecionada.status === 1) {
+      return 'Iniciar Consulta';
     }
-    return 'Finalizar Consulta';
+    if (consultaSelecionada.status === 'EmAndamento' || consultaSelecionada.status === 'Em Andamento' || consultaSelecionada.status === 4) {
+      return 'Finalizar Consulta';
+    }
+    return 'Atualizar Observações';
   };
 
 
@@ -389,9 +348,7 @@ const Consulta = () => {
                       <h2>{renderValue(consultaSelecionada.paciente?.nome)}</h2>
                       <span className="meta-label">ID Paciente: {renderValue(consultaSelecionada.paciente?.id)}</span>
                     </div>
-                    <div className="actions-wrapper">
-                      {renderAcoesDetalhes()}
-                    </div>
+
                   </div>
 
                   <hr className="divider full-width" />
@@ -454,7 +411,7 @@ const Consulta = () => {
                       <button
                         className="btn-salvar-obs"
                         onClick={handleSalvarObservacao}
-                        disabled={localObservacao === (consultaSelecionada.observacao || '')}
+                        disabled={localObservacao === (consultaSelecionada.observacao || '') && consultaSelecionada.status !== 'Agendada' && consultaSelecionada.status !== 1 && consultaSelecionada.status !== 'EmAndamento' && consultaSelecionada.status !== 4}
                       >
                         {getButtonText()}
                       </button>
