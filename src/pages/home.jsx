@@ -12,12 +12,14 @@ import RelatorioResumo from '../components/Resumo/Relatorios/RelatorioResumo';
 
 // FUNCTIONS
 import GetPacientes from '../functions/Pacientes/GetPacientes';
+import { decodeToken } from '../services/authUtils';
 
 const Home = () => {
   const [activeTab, setActiveTab] = useState('inicio');
   const [pacientes, setPacientes] = useState([]);
   const [pacienteEtapa, setPacienteEtapa] = useState(null);
   const [pacienteSelecionadoId, setPacienteSelecionadoId] = useState(null);
+  const [userName, setUserName] = useState('Usuário');
 
   // 2. Envolva a função com useCallback
   const handlePesquisarPacientes = useCallback(async (filtroNome) => {
@@ -34,9 +36,17 @@ const Home = () => {
     }
   }, []);
 
-  // Carregar pacientes iniciais
+  // Carregar dados iniciais e nome do usuário
   useEffect(() => {
     handlePesquisarPacientes('');
+
+    const token = localStorage.getItem('token');
+    if (token) {
+      const decoded = decodeToken(token);
+      if (decoded && decoded.usuario_nome) {
+        setUserName(decoded.usuario_nome);
+      }
+    }
   }, [handlePesquisarPacientes]);
 
   return (
@@ -62,8 +72,8 @@ const Home = () => {
         {activeTab === 'inicio' && (
           <>
             <div className="welcome-header">
-              <h2>Bem-vindo(a), Usuário!</h2>
-              <p>Tenha um ótimo dia de trabalho.</p>
+              <h2>Bem-vindo(a), {userName}!</h2>
+              <p>Tenha um ótimo dia de trabalho. 😊</p>
             </div>
             <div className="search-hero-container">
               <PacientesResumo

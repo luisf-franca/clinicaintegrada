@@ -151,6 +151,8 @@ const Agendamento = () => {
 
         const agendamentosRaw = await GetAgendamentos({ filter: filters.join(',') });
 
+        console.log(agendamentosRaw);
+
         // Apenas atualiza o estado se o componente ainda estiver montado/ativo com esses props
         if (isActive) {
           // Chamada da função extraída
@@ -171,27 +173,22 @@ const Agendamento = () => {
   }, [selectedSpecialty, reloadAgendamentos, selectedSala, tipo, status, processAgendamentosToSlots]);
 
 
-  // ### MELHORIA DE PERFORMANCE ###
-  // useMemo evita que a lista de dias seja recalculada a cada renderização.
   const daysForWeek = useMemo(() => {
     const today = new Date();
-    // Ajusta o início da semana para o dia atual, deslocado pela currentWeek
-    // REMOVIDO: - today.getDay() para que comece HOJE e não no Domingo
-    const startOfWeek = new Date(today.setDate(today.getDate() + currentWeek * 7));
+    // Calcula o domingo da semana alvo diretamente
+    const startDay = new Date(today);
+    startDay.setDate(today.getDate() - today.getDay() + (currentWeek * 7));
 
-    const days = [];
-    for (let i = 0; i < 7; i++) {
-      const day = new Date(startOfWeek);
-      day.setDate(startOfWeek.getDate() + i);
-      days.push({
-        date: day,
-        label: day.toLocaleDateString('pt-BR', {
-          day: '2-digit',
-          month: '2-digit',
-        }),
-      });
-    }
-    return days;
+    // Gera o array de 7 dias
+    return Array.from({ length: 7 }, (_, i) => {
+      const date = new Date(startDay);
+      date.setDate(startDay.getDate() + i);
+
+      return {
+        date,
+        label: date.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }),
+      };
+    });
   }, [currentWeek]);
 
 

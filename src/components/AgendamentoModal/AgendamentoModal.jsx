@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
-import './AgendamentoModal.css'; // Importa o novo CSS
+import './AgendamentoModal.css';
 
 // COMPONENTS
 import PesquisarListaEspera from '../ListaEspera/PesquisarListaEspera';
 import PesquisarEquipes from '../Equipes/PesquisarEquipes';
 import SelectSala from '../Salas/SelectSala';
 import Especialidade from '../Especialidade/Especialidade';
+import CriarPacienteAgendamento from '../Pacientes/CriarPacienteAgendamento'; // Novo componente
 
 // FUNCTIONS
 import CreateAgendamento from '../../functions/Agendamentos/CreateAgendamento';
@@ -18,19 +19,23 @@ const AgendamentoModal = ({
   atualizarRegistros,
 }) => {
   const [step, setStep] = useState(1);
-  const [reservarSala, setReservarSala] = useState(!!modalData.salaId);
-  const [registroListaEspera, setRegistroListaEspera] = useState(null);
+  const [mode, setMode] = useState('search'); // 'search' ou 'create-patient'
+
+  // Dados de Seleção (Separados para Feedback Visual)
+  const [pacienteSelecionado, setPacienteSelecionado] = useState(null);
   const [equipeSelecionada, setEquipeSelecionada] = useState(null);
 
+  // Estado do Formulário
+  const [reservarSala, setReservarSala] = useState(!!modalData.salaId);
   const [requestData, setRequestData] = useState({
     agendamento: {
       dataHoraInicio: modalData.startSlot,
       dataHoraFim: modalData.endSlot,
-      tipo: 1,
+      tipo: 1, // 1: Triagem, 2: Consulta
       status: 1,
-      pacienteId: modalData.pacienteId || '',
-      nomePaciente: '',
-      salaId: modalData.salaId || '',
+      pacienteId: modalData.pacienteId || null,
+      nomePaciente: '', // Caso seja avulso sem ID (legado, mas mantemos)
+      salaId: modalData.salaId || null,
     },
     consulta: {
       observacao: '',
@@ -39,219 +44,101 @@ const AgendamentoModal = ({
     },
   });
 
-  const handleStateChange = (section, field, value) => {
-    setRequestData((prev) => ({
+  // Helpers de Data
+  const formatTime = (isoString) => {
+    if (!isoString) return '';
+    return new Date(isoString).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+  };
+
+  const formatDate = (isoString) => {
+    if (!isoString) return '';
+    return new Date(isoString).toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
+  };
+
+  // --- Handlers de Paciente ---
+
+  const handlePacienteSelect = (registro) => {
+    // registro vem da Lista de Espera
+    setPacienteSelecionado({
+      id: registro.pacienteId || registro.id,
+      nome: registro.nome || registro.pacienteNome,
+      origem: 'Lista de Espera'
+    });
+
+    setRequestData(prev => ({
       ...prev,
-      [section]: { ...prev[section], [field]: value },
+      agendamento: { ...prev.agendamento, pacienteId: registro.pacienteId || registro.id }
     }));
   };
 
-  const handleRegistroListaEsperaChange = (registro) => {
-    setRegistroListaEspera(registro);
-    handleStateChange('agendamento', 'pacienteId', registro.pacienteId);
-    handleStateChange('agendamento', 'nomePaciente', '');
-  };
+  const handlePacienteCriado = (novoPaciente) => {
+    // Callback ajustado para receber os dados mapeados do filho
+    console.log("Paciente criado recebido:", novoPaciente); // Debug útil
 
-  const handleLimparRegistroListaEspera = () => {
-    setRegistroListaEspera(null);
-    handleStateChange('agendamento', 'pacienteId', '');
-  };
-
-  const handleNomeChange = (nome) => {
-    handleStateChange('agendamento', 'nomePaciente', nome);
-  };
-
-  const handleEquipeChange = (equipe) => {
-    setEquipeSelecionada(equipe);
-    handleStateChange('consulta', 'equipeId', equipe.id);
-    handleStateChange('agendamento', 'nomeEquipe', equipe.nome);
-  };
-
-  const handleLimparEquipe = () => {
-    setEquipeSelecionada(null);
-    handleStateChange('consulta', 'equipeId', '');
-    handleStateChange('agendamento', 'nomeEquipe', '');
-  };
-
-  const handleReservarSalaChange = (event) => {
-    const isChecked = event.target.checked;
-    setReservarSala(isChecked);
-    if (!isChecked) {
-      handleStateChange('agendamento', 'salaId', null);
-    }
-  };
-
-  const getDiaStringFromDateTime = (dateTime) => {
-    if (!dateTime) return '';
-    const dateObj = new Date(dateTime);
-    return dateObj.toLocaleDateString('pt-BR', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
+    setPacienteSelecionado({
+      id: novoPaciente.id,
+      nome: novoPaciente.nome,
+      origem: 'Novo Cadastro'
     });
+
+    setRequestData(prev => ({
+      ...prev,
+      agendamento: {
+        ...prev.agendamento,
+        pacienteId: novoPaciente.id // Garante o uso do ID retornado pela API
+      }
+    }));
+
+    setMode('search'); // Volta para visualização normal
   };
 
-  const formatDateTimeToLocal = (dateTimeString) => {
-    if (!dateTimeString) return '';
-    const dateObj = new Date(dateTimeString);
-    const hours = dateObj.getHours().toString().padStart(2, '0');
-    const minutes = dateObj.getMinutes().toString().padStart(2, '0');
-    return `${hours}:${minutes}`;
+  const handleRemoverPaciente = () => {
+    setPacienteSelecionado(null);
+    setRequestData(prev => ({
+      ...prev,
+      agendamento: { ...prev.agendamento, pacienteId: null }
+    }));
   };
 
-  const handlePostAgendamento = async () => {
+  // --- Handlers de Equipe ---
+
+  const handleEquipeSelect = (equipe) => {
+    setEquipeSelecionada(equipe);
+    setRequestData(prev => ({
+      ...prev,
+      consulta: { ...prev.consulta, equipeId: equipe.id }
+    }));
+  };
+
+  // --- Submissão ---
+
+  const handleSalvar = async () => {
     try {
       if (!requestData.consulta.equipeId) {
-        alert("Selecione uma equipe.");
+        alert("A seleção da equipe é obrigatória.");
         return;
       }
 
-      if (reservarSala && !requestData.agendamento.salaId) {
-        alert("Selecione uma sala ou desmarque a opção 'Reservar sala'.");
-        return;
-      }
-
-      // Cria um payload limpo para o request, convertendo os valores
       const payload = {
         ...requestData,
         agendamento: {
           ...requestData.agendamento,
           tipo: parseInt(requestData.agendamento.tipo, 10),
-          status: parseInt(requestData.agendamento.status, 10),
           pacienteId: requestData.agendamento.pacienteId || null,
-          nomePaciente: !requestData.agendamento.pacienteId ? requestData.agendamento.nomePaciente : undefined,
         },
         consulta: {
           ...requestData.consulta,
           especialidade: parseInt(requestData.consulta.especialidade, 10),
         }
       };
-      //console.log('Payload Criar Agendamento:', payload);
+
+      console.log("Payload enviado para agendamento:", payload);
       await CreateAgendamento(payload);
       atualizarRegistros();
       setIsModalOpen(false);
     } catch (error) {
-      console.error('Erro ao criar agendamento:', error);
-      alert('Erro ao criar agendamento. Verifique o console para mais detalhes.');
-    }
-  };
-
-  const renderStep = () => {
-    switch (step) {
-      case 1:
-        return (
-          <>
-            <div className="form-group">
-
-              <PesquisarListaEspera
-                especialidade={requestData.consulta.especialidade}
-                onSelectRegistro={handleRegistroListaEsperaChange}
-                registroSelecionado={registroListaEspera}
-                onLimparRegistro={handleLimparRegistroListaEspera}
-                onNomeChange={handleNomeChange}
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="especialidade">Especialidade</label>
-              <Especialidade
-                id="especialidade"
-                selectedSpecialty={requestData.consulta.especialidade || ''}
-                onSelectSpecialty={(value) => handleStateChange('consulta', 'especialidade', value)}
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="tipoAgendamento">Tipo</label>
-              <select
-                id="tipoAgendamento"
-                name="tipo"
-                value={requestData.agendamento.tipo}
-                onChange={(e) => handleStateChange('agendamento', 'tipo', e.target.value)}
-              >
-                <option value={1}>Triagem</option>
-                <option value={2}>Consulta</option>
-              </select>
-            </div>
-          </>
-        );
-
-      case 2:
-        return (
-          <>
-            <div className="form-group">
-
-              <PesquisarEquipes
-                especialidade={requestData.consulta.especialidade}
-                onSelectEquipe={handleEquipeChange}
-                equipeSelecionada={equipeSelecionada}
-                onLimparEquipe={handleLimparEquipe}
-              />
-            </div>
-
-            <div className="form-group checkbox-group">
-              <label
-                htmlFor="reservarSala"
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.5rem',
-                  cursor: 'pointer',
-                  userSelect: 'none',
-                }}
-              >
-                <input
-                  type="checkbox"
-                  id="reservarSala"
-                  checked={reservarSala}
-                  onChange={handleReservarSalaChange}
-                  style={{ display: 'none' }}
-                />
-                <span
-                  className="checkmark"
-                  style={{
-                    width: '20px',
-                    height: '20px',
-                    border: '1px solid #aaa',
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '1rem',
-                    background: reservarSala ? '#e6f7e6' : 'var(--branco)',
-                  }}
-                >
-                  {reservarSala ? '✔' : ''}
-                </span>
-                Reservar sala?
-              </label>
-            </div>
-
-            {reservarSala && (
-              <div className="form-group">
-                <label htmlFor="sala">Sala</label>
-                <SelectSala
-                  id="sala"
-                  initialSala={modalData.salaObj}
-                  onSelectSala={(value) => handleStateChange('agendamento', 'salaId', value)}
-                  selectedSala={requestData.agendamento.salaId}
-                />
-              </div>
-            )}
-
-            <div className="form-group">
-              <label htmlFor="observacoes">Observações</label>
-              <textarea
-                id="observacoes"
-                placeholder="Adicione observações relevantes..."
-                value={requestData.consulta.observacao || ''}
-                onChange={(e) => handleStateChange('consulta', 'observacao', e.target.value)}
-              />
-            </div>
-          </>
-        );
-      default:
-        return null;
+      console.error(error);
+      alert("Erro ao salvar agendamento.");
     }
   };
 
@@ -259,53 +146,176 @@ const AgendamentoModal = ({
 
   return ReactDOM.createPortal(
     <div className="overlay" onClick={() => setIsModalOpen(false)}>
-      <div className="agendar-modal" onClick={(e) => e.stopPropagation()}>
-        <hgroup>
+      <div className="agendar-modal" onClick={e => e.stopPropagation()}>
+
+        {/* HEADER */}
+        <div className="modal-header">
           <h3>Agendar Horário</h3>
-          <div className="time-range">
-            <span>{getDiaStringFromDateTime(requestData.agendamento.dataHoraInicio)}</span>
-            <span>Início: {formatDateTimeToLocal(requestData.agendamento.dataHoraInicio)}</span>
-            <span>Término: {formatDateTimeToLocal(requestData.agendamento.dataHoraFim)}</span>
+          <div className="time-badge">
+            <strong>📅 {formatDate(requestData.agendamento.dataHoraInicio)}</strong>
+            <span>🕒 {formatTime(requestData.agendamento.dataHoraInicio)} - {formatTime(requestData.agendamento.dataHoraFim)}</span>
           </div>
-        </hgroup>
+        </div>
 
-        <form onSubmit={(e) => e.preventDefault()}>
-          {renderStep()}
-        </form>
+        {/* BODY */}
+        <div className="modal-body">
 
-        <div className="step-buttons">
-          {step > 1 && (
-            <button type="button" onClick={() => setStep((prevStep) => prevStep - 1)}>
-              Voltar
-            </button>
+          {/* ETAPA 1: Definições Básicas e Paciente */}
+          {step === 1 && (
+            <div className="form-section">
+              <span className="step-indicator">PASSO 1 DE 2: DADOS DO PACIENTE</span>
+
+              <div className="form-group">
+                <label>Especialidade</label>
+                <Especialidade
+                  selectedSpecialty={requestData.consulta.especialidade}
+                  onSelectSpecialty={(val) => setRequestData(p => ({ ...p, consulta: { ...p.consulta, especialidade: val } }))}
+                />
+              </div>
+
+              <div className="form-group">
+                <label>Tipo de Atendimento</label>
+                <select
+                  value={requestData.agendamento.tipo}
+                  onChange={(e) => setRequestData(p => ({ ...p, agendamento: { ...p.agendamento, tipo: e.target.value } }))}
+                >
+                  <option value={1}>Triagem</option>
+                  <option value={2}>Consulta / Retorno</option>
+                </select>
+              </div>
+
+              <div className="form-group">
+                {/* <label>Paciente</label> */}
+
+                {/* Lógica de Visualização do Paciente */}
+                {pacienteSelecionado ? (
+                  // ESTADO 1: Paciente Selecionado (Card Visual)
+                  <div className="selection-card success">
+                    <div className="selection-info">
+                      <strong>{pacienteSelecionado.nome}</strong>
+                      <span>Status: {pacienteSelecionado.origem}</span>
+                    </div>
+                    <button className="btn-remove" onClick={handleRemoverPaciente}>
+                      Alterar
+                    </button>
+                  </div>
+                ) : mode === 'create-patient' ? (
+                  // ESTADO 2: Criando Novo Paciente
+                  <CriarPacienteAgendamento
+                    onPacienteCriado={handlePacienteCriado}
+                    onCancelar={() => setMode('search')}
+                    especialidadeId={requestData.consulta.especialidade}
+                  />
+                ) : (
+                  // ESTADO 3: Buscando na Lista de Espera
+                  <>
+                    <PesquisarListaEspera
+                      especialidade={requestData.consulta.especialidade}
+                      onSelectRegistro={handlePacienteSelect}
+                    // Adicionamos um texto de ajuda visual no componente pai
+                    />
+                    <p className="input-helper-text">
+                      * Buscando registros ativos na Lista de Espera.
+                    </p>
+
+                    <button className="btn-create-new" onClick={() => setMode('create-patient')}>
+                      + Paciente não está na lista? Cadastrar Novo
+                    </button>
+                  </>
+                )}
+              </div>
+            </div>
           )}
+
+          {/* ETAPA 2: Equipe e Sala */}
           {step === 2 && (
-            <button type="button" onClick={() => setIsModalOpen(false)}>Cancelar</button>
-          )}
+            <div className="form-section">
+              <span className="step-indicator">PASSO 2 DE 2: EQUIPE E SALA</span>
 
-          {step < 2 && (
-            <button type="button" onClick={() => setStep((prevStep) => prevStep + 1)}>
-              Avançar
-            </button>
-          )}
+              <div className="form-group">
+                {/* <label>Equipe Responsável <span style={{ color: 'red' }}>*</span></label> */}
+                {equipeSelecionada ? (
+                  <div className="selection-card success">
+                    <div className="selection-info">
+                      <strong>{equipeSelecionada.nome}</strong>
+                      <span>Equipe Selecionada</span>
+                    </div>
+                    <button className="btn-remove" onClick={() => setEquipeSelecionada(null)}>
+                      Alterar
+                    </button>
+                  </div>
+                ) : (
+                  <PesquisarEquipes
+                    especialidade={requestData.consulta.especialidade}
+                    onSelectEquipe={handleEquipeSelect}
+                  />
+                )}
+              </div>
 
-          {step === 2 && (
-            <button
-              onClick={handlePostAgendamento}
-              disabled={!requestData.consulta.equipeId}
-              style={{
-                opacity: !requestData.consulta.equipeId ? 0.5 : 1,
-                cursor: !requestData.consulta.equipeId ? 'not-allowed' : 'pointer'
-              }}
-              title={!requestData.consulta.equipeId ? "Selecione uma equipe para continuar" : ""}
-            >
-              Salvar Agendamento
-            </button>
+              <div className="form-group checkbox-group">
+                <label style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer' }}>
+                  <input
+                    type="checkbox"
+                    checked={reservarSala}
+                    onChange={(e) => {
+                      setReservarSala(e.target.checked);
+                      if (!e.target.checked) setRequestData(p => ({ ...p, agendamento: { ...p.agendamento, salaId: null } }));
+                    }}
+                  />
+                  <span>Necessita reservar sala física?</span>
+                </label>
+              </div>
+
+              {reservarSala && (
+                <div className="form-group">
+                  <label>Sala</label>
+                  <SelectSala
+                    initialSala={modalData.salaObj}
+                    selectedSala={requestData.agendamento.salaId}
+                    onSelectSala={(val) => setRequestData(p => ({ ...p, agendamento: { ...p.agendamento, salaId: val } }))}
+                  />
+                </div>
+              )}
+
+              <div className="form-group">
+                <label>Observações</label>
+                <textarea
+                  placeholder="Detalhes para a equipe..."
+                  value={requestData.consulta.observacao}
+                  onChange={(e) => setRequestData(p => ({ ...p, consulta: { ...p.consulta, observacao: e.target.value } }))}
+                />
+              </div>
+            </div>
           )}
         </div>
+
+        {/* FOOTER */}
+        <div className="modal-footer">
+          {step === 1 ? (
+            <>
+              <button className="btn-secondary" onClick={() => setIsModalOpen(false)}>Cancelar</button>
+              <button className="btn-primary" onClick={() => setStep(2)}>
+                Avançar &rarr;
+              </button>
+            </>
+          ) : (
+            <>
+              <button className="btn-secondary" onClick={() => setStep(1)}>&larr; Voltar</button>
+              <button
+                className="btn-primary"
+                onClick={handleSalvar}
+                disabled={!equipeSelecionada}
+                title={!equipeSelecionada ? "Selecione uma equipe para concluir" : ""}
+              >
+                Confirmar Agendamento
+              </button>
+            </>
+          )}
+        </div>
+
       </div>
     </div>,
-    document.body,
+    document.body
   );
 };
 

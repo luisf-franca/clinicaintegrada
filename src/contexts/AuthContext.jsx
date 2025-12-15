@@ -51,7 +51,7 @@ export const AuthProvider = ({ children }) => {
     const responseInterceptor = api.interceptors.response.use(
       // 1. Função para respostas de sucesso (não faz nada, apenas repassa)
       (response) => response,
-      
+
       // 2. Função para respostas de erro
       (error) => {
         // Verifica se o erro é 401 (Não Autorizado)
@@ -77,6 +77,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await api.post('/auth/login', credentials);
       const { token } = response.data;
+      console.log(token);
       localStorage.setItem('token', token);
       api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       const userResponse = await api.get('/usuarios/informacao');

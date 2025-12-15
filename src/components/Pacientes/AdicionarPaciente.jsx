@@ -78,6 +78,7 @@ const AdicionarPaciente = ({ onSuccess }) => {
     }
 
     try {
+      console.log(pacienteData);
       await CreatePaciente(pacienteData);
 
       if (onSuccess) onSuccess();
