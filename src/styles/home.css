@@ -95,7 +95,64 @@
   color: var(--branco);
 }
 
-/* CSS TABS REMOVED */
+/* CSS TABS */
+.home-tabs {
+  display: flex;
+  gap: 2rem;
+  border-bottom: 1px solid var(--cinza-300);
+  width: 100%;
+}
+
+.home-tabs button {
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 0.5rem 0.25rem;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--cinza-600);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.home-tabs button:hover {
+  color: var(--vermelho-escuro);
+}
+
+.home-tabs button.active {
+  border-bottom: 2px solid var(--vermelho-escuro);
+  color: var(--vermelho-escuro);
+  font-weight: 700;
+}
+
+/* WELCOME HEADER */
+.welcome-header {
+  text-align: center;
+  margin-top: 3rem;
+  margin-bottom: 2rem;
+}
+
+.welcome-header h2 {
+  font-size: 2rem;
+  color: var(--vermelho-escuro);
+  text-shadow: 0 2px 8px rgba(125, 20, 116, 0.08);
+  font-weight: 700;
+  margin: 0;
+}
+
+.welcome-header p {
+  color: var(--cinza-600);
+  font-size: 1.1rem;
+}
+
+/* HERO SEARCH CONTAINER */
+.search-hero-container {
+  max-width: 700px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
 
 /* Estilos para a barra de abas e botões de tabs manuais */
 /* TAB BUTTONS REMOVED */
@@ -110,19 +167,6 @@
   gap: 1.5rem;
   /* Reduzi um pouco o gap vertical */
   width: 100%;
-}
-
-/* CORREÇÃO 1: Estabilidade Visual */
-.dashboard-hero {
-  width: 100%;
-  /* Define uma altura mínima baseada no tamanho do componente expandido. 
-     Ajuste este valor (ex: 220px, 250px) conforme a altura real do seu tracker aberto */
-  min-height: 240px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  /* Mantém o buscador no topo */
-  transition: min-height 0.3s ease;
 }
 
 /* CORREÇÃO 2: Grid Assimétrico para diminuir o widget de Salas */
@@ -384,5 +428,37 @@
   .tab-btn {
     padding: 0.4rem 0.5rem;
     font-size: 0.95rem;
+  }
+}
+
+/* ========================================= */
+/* DASHBOARD GRID LAYOUT 2x2 (VISÃO GERAL)   */
+/* ========================================= */
+
+.dashboard-grid-2x2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  /* Duas colunas iguais */
+  grid-template-rows: minmax(320px, auto) minmax(200px, auto);
+  /* Altura mínima controlada */
+  gap: 1.5rem;
+  width: 100%;
+  align-items: stretch;
+}
+
+/* Ajustes de Responsividade */
+
+/* Tablet: Mantém 2 colunas, ajusta gap */
+@media (max-width: 1024px) {
+  .dashboard-grid-2x2 {
+    gap: 1rem;
+  }
+}
+
+/* Mobile: Empilha tudo (1 coluna) */
+@media (max-width: 768px) {
+  .dashboard-grid-2x2 {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
   }
 }

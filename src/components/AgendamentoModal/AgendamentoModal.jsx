@@ -102,6 +102,11 @@ const AgendamentoModal = ({
 
   const handlePostAgendamento = async () => {
     try {
+      if (!requestData.consulta.equipeId) {
+        alert("Selecione uma equipe.");
+        return;
+      }
+
       if (reservarSala && !requestData.agendamento.salaId) {
         alert("Selecione uma sala ou desmarque a opção 'Reservar sala'.");
         return;
@@ -285,7 +290,17 @@ const AgendamentoModal = ({
           )}
 
           {step === 2 && (
-            <button onClick={handlePostAgendamento}>Salvar Agendamento</button>
+            <button
+              onClick={handlePostAgendamento}
+              disabled={!requestData.consulta.equipeId}
+              style={{
+                opacity: !requestData.consulta.equipeId ? 0.5 : 1,
+                cursor: !requestData.consulta.equipeId ? 'not-allowed' : 'pointer'
+              }}
+              title={!requestData.consulta.equipeId ? "Selecione uma equipe para continuar" : ""}
+            >
+              Salvar Agendamento
+            </button>
           )}
         </div>
       </div>

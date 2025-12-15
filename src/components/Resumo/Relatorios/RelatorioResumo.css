@@ -1,0 +1,70 @@
+.relatorio-resumo {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.relatorio-body {
+    flex: 1;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    /* Centraliza verticalmente o grid */
+}
+
+.metrics-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem 2rem;
+    width: 100%;
+}
+
+.metric-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.metric-label {
+    font-size: 0.85rem;
+    color: var(--cinza-600);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.metric-value-row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+}
+
+.metric-number {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--vermelho-escuro);
+    line-height: 1;
+}
+
+.metric-badge {
+    background: #e8f5e9;
+    color: #2e7d32;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.metric-detail {
+    font-size: 0.9rem;
+    color: var(--cinza-500);
+}
+
+.loading-state,
+.error-state {
+    width: 100%;
+    text-align: center;
+    color: var(--cinza-500);
+    font-size: 0.9rem;
+}

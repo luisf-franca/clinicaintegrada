@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 
-const PesquisarPacientes = ({ onPesquisar, initialValue = '' }) => {
+const PesquisarPacientes = ({ onPesquisar, initialValue = '', placeholder }) => {
   const [nome, setNome] = useState(initialValue);
   const [debouncedNome, setDebouncedNome] = useState(initialValue);
 
@@ -34,7 +34,7 @@ const PesquisarPacientes = ({ onPesquisar, initialValue = '' }) => {
           type="text"
           value={nome}
           onChange={handleInputChange}
-          placeholder="Digite o nome para buscar..."
+          placeholder={placeholder || "Digite o nome para buscar..."}
           autoComplete="off"
         />
       </div>

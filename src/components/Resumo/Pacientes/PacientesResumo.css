@@ -1,44 +1,141 @@
-/* Tracker Card Style for Pacientes Widget */
-/* Inherits mostly from .widget-card but allows visible overflow for specific needs if any */
+/* Tracker Card Style for Pacientes Widget (HERO MODE DEFAULT) */
 
-.pacientes-resumo.tracker-card {
-  /* .widget-card handles background, border, radius, shadow */
-  overflow: visible;
-  /* Override if needed for certain popups, otherwise keep hidden like others */
-  border-left: 6px solid var(--vermelho-escuro);
-  /* Distinctive feature for this hero widget */
-  height: auto;
-  /* Allow growth */
-  max-height: none;
-  /* Hero widget might need more space */
-}
-
-/* Header handled primarily by .widget-header */
-.pacientes-resumo__header {
-  /* Override specifics for this header if needed */
-  padding: 0.75rem 1rem;
-}
-
-.pacientes-resumo__header button.btn-novo-paciente {
-  background: rgba(255, 255, 255, 0.85);
-  border: 1px solid var(--cinza-300);
-  color: var(--vermelho-escuro);
-  font-weight: 600;
-  border-radius: 6px;
-  padding: 0.4rem 1rem;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: background 0.2s, color 0.2s;
-}
-
-.pacientes-resumo__header button.btn-novo-paciente:hover {
-  background: var(--vermelho-escuro);
-  color: var(--branco);
+.pacientes-resumo {
+  background: transparent;
+  box-shadow: none;
+  border: none;
+  width: 100%;
 }
 
 .pacientes-resumo__body {
-  padding: 1rem 1.5rem;
+  padding: 0;
+  overflow: visible;
+  /* Allow external shadow/dropdown */
 }
+
+/* SEARCH INPUT */
+.pacientes-resumo .search-section .form-group label {
+  display: none;
+  /* Hide label */
+}
+
+.pacientes-resumo .search-section input {
+  height: 56px;
+  border-radius: 28px;
+  border: 1px solid transparent;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding-left: 3rem;
+  /* Space for search icon if we had one */
+  background: var(--branco);
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.pacientes-resumo .search-section input:focus {
+  border-color: var(--vermelho-escuro);
+  box-shadow: 0 6px 16px rgba(176, 23, 27, 0.15);
+  outline: none;
+}
+
+/* RESULTS LIST (FLOW LAYOUT) */
+.pacientes-resumo .results-list {
+  background: var(--branco);
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  margin-top: 0.5rem;
+  overflow: hidden;
+  /* position: absolute;  <-- REMOVED to allow pushing the footer down */
+  width: 100%;
+  z-index: 100;
+  /* No max-width needed if we want it full width of container */
+}
+
+.pacientes-resumo .stepper-wrapper {
+  margin-top: 1rem;
+  background: var(--branco);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border: 1px solid #eee;
+}
+
+.pacientes-resumo .pacientes-resumo__footer {
+  border: none;
+  justify-content: center;
+  margin-top: 1rem;
+  display: flex !important;
+  /* Force display if hidden by other rules */
+}
+
+/* HERO SELECTED CARD */
+.hero-selected-card {
+  background: var(--branco);
+  border-radius: 16px;
+  padding: 1rem 1.5rem;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid #eee;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-selected-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.hero-selected-label {
+  font-size: 0.75rem;
+  color: var(--cinza-500);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.hero-selected-name {
+  margin: 0;
+  font-size: 1.25rem;
+  color: var(--vermelho-escuro);
+  font-weight: 700;
+}
+
+.hero-selected-details {
+  font-size: 0.9rem;
+  color: var(--cinza-600);
+}
+
+.btn-clear-selection {
+  background: var(--cinza-100);
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--cinza-600);
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.2s;
+}
+
+.btn-clear-selection:hover {
+  background: var(--cinza-300);
+  color: var(--vermelho-escuro);
+}
+
 
 /* STEPPER STYLES */
 .stepper-wrapper {
@@ -251,4 +348,61 @@
   .pacientes-resumo__footer {
     padding: 0.5rem 0.25rem;
   }
+}
+
+/* Adicione ou atualize estas classes */
+
+.search-interaction-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+/* Animação suave de entrada */
+.animate-fade-in {
+  animation: slideDownFade 0.2s ease-out forwards;
+}
+
+@keyframes slideDownFade {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Ajuste visual para quando o dropdown está aberto (opcional: conectar visualmente ao input) */
+.pacientes-resumo .results-list {
+  margin-top: 0.5rem;
+  /* Pequeno espaço entre input e lista */
+  border: 1px solid #eee;
+  /* Borda sutil para destacar sobre o fundo */
+}
+
+/* Footer integrado dentro da lista (Estilo Clean) */
+.pacientes-resumo__footer_integrated {
+  padding: 10px 16px;
+  border-top: 1px solid #f0f0f0;
+  display: flex;
+  justify-content: flex-end;
+  background: #fafafa;
+}
+
+.btn-rastrear {
+  padding: 0.5rem 1.25rem;
+  background: var(--vermelho-escuro);
+  color: var(--branco);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: background 0.2s;
+}
+
+.btn-rastrear:hover {
+  background: var(--vermelho);
 }

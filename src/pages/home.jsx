@@ -8,11 +8,13 @@ import AgendamentosResumo from '../components/Resumo/Agendamentos/AgendamentosRe
 // import ConsultaResumo from '../components/Resumo/Consultas/ConsultaResumo';
 import SalasResumo from '../components/Resumo/Salas/SalasResumo';
 import PacientesResumo from '../components/Resumo/Pacientes/PacientesResumo';
+import RelatorioResumo from '../components/Resumo/Relatorios/RelatorioResumo';
 
 // FUNCTIONS
 import GetPacientes from '../functions/Pacientes/GetPacientes';
 
 const Home = () => {
+  const [activeTab, setActiveTab] = useState('inicio');
   const [pacientes, setPacientes] = useState([]);
   const [pacienteEtapa, setPacienteEtapa] = useState(null);
   const [pacienteSelecionadoId, setPacienteSelecionadoId] = useState(null);
@@ -37,43 +39,69 @@ const Home = () => {
     handlePesquisarPacientes('');
   }, [handlePesquisarPacientes]);
 
-  // EFEITO REMOVIDO: A lógica de mudar abas automatica foi trocada pelo dashboard unificado.
-  // O filtro visual agora acontece via props nos cards.
-
   return (
     <div className="home container">
       <div className="home-header">
-        <h1>Início</h1>
+        <nav className="home-tabs">
+          <button
+            className={activeTab === 'inicio' ? 'active' : ''}
+            onClick={() => setActiveTab('inicio')}
+          >
+            Início
+          </button>
+          <button
+            className={activeTab === 'visao-geral' ? 'active' : ''}
+            onClick={() => setActiveTab('visao-geral')}
+          >
+            Visão Geral
+          </button>
+        </nav>
       </div>
       <div className="home-body home-dashboard">
 
-        {/* HERO SECTION: RASTREADOR DE PACIENTES */}
-        <section className="dashboard-hero">
-          <PacientesResumo
-            pacientes={pacientes}
-            pacienteEtapa={pacienteEtapa}
-            setPacienteEtapa={setPacienteEtapa}
-            setPacienteSelecionadoId={setPacienteSelecionadoId}
-            onPesquisar={handlePesquisarPacientes}
-          />
-        </section>
+        {activeTab === 'inicio' && (
+          <>
+            <div className="welcome-header">
+              <h2>Bem-vindo(a), Usuário!</h2>
+              <p>Tenha um ótimo dia de trabalho.</p>
+            </div>
+            <div className="search-hero-container">
+              <PacientesResumo
+                pacientes={pacientes}
+                pacienteEtapa={pacienteEtapa}
+                setPacienteEtapa={setPacienteEtapa}
+                setPacienteSelecionadoId={setPacienteSelecionadoId}
+                onPesquisar={handlePesquisarPacientes}
+              />
+            </div>
+          </>
+        )}
 
-        {/* WIDGETS GRID */}
-        <section className="dashboard-grid">
+        {activeTab === 'visao-geral' && (
+          <section className="dashboard-grid-2x2">
 
-          <div className="widget-card">
-            <ListaEsperaResumo pacienteId={pacienteSelecionadoId} />
-          </div>
+            {/* 1. Lista de Espera (Top Left) */}
+            <div className="widget-card">
+              <ListaEsperaResumo pacienteId={pacienteSelecionadoId} />
+            </div>
 
-          <div className="widget-card">
-            <AgendamentosResumo pacienteId={pacienteSelecionadoId} />
-          </div>
+            {/* 2. Agendamentos (Top Right) */}
+            <div className="widget-card">
+              <AgendamentosResumo pacienteId={pacienteSelecionadoId} />
+            </div>
 
-          <div className="widget-card">
-            <SalasResumo />
-          </div>
+            {/* 3. Relatórios (Bottom Left) */}
+            <div className="widget-card">
+              <RelatorioResumo />
+            </div>
 
-        </section>
+            {/* 4. Salas (Bottom Right) */}
+            <div className="widget-card">
+              <SalasResumo />
+            </div>
+
+          </section>
+        )}
 
       </div>
     </div>
