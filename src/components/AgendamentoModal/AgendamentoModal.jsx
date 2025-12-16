@@ -138,7 +138,7 @@ const AgendamentoModal = ({
       setIsModalOpen(false);
     } catch (error) {
       console.error(error);
-      alert("Erro ao salvar agendamento.");
+      alert("A sala atingiu sua capacidade máxima.");
     }
   };
 
@@ -253,7 +253,7 @@ const AgendamentoModal = ({
               </div>
 
               <div className="form-group checkbox-group">
-                <label style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer' }}>
+                <label className="custom-checkbox-label">
                   <input
                     type="checkbox"
                     checked={reservarSala}
@@ -261,8 +261,13 @@ const AgendamentoModal = ({
                       setReservarSala(e.target.checked);
                       if (!e.target.checked) setRequestData(p => ({ ...p, agendamento: { ...p.agendamento, salaId: null } }));
                     }}
+                    hidden // Oculta o input nativo
                   />
-                  <span>Necessita reservar sala física?</span>
+                  {/* Caixa visual do Checkbox */}
+                  <div className={`custom-checkbox-box ${reservarSala ? 'checked' : ''}`}>
+                    {reservarSala && <span className="checkmark-icon">✔️</span>}
+                  </div>
+                  <span>Reservar sala?</span>
                 </label>
               </div>
 
@@ -270,7 +275,7 @@ const AgendamentoModal = ({
                 <div className="form-group">
                   <label>Sala</label>
                   <SelectSala
-                    initialSala={modalData.salaObj}
+                    initialSala={modalData.salaObj || { id: null, nome: 'Selecione uma sala...' }}
                     selectedSala={requestData.agendamento.salaId}
                     onSelectSala={(val) => setRequestData(p => ({ ...p, agendamento: { ...p.agendamento, salaId: val } }))}
                   />
@@ -295,7 +300,7 @@ const AgendamentoModal = ({
             <>
               <button className="btn-secondary" onClick={() => setIsModalOpen(false)}>Cancelar</button>
               <button className="btn-primary" onClick={() => setStep(2)}>
-                Avançar &rarr;
+                {pacienteSelecionado ? 'Avançar' : 'Agendar sem paciente'} &rarr;
               </button>
             </>
           ) : (

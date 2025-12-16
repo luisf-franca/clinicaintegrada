@@ -114,13 +114,6 @@ const SelectSala = ({ onSelectSala, onSelectSalaObj, selectedSala, initialSala }
 
       {isOpen && (
         <div className="select-options" onScroll={handleScroll} ref={listRef}>
-          <div
-            className={"select-option"}
-            onClick={() => handleSelect(null)}
-          >
-            Todas as salas...
-          </div>
-
           {salas.map((sala) => (
             <div
               key={sala.id}

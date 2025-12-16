@@ -332,18 +332,22 @@
 
 /* ESTILO PRINCIPAL QUE FALTAVA: Torna os selects visíveis */
 .filtro-wrapper select {
-  background-color: var(--branco, #fff); /* Fundo branco */
-  border: 1px solid var(--cinza-300, #ccc); /* Borda visível */
+  background-color: var(--branco, #fff);
+  /* Fundo branco */
+  border: 1px solid var(--cinza-300, #ccc);
+  /* Borda visível */
   border-radius: 6px;
-  padding: 0.4rem 0.8rem; /* Espaçamento interno */
+  padding: 0.4rem 0.8rem;
+  /* Espaçamento interno */
   font-size: 0.9rem;
   color: var(--cinza-600, #333);
   font-weight: 500;
   outline: none;
   cursor: pointer;
   min-width: 140px;
-  height: 40px; /* Altura fixa para alinhar todos */
-  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  height: 40px;
+  /* Altura fixa para alinhar todos */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
@@ -356,15 +360,57 @@
 
 /* Ajuste específico para o componente Especialidade para manter o destaque dele */
 .especialidade select {
-  height: 40px; /* Garante que ele tenha a mesma altura dos outros */
-  border-width: 1.5px; /* Mantém ele um pouco mais grosso se desejar destaque */
+  height: 40px;
+  /* Garante que ele tenha a mesma altura dos outros */
+  border-width: 1.5px;
+  /* Mantém ele um pouco mais grosso se desejar destaque */
 }
 
 /* Ajuste no container pai para alinhar tudo na base verticalmente */
-.agendamento > hgroup .filtros-container,
-.agendamento > hgroup .filtros-secundarios {
+.agendamento>hgroup .filtros-container,
+.agendamento>hgroup .filtros-secundarios {
   display: flex;
-  align-items: flex-end; /* Alinha os inputs pela parte de baixo */
+  align-items: flex-end;
+  /* Alinha os inputs pela parte de baixo */
   gap: 1rem;
   flex-wrap: wrap;
+}
+
+/* ... código anterior ... */
+
+/* Estilo para o botão Limpar Filtros */
+.btn-limpar {
+  height: 40px;
+  /* Mesma altura dos selects */
+  padding: 0 1.5rem;
+  background-color: transparent;
+  border: 1px solid var(--vermelho-escuro);
+  color: var(--vermelho-escuro);
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.btn-limpar:hover {
+  background-color: var(--vermelho-escuro);
+  color: var(--branco);
+  box-shadow: 0 2px 6px rgba(125, 20, 116, 0.15);
+  transform: translateY(-1px);
+}
+
+.btn-limpar:active {
+  transform: translateY(0);
+}
+
+/* Ajuste Opcional: Se quiser um ícone de "X" ou lixeira antes do texto */
+.btn-limpar::before {
+  content: '✕';
+  margin-right: 6px;
+  font-size: 0.8rem;
 }

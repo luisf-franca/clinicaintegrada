@@ -89,3 +89,185 @@
   color: var(--cinza-500);
   font-size: 0.8rem;
 }
+
+/* Container Principal */
+.salas-resumo.compact-widget {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 100%;
+}
+
+.widget-header {
+  padding: 0.8rem 1rem;
+  background-color: #fcfcfc;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+}
+
+.widget-header h4 {
+  margin: 0;
+  font-size: 1rem;
+  color: #333;
+}
+
+.compact-body {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* --- ÁREA SUPERIOR (SELECT) --- */
+.salas-compact-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.salas-select-compact {
+  flex: 1;
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  background: #fff;
+}
+
+.btn-icon-lock {
+  border: none;
+  border-radius: 6px;
+  width: 36px;
+  height: 36px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.btn-icon-lock:disabled {
+  background: #eee;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.btn-icon-lock.unlocked {
+  background-color: #e8f5e9;
+  /* Fundo verde claro */
+  border: 1px solid #c8e6c9;
+}
+
+.btn-icon-lock.locked {
+  background-color: #ffebee;
+  /* Fundo vermelho claro */
+  border: 1px solid #ffcdd2;
+}
+
+.sala-status-mini {
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: #666;
+  padding-left: 2px;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.status-dot.green {
+  background-color: #4caf50;
+}
+
+.status-dot.red {
+  background-color: #f44336;
+}
+
+/* --- DIVISÓRIA --- */
+.divider {
+  height: 1px;
+  background-color: #eee;
+  margin: 0.8rem 0;
+  width: 100%;
+}
+
+/* --- ÁREA INFERIOR (LISTA) --- */
+.blocked-list-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+  min-height: 0;
+  /* Importante para o scroll funcionar se necessário */
+}
+
+.section-title {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #888;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.empty-msg {
+  font-size: 0.85rem;
+  color: #aaa;
+  font-style: italic;
+  margin: 0;
+  padding-left: 4px;
+}
+
+.blocked-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  overflow-y: auto;
+  max-height: 200px;
+  /* Limita a altura se tiver muitas salas */
+}
+
+.blocked-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  border-bottom: 1px dashed #f0f0f0;
+  font-size: 0.9rem;
+}
+
+.blocked-item:last-child {
+  border-bottom: none;
+}
+
+.room-name {
+  color: #d32f2f;
+  /* Vermelho escuro para indicar ocupado */
+  font-weight: 500;
+}
+
+.btn-quick-unlock {
+  background: transparent;
+  border: 1px solid #ddd;
+  padding: 2px 8px;
+  font-size: 0.75rem;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #555;
+  transition: all 0.2s;
+}
+
+.btn-quick-unlock:hover {
+  background-color: #4caf50;
+  border-color: #4caf50;
+  color: white;
+}

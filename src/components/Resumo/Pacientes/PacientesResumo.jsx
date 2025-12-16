@@ -156,7 +156,7 @@ const PacientesResumo = ({
                   ))
                 ) : (
                   <div className="no-pacientes">
-                    <button onClick={() => navigate('/pacientes')}>
+                    <button onClick={() => navigate('/pacientes?view=add')}>
                       Clique aqui para cadastrar um novo paciente...
                     </button>
                   </div>

@@ -213,12 +213,12 @@ const Consulta = () => {
 
   const getButtonText = () => {
     if (consultaSelecionada.status === 'Agendada' || consultaSelecionada.status === 1) {
-      return 'Iniciar Consulta';
+      return '▶ Iniciar Consulta';
     }
     if (consultaSelecionada.status === 'EmAndamento' || consultaSelecionada.status === 'Em Andamento' || consultaSelecionada.status === 4) {
-      return 'Finalizar Consulta';
+      return '⏹ Finalizar Consulta';
     }
-    return 'Atualizar Observações';
+    return '✏️ Atualizar Observações';
   };
 
 

@@ -99,6 +99,7 @@ const ListaEsperaResumo = ({ pacienteId }) => {
               <th>Nome</th>
               <th>Entrada</th>
               <th>Especialidade</th>
+              <th>Prioridade</th>
               <th style={{ width: '40px' }}></th>
             </tr>
           </thead>

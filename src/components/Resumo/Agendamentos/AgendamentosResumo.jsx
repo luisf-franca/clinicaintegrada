@@ -109,6 +109,7 @@ const AgendamentosResumo = ({ pacienteId }) => {
               <th>Data/Hora</th>
               <th>Sala</th>
               <th>Especialidade</th>
+              <th>Ações</th>
             </tr>
           </thead>
           <tbody>
@@ -127,6 +128,17 @@ const AgendamentosResumo = ({ pacienteId }) => {
                     </td>
                     <td>{item.sala}</td>
                     <td>{item.especialidade}</td>
+                    <td>
+                      <button
+                        // className="btn-iniciar-consulta"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleNavigateConsulta(item.consultaId);
+                        }}
+                      >
+                        ▶ Iniciar Consulta
+                      </button>
+                    </td>
                   </tr>
                 );
               })

@@ -57,6 +57,25 @@ const Agendamento = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  // --- ADICIONE ESTA FUNÇÃO ---
+  const handleClearFilters = () => {
+    // Retorna para os valores iniciais definidos nos useState
+    setStatus(1);
+    setTipo('');
+    setSelectedSala(null);
+    setSelectedSalaObj(null);
+    setCurrentSalaCapacity(1);
+
+    // Reseta especialidade para o padrão (1) e atualiza localStorage
+    setSelectedSpecialty(1);
+    localStorage.setItem('selectedSpecialty', '1');
+
+    // Força recarregamento visual limpo
+    setSelectedAgendamentoId(null);
+    setCurrentRange([]);
+    setCurrentDay(null);
+  };
+
   // Substituir o useState(generateTimeSlots()) por:
   const timeSlots = TIME_SLOTS;
 
@@ -397,6 +416,30 @@ const Agendamento = () => {
         <div className="filtros-container">
           <div className="filtros-secundarios">
 
+            {selectedSala && (
+              <div className="filtro-wrapper">
+                <label>&nbsp;</label>
+                <button
+                  className="btn-limpar"
+                  onClick={handleClearFilters}
+                  title="Limpar todos os filtros"
+                >
+                  Limpar
+                </button>
+              </div>
+            )}
+
+            {/* Filtro de Sala */}
+            <div className="filtro-wrapper">
+              <label>Sala</label>
+              <SelectSala
+                onSelectSala={setSelectedSala}
+                onSelectSalaObj={handleSelectSalaObj}
+                selectedSala={selectedSala}
+              />
+            </div>
+
+
             {/* Filtro de Status */}
             <div className="filtro-wrapper">
               <label>Status</label>
@@ -420,15 +463,7 @@ const Agendamento = () => {
               </select>
             </div>
 
-            {/* Filtro de Sala */}
-            <div className="filtro-wrapper">
-              <label>Sala</label>
-              <SelectSala
-                onSelectSala={setSelectedSala}
-                onSelectSalaObj={handleSelectSalaObj}
-                selectedSala={selectedSala}
-              />
-            </div>
+
           </div>
 
           {/* Filtro de Especialidade */}

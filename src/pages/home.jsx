@@ -49,6 +49,39 @@ const Home = () => {
     }
   }, [handlePesquisarPacientes]);
 
+  // Auto-refresh a cada 3 minutos
+  const [refreshKey, setRefreshKey] = useState(0); // Estado para forçar reload dos componentes filhos
+
+  // Relógio
+  const [currentTime, setCurrentTime] = useState(new Date());
+
+  useEffect(() => {
+    // Relógio que atualiza a cada segundo
+    const clockInterval = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+
+    // Auto-refresh dos dados a cada 3 minutos
+    const refreshInterval = setInterval(() => {
+      // 1. Recarregar lista de pacientes do componente pai
+      handlePesquisarPacientes('');
+
+      // 2. Atualizar chave para forçar remount/reload dos widgets filhos
+      setRefreshKey(prev => prev + 1);
+    }, 180000); // 3 minutos
+
+    return () => {
+      clearInterval(clockInterval);
+      clearInterval(refreshInterval);
+    };
+  }, [handlePesquisarPacientes]);
+
+  const formattedTime = currentTime.toLocaleString('pt-BR', {
+    weekday: 'long',
+    hour: '2-digit',
+    minute: '2-digit',
+  }).replace(/^\w/, (c) => c.toUpperCase()); // Capitalize first letter
+
   return (
     <div className="home container">
       <div className="home-header">
@@ -66,6 +99,16 @@ const Home = () => {
             Visão Geral
           </button>
         </nav>
+
+        {/* Relógio no canto superior direito */}
+        <div className="header-clock" style={{
+          color: 'var(--cinza-600)',
+          fontWeight: 500,
+          fontSize: '0.95rem',
+          textTransform: 'capitalize'
+        }}>
+          {formattedTime}
+        </div>
       </div>
       <div className="home-body home-dashboard">
 
@@ -92,22 +135,22 @@ const Home = () => {
 
             {/* 1. Lista de Espera (Top Left) */}
             <div className="widget-card">
-              <ListaEsperaResumo pacienteId={pacienteSelecionadoId} />
+              <ListaEsperaResumo key={refreshKey} pacienteId={pacienteSelecionadoId} />
             </div>
 
             {/* 2. Agendamentos (Top Right) */}
             <div className="widget-card">
-              <AgendamentosResumo pacienteId={pacienteSelecionadoId} />
+              <AgendamentosResumo key={refreshKey} pacienteId={pacienteSelecionadoId} />
             </div>
 
             {/* 3. Relatórios (Bottom Left) */}
             <div className="widget-card">
-              <RelatorioResumo />
+              <RelatorioResumo key={refreshKey} />
             </div>
 
             {/* 4. Salas (Bottom Right) */}
             <div className="widget-card">
-              <SalasResumo />
+              <SalasResumo key={refreshKey} />
             </div>
 
           </section>
