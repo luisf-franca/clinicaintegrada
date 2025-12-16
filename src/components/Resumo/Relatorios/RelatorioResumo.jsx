@@ -65,7 +65,7 @@ const RelatorioResumo = () => {
                             label="Consultas"
                             value={dados.consultasConcluidas}
                             subValue={dados.consultasConcluidasEsteMes}
-                            subLabel="estemês"
+                            subLabel="este mês"
                         />
                         <div className="metric-item">
                             <span className="metric-label">Equipes</span>
