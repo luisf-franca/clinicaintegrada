@@ -100,6 +100,7 @@ const ListaEsperaResumo = ({ pacienteId }) => {
               <th>Entrada</th>
               <th>Especialidade</th>
               <th>Prioridade</th>
+              <th>Ações</th>
               <th style={{ width: '40px' }}></th>
             </tr>
           </thead>
@@ -118,7 +119,11 @@ const ListaEsperaResumo = ({ pacienteId }) => {
               </tr>
             ) : listaEspera.length > 0 ? (
               listaEspera.map((item) => (
-                <tr key={item.id}>
+                <tr
+                  key={item.id}
+                  onClick={() => handleAgendarConsulta(item.id)}
+                  style={{ cursor: 'pointer' }}
+                >
                   <td title={item.nome}>
                     <div className="truncate-text">{item.nome}</div>
                   </td>
@@ -128,6 +133,7 @@ const ListaEsperaResumo = ({ pacienteId }) => {
                       : '-'}
                   </td>
                   <td>{item.especialidade}</td>
+                  <td>{item.prioridade || '-'}</td>
                   <td>
                     <button
                       className="btn-icon-action"
@@ -135,9 +141,9 @@ const ListaEsperaResumo = ({ pacienteId }) => {
                         e.stopPropagation();
                         handleAgendarConsulta(item.id);
                       }}
-                      title="Chamar / Agendar"
+                      title="Agendar"
                     >
-                      ▶
+                      📅 Agendar
                     </button>
                   </td>
                 </tr>
