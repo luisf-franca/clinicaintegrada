@@ -217,7 +217,12 @@ const Agendamento = () => {
 
     // Se estiver ocupado, só impede se estiver CHEIO
     const appointments = selectedSlots[dayObject.label]?.[time] || [];
-    if (appointments.length >= currentSalaCapacity) return;
+
+    // --- CORREÇÃO AQUI ---
+    // A regra de capacidade só se aplica se houver uma sala específica selecionada.
+    // Se selectedSala for null, permitimos a interação independentemente da quantidade.
+    if (selectedSala && appointments.length >= currentSalaCapacity) return;
+    // ---------------------
 
     setIsDragging(true);
     setCurrentDay(dayObject);
@@ -347,6 +352,8 @@ const Agendamento = () => {
   };
 
   const isSelectedFull = (dayLabel, time) => {
+    if (!selectedSala) return false;
+
     const apps = selectedSlots[dayLabel]?.[time] || [];
     return apps.length >= currentSalaCapacity;
   };

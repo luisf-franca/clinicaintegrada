@@ -7,8 +7,8 @@ const LoginPage = () => {
   const { login, isLoading, error } = useAuth();
 
   const [formData, setFormData] = useState({
-    email: 'atendente@user.com.br',
-    senha: 'Teste1@',
+    email: '',
+    senha: '',
   });
 
   const handleChange = (e) => {
@@ -51,7 +51,7 @@ const LoginPage = () => {
               name="email"
               value={formData.email}
               onChange={handleChange}
-              placeholder="seu@email.com"
+              placeholder="email@example.com"
               disabled={isLoading}
               required
             />
