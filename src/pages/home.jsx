@@ -20,6 +20,8 @@ const Home = () => {
   const [pacienteEtapa, setPacienteEtapa] = useState(null);
   const [pacienteSelecionadoId, setPacienteSelecionadoId] = useState(null);
   const [userName, setUserName] = useState('Usuário');
+  const supportLink = 'https://docs.google.com/forms/d/e/1FAIpQLSfBySncxMR1kMyXnjl2AtsPzvteEQ475V1i6OxM-usKLesnEQ/viewform';
+
 
   // 2. Envolva a função com useCallback
   const handlePesquisarPacientes = useCallback(async (filtroNome) => {
@@ -157,6 +159,27 @@ const Home = () => {
         )}
 
       </div>
+
+      {/* Link de Suporte */}
+      <a
+        href={supportLink}
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{
+          position: 'fixed',
+          bottom: '10px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          color: 'var(--cinza-600)',
+          fontSize: '0.75rem',
+          textDecoration: 'none',
+          opacity: 0.7,
+        }}
+        onMouseOver={(e) => (e.target.style.opacity = 1)}
+        onMouseOut={(e) => (e.target.style.opacity = 0.7)}
+      >
+        Precisa de Ajuda?
+      </a>
     </div>
   );
 };
